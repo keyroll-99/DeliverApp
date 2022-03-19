@@ -1,6 +1,6 @@
 ﻿namespace Models.Db;
 
-public class Location : BaseModel
+public class Location : BaseHashModel
 {
     public string Country  { get; set; }
     public string City { get; set; }
@@ -15,5 +15,8 @@ public class Location : BaseModel
 
     public long CompanyId { get; set; }
     public Company Company { get; set; }
+
+    public virtual ICollection<Deliver> Pickup { get; set; } = new List<Deliver>();
+    public virtual ICollection<Deliver> Send { get; set; } = new List<Deliver>();
 }
     

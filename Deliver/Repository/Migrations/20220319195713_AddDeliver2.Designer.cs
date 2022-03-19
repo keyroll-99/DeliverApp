@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Repository;
 
@@ -11,9 +12,10 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220319195713_AddDeliver2")]
+    partial class AddDeliver2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -127,6 +129,9 @@ namespace Repository.Migrations
                     b.Property<long>("ToId")
                         .HasColumnType("bigint");
 
+                    b.Property<long>("ToId1")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTime>("UpdateTime")
                         .HasColumnType("datetime2");
 
@@ -134,9 +139,9 @@ namespace Repository.Migrations
 
                     b.HasIndex("CarId");
 
-                    b.HasIndex("FromId");
-
                     b.HasIndex("ToId");
+
+                    b.HasIndex("ToId1");
 
                     b.ToTable("Delivers");
                 });
@@ -203,29 +208,6 @@ namespace Repository.Migrations
                     b.ToTable("Locations");
                 });
 
-            modelBuilder.Entity("Models.Db.Role", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("UpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Roles");
-                });
-
             modelBuilder.Entity("Models.Db.User", b =>
                 {
                     b.Property<long>("Id")
@@ -273,35 +255,6 @@ namespace Repository.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Models.Db.UserRole", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("RoleId")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTime>("UpdateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRoles");
-                });
-
             modelBuilder.Entity("Models.Db.Car", b =>
                 {
                     b.HasOne("Models.Db.User", "Driver")
@@ -323,14 +276,14 @@ namespace Repository.Migrations
 
                     b.HasOne("Models.Db.Location", "From")
                         .WithMany("Send")
-                        .HasForeignKey("FromId")
+                        .HasForeignKey("ToId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("Models.Db.Location", "To")
                         .WithMany("Pickup")
-                        .HasForeignKey("ToId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .HasForeignKey("ToId1")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Car");
@@ -362,25 +315,6 @@ namespace Repository.Migrations
                     b.Navigation("Company");
                 });
 
-            modelBuilder.Entity("Models.Db.UserRole", b =>
-                {
-                    b.HasOne("Models.Db.Role", "Role")
-                        .WithMany("UserRoles")
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Models.Db.User", "User")
-                        .WithMany("Roles")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Models.Db.Car", b =>
                 {
                     b.Navigation("Delivers");
@@ -400,17 +334,10 @@ namespace Repository.Migrations
                     b.Navigation("Send");
                 });
 
-            modelBuilder.Entity("Models.Db.Role", b =>
-                {
-                    b.Navigation("UserRoles");
-                });
-
             modelBuilder.Entity("Models.Db.User", b =>
                 {
                     b.Navigation("Car")
                         .IsRequired();
-
-                    b.Navigation("Roles");
                 });
 #pragma warning restore 612, 618
         }

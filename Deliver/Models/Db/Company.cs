@@ -1,11 +1,11 @@
 ﻿namespace Models.Db;
 
-public class Company : BaseModel
+public class Company : BaseHashModel
 {
     public string Name { get; set; }
     public string Email { get; set; }
     public string ContactNumber { get; set; }
 
-    public virtual ICollection<User> Users { get; set; }
-    public virtual ICollection<Location> Locations { get; set; }
+    public virtual ICollection<User> Users { get; set; } = new List<User>();
+    public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
 }

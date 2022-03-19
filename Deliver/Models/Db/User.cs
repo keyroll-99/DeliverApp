@@ -1,6 +1,6 @@
 ﻿namespace Models.Db;
 
-public class User : BaseModel
+public class User : BaseHashModel
 {
     public string Name { get; set; }
     public string Surname { get; set; }
@@ -10,4 +10,8 @@ public class User : BaseModel
 
     public long CompanyId { get; set; }
     public Company Company { get; set; }
+
+    public Car Car { get; set; }
+
+    public virtual ICollection<UserRole> Roles { get; set; }
 }
