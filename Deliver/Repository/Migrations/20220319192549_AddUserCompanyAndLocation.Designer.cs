@@ -12,8 +12,8 @@ using Repository;
 namespace Repository.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220319184924_AddUserAndCompany")]
-    partial class AddUserAndCompany
+    [Migration("20220319192549_AddUserCompanyAndLocation")]
+    partial class AddUserCompanyAndLocation
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,6 +56,68 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Company");
+                });
+
+            modelBuilder.Entity("Models.Db.Location", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("CompanyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("ContactNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("Hash")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<float>("Latitude")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Longitude")
+                        .HasColumnType("real");
+
+                    b.Property<string>("No")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Region")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Street")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdateTime")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CompanyId");
+
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("Models.Db.User", b =>
@@ -105,6 +167,17 @@ namespace Repository.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Models.Db.Location", b =>
+                {
+                    b.HasOne("Models.Db.Company", "Company")
+                        .WithMany("Locations")
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
             modelBuilder.Entity("Models.Db.User", b =>
                 {
                     b.HasOne("Models.Db.Company", "Company")
@@ -118,6 +191,8 @@ namespace Repository.Migrations
 
             modelBuilder.Entity("Models.Db.Company", b =>
                 {
+                    b.Navigation("Locations");
+
                     b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
