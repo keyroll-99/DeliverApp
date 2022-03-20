@@ -15,6 +15,8 @@ namespace Deliver
         {
             services.SetupDb(_configuration);
 
+            services.RegisterRepository();
+
             services.AddControllers();
 
         }

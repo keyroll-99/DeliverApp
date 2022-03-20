@@ -23,4 +23,9 @@
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Impl\_Core\" />
+    <Folder Include="_Core\" />
+  </ItemGroup>
+
 </Project>

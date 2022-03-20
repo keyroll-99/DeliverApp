@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Models.Db;
+using Repository.Repository.Interface;
 
 namespace Deliver.Controllers
 {
@@ -7,10 +9,18 @@ namespace Deliver.Controllers
     [ApiController]
     public class TestController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Test()
+        private readonly IUserRepository _userRepository;
+
+        public TestController(IUserRepository userRepository)
         {
-            return Ok();
+            _userRepository = userRepository;
+        }
+
+        [HttpGet]
+        public async Task<List<User>> Test()
+        {
+            var x = await _userRepository.GetAll().ToListAsync();
+            return x;
         }
     }
 }
