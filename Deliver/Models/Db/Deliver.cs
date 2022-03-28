@@ -6,7 +6,7 @@ public class Deliver : BaseHashModel
     public string? Description { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    public int DeliverStatus { get; set; }
+    public int Status { get; set; }
     
     public long CarId { get; set; }
     public Car Car { get; set; }

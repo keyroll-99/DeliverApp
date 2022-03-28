@@ -16,6 +16,7 @@ public class AppDbContext : DbContext
     public DbSet<Deliver> Delivers { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Role> Roles { get; set; }
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -71,7 +72,7 @@ public class AppDbContext : DbContext
         modelBuilder
             .Entity<UserRole>()
             .HasOne(x => x.User)
-            .WithMany(x => x.Roles)
+            .WithMany(x => x.UserRole)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.NoAction);
 
@@ -80,6 +81,13 @@ public class AppDbContext : DbContext
             .HasOne(x => x.Role)
             .WithMany(x => x.UserRoles)
             .HasForeignKey(x => x.RoleId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder
+            .Entity<RefreshToken>()
+            .HasOne(x => x.User)
+            .WithMany(x => x.RefreshTokens)
+            .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

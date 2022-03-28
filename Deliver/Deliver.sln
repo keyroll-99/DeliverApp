@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Deliver", "Deliver\Deliver.csproj", "{A75FE3DE-3B3E-47B4-A163-B899CE4D27F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Deliver", "Deliver\Deliver.csproj", "{A75FE3DE-3B3E-47B4-A163-B899CE4D27F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{85D91EBF-3BD6-408A-8A89-65589E602EA8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Repository", "Repository\Repository.csproj", "{85D91EBF-3BD6-408A-8A89-65589E602EA8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{C8333F5B-CF6B-4F8D-B4AA-E50844C21A54}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{C8333F5B-CF6B-4F8D-B4AA-E50844C21A54}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{9B319903-0965-4A31-8F13-7E2987ECF7A2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{9B319903-0965-4A31-8F13-7E2987ECF7A2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{44DDBA85-75C0-4755-9A18-77DD315B0DC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{44DDBA85-75C0-4755-9A18-77DD315B0DC3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeployApp", "DeployApp\DeployApp.csproj", "{9CCA2392-8602-45DF-A95E-40B8C6A97077}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{44DDBA85-75C0-4755-9A18-77DD315B0DC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{44DDBA85-75C0-4755-9A18-77DD315B0DC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{44DDBA85-75C0-4755-9A18-77DD315B0DC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CCA2392-8602-45DF-A95E-40B8C6A97077}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CCA2392-8602-45DF-A95E-40B8C6A97077}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CCA2392-8602-45DF-A95E-40B8C6A97077}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CCA2392-8602-45DF-A95E-40B8C6A97077}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

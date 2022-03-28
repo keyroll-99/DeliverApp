@@ -1,0 +1,3 @@
+﻿ALTER TABLE "Users"
+	ADD CONSTRAINT FK_User_Company_Id
+	FOREIGN KEY (CompanyId) REFERENCES Company(Id);
