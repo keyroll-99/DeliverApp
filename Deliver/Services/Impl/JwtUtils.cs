@@ -94,7 +94,7 @@ public class JwtUtils : IJwtUtils
 
             return userId;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }

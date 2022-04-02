@@ -55,7 +55,7 @@ namespace Tests.Service
 
             // assert
             response.Should().BeOfType<User>();
-            response.Id.Should().Be(1);
+            response?.Id.Should().Be(1);
         }
 
         [Fact]
@@ -68,7 +68,6 @@ namespace Tests.Service
                 Password = "test"
             };
             var jwtToken = Guid.NewGuid().ToString();
-            var refreshToken = Guid.NewGuid().ToString();
 
             _jwtUtilsMock.GenerateJwtToken(Arg.Any<User>()).Returns(jwtToken);
             _jwtUtilsMock.GenerateRefreshToken(Arg.Any<User>(), Arg.Any<string>()).Returns(new RefreshToken
@@ -116,7 +115,7 @@ namespace Tests.Service
             // arrange
             var token = "token";
             var ip = "ip";
-            _jwtUtilsMock.GetRefreshTokenByToken(Arg.Any<string>()).Returns((RefreshToken)null);
+            _jwtUtilsMock.GetRefreshTokenByToken(Arg.Any<string>()).Returns(null as RefreshToken);
 
             // act
             var response = await _service.RefreshToken(token, ip);
