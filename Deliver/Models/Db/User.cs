@@ -9,9 +9,9 @@ public class User : BaseHashModel
     public string Email { get; set; }
 
     public long? CompanyId { get; set; }
-    public Company? Company { get; set; }
+    public Company Company { get; set; }
 
-    public Car? Car { get; set; }
+    public Car Car { get; set; }
 
     public virtual ICollection<UserRole> UserRole { get; set; } = new List<UserRole>();
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();

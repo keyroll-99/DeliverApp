@@ -1,12 +1,9 @@
 ﻿using Deliver.CustomAttribute;
-using Integrations.Interface;
 using Microsoft.AspNetCore.Mvc;
-using Models.Intefrations;
 using Models.Request.User;
 using Models.Response._Core;
 using Models.Response.User;
 using Services.Interface;
-using System.Net.Mail;
 
 namespace Deliver.Controllers
 {
@@ -16,22 +13,19 @@ namespace Deliver.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IJwtUtils _jwtUtils;
-        private readonly IMailService _communicationService;
-        private const string RefrehTokenCookieName = "refreshToken";
+        private const string _refrehTokenCookieName = "refreshToken";
 
-        public UserController(IUserService userService, IJwtUtils jwtUtils, IMailService communicationService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
-            _jwtUtils = jwtUtils;
-            _communicationService = communicationService;
         }
 
         [HttpPost("Login")]
         [AllowAnonymous]
         public async Task<BaseResponse<AuthResponse>> Login(LoginRequest loginRequest)
         {
-            var response = await _userService.Login(loginRequest, getIpAddress());
+            var ipAddress = getIpAddress() ?? "unknown";
+            var response = await _userService.Login(loginRequest, ipAddress);
             if (response.IsSuccess)
             {
                 setTokenCookie(response.Data!.RefreshToken);
@@ -43,28 +37,14 @@ namespace Deliver.Controllers
         [AllowAnonymous]
         public async Task<BaseResponse<AuthResponse>> RefreshToken()
         {
-            var token = Request.Cookies[RefrehTokenCookieName];
-            var response = await _userService.RefreshToken(token, getIpAddress());
+            var token = Request.Cookies[_refrehTokenCookieName];
+            var ipAddress = getIpAddress() ?? "unknown";
+            var response = await _userService.RefreshToken(token, ipAddress);
             if (response.IsSuccess)
             {
-                setTokenCookie(response.Data.RefreshToken);
+                setTokenCookie(response.Data!.RefreshToken);
             }
             return response;
-        }
-
-        [HttpPost("mail-test")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Test()
-        {
-            await _communicationService.SendWelcomeMessage(new WelcomeMessageModel
-            {
-                Email = "kaziu11511@gmail.com",
-                Name = "Karol",
-                Password = "123",
-                Surname = "Kaźmierczak",
-                Username = "username"
-            });
-            return Ok();
         }
 
         private void setTokenCookie(string token)
@@ -74,10 +54,10 @@ namespace Deliver.Controllers
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddDays(7),
             };
-            Response.Cookies.Append(RefrehTokenCookieName, token, cookieOption);
+            Response.Cookies.Append(_refrehTokenCookieName, token, cookieOption);
         }
 
-        private string getIpAddress() =>
-            HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+        private string? getIpAddress() =>
+            HttpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
     }
 }

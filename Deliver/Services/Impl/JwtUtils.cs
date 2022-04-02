@@ -68,7 +68,7 @@ public class JwtUtils : IJwtUtils
         }
     }
 
-    public int? ValidateJwtToken(string token)
+    public int? ValidateJwtToken(string? token)
     {
         if (token is null)
         {
@@ -94,7 +94,7 @@ public class JwtUtils : IJwtUtils
 
             return userId;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             return null;
         }
