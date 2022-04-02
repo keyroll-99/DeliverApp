@@ -1,9 +1,12 @@
 ﻿using Deliver.CustomAttribute;
+using Integrations.Interface;
 using Microsoft.AspNetCore.Mvc;
+using Models.Intefrations;
 using Models.Request.User;
 using Models.Response._Core;
 using Models.Response.User;
 using Services.Interface;
+using System.Net.Mail;
 
 namespace Deliver.Controllers
 {
@@ -14,12 +17,14 @@ namespace Deliver.Controllers
     {
         private readonly IUserService _userService;
         private readonly IJwtUtils _jwtUtils;
+        private readonly IMailService _communicationService;
         private const string RefrehTokenCookieName = "refreshToken";
 
-        public UserController(IUserService userService, IJwtUtils jwtUtils)
+        public UserController(IUserService userService, IJwtUtils jwtUtils, IMailService communicationService)
         {
             _userService = userService;
             _jwtUtils = jwtUtils;
+            _communicationService = communicationService;
         }
 
         [HttpPost("Login")]
@@ -47,6 +52,21 @@ namespace Deliver.Controllers
             return response;
         }
 
+        [HttpPost("mail-test")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Test()
+        {
+            await _communicationService.SendWelcomeMessage(new WelcomeMessageModel
+            {
+                Email = "kaziu11511@gmail.com",
+                Name = "Karol",
+                Password = "123",
+                Surname = "Kaźmierczak",
+                Username = "username"
+            });
+            return Ok();
+        }
+
         private void setTokenCookie(string token)
         {
             var cookieOption = new CookieOptions
@@ -57,7 +77,7 @@ namespace Deliver.Controllers
             Response.Cookies.Append(RefrehTokenCookieName, token, cookieOption);
         }
 
-        private string getIpAddress() => 
+        private string getIpAddress() =>
             HttpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
     }
 }

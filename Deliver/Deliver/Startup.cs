@@ -1,5 +1,6 @@
 ﻿using Deliver.Setup;
 using Models;
+using Models.Intefrations;
 
 namespace Deliver
 {
@@ -26,7 +27,12 @@ namespace Deliver
             services.Configure<AppSettings>(_configuration.GetSection("AppSettings"))
                 .AddScoped<AppSettings>();
 
+
+            services.Configure<MailSettings>(_configuration.GetSection("Mail"))
+                .AddScoped<MailSettings>();
+
             services.RegisterService();
+            services.RegisterIntegrations();
 
             if (_environment.IsDevelopment())
             {

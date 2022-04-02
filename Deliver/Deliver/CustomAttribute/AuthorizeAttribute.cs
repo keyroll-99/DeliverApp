@@ -15,7 +15,7 @@ public class AuthorizeAttribute : Attribute
             return;
         }
 
-        var user = (User)context.HttpContext.Items["User"];
+        var user = context.HttpContext.Items["User"] as User;
         if(user is null)
         {
             context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };

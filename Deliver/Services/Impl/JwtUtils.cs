@@ -102,7 +102,10 @@ public class JwtUtils : IJwtUtils
 
     public async Task RevokeAllRefreshTokenForUser(User user, string ipAddress)
     {
-        var tokens = await _refreshTokenRepository.GetAll().Where(x => x.UserId == user.Id && x.IsUsed == false).ToListAsync();
+        var tokens = await _refreshTokenRepository
+            .GetAll()
+            .Where(x => x.UserId == user.Id && x.IsUsed == false && x.ExpireDate > DateTime.UtcNow)
+            .ToListAsync();
         foreach (var token in tokens)
         {
             token.IsUsed = true;

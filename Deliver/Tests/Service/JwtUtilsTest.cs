@@ -22,20 +22,23 @@ namespace Tests.Service
                 Id = 1,
                 Token =  "test-token",
                 UserId = 10,
-                IsUsed = false
+                IsUsed = false,
+                ExpireDate = System.DateTime.UtcNow.AddDays(2),
             },
             new RefreshToken
             {
                 Id = 2,
                 Token = "test",
-                UserId = 30
+                UserId = 30,
+                ExpireDate = System.DateTime.UtcNow.AddDays(-3),
             },
             new RefreshToken
             {
                 Id = 3,
-                Token = "test",
+                Token = "test-token-ss",
                 UserId = 10,
-                IsUsed = false
+                IsUsed = false,
+                ExpireDate = System.DateTime.UtcNow.AddDays(2),
             }
         }.BuildMock();
 
@@ -115,6 +118,16 @@ namespace Tests.Service
 
             // assert
             response.Should().Be(10);
+        }
+
+        [Fact]
+        public void ValidateJwtToken_WhenTokenExpire_ReturnNull()
+        {
+            // act
+            var token = _service.ValidateJwtToken("test");
+
+            // assert
+            token.Should().BeNull();
         }
 
         [Fact]
