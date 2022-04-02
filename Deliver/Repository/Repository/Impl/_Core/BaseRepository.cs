@@ -41,7 +41,7 @@ public class BaseRepository<T> : IBaseRepository<T>
         return Entities;
     }
 
-    public async Task<T?> GetByIdAsync(long id)
+    public async Task<T> GetByIdAsync(long id)
     {
         return await Entities.FirstOrDefaultAsync(x => x.Id == id);
     }

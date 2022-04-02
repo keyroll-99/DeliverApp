@@ -9,7 +9,7 @@ namespace Services.Impl;
 
 public class CompanyService : ICompanyService
 {
-    private ICompanyRepository _companyRepository;
+    private readonly ICompanyRepository _companyRepository;
 
     public CompanyService(ICompanyRepository companyRepository)
     {

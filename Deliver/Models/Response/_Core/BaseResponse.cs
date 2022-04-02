@@ -7,14 +7,14 @@ public class BaseResponse<T>
     public string Error { get; set; }
 
     public static BaseResponse<T> Fail(String error) =>
-         new BaseResponse<T>
+         new()
          {
              IsSuccess = false,
              Error = error
          };
 
     public static BaseResponse<T> Success(T data) =>
-        new BaseResponse<T>
+        new()
         {
             IsSuccess = true,
             Data = data

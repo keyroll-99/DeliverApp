@@ -7,7 +7,7 @@ namespace Deliver.Middleware;
 public class JwtMiddleware
 {
     private readonly RequestDelegate _next;
-    private IOptions<LoggedUser> _loggedUser;
+    private readonly IOptions<LoggedUser> _loggedUser;
 
     public JwtMiddleware(RequestDelegate requestDelegate, IOptions<LoggedUser> options)
     {

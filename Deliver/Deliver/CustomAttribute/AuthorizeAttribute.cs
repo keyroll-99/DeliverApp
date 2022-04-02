@@ -7,7 +7,7 @@ namespace Deliver.CustomAttribute;
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
-    private string? _requireRole;
+    private readonly string? _requireRole;
 
     public AuthorizeAttribute()
     {

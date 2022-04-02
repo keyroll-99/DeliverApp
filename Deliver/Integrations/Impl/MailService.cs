@@ -20,16 +20,18 @@ public class MailService : IMailService
 
     public async Task<bool> SendWelcomeMessage(WelcomeMessageModel welcomeMessageModel)
     {
-        var message = new MailMessage();
-        message.From = new MailAddress(_mailSettings.Login);
-        message.To.Add(new MailAddress(welcomeMessageModel.Email));
-        message.Subject = "Wlecome in deliver app";
-        message.Body =
-            $@"<h1> Welcome {welcomeMessageModel.Name} {welcomeMessageModel.Surname} </h1> <br /> 
+        var message = new MailMessage
+        {
+            From = new MailAddress(_mailSettings.Login),
+            Subject = "Wlecome in deliver app",
+            Body = $@"<h1> Welcome {welcomeMessageModel.Name} {welcomeMessageModel.Surname} </h1> <br /> 
             Your loing {welcomeMessageModel.Username} <br />
             Your password {welcomeMessageModel.Password} <br />
-            <h3>Remeber you should change password after first login</h3>";
-        message.IsBodyHtml = true;
+            <h3>Remeber you should change password after first login</h3>",
+            IsBodyHtml = true
+        };
+        message.To.Add(new MailAddress(welcomeMessageModel.Email));
+
         return await SendMail(message);
     }
 

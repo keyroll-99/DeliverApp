@@ -15,12 +15,10 @@ namespace Deliver.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
-        private readonly AppSettings _appSettings;
 
-        public CompanyController(ICompanyService companyService, IOptions<AppSettings> options)
+        public CompanyController(ICompanyService companyService)
         {
             _companyService = companyService;
-            _appSettings = options.Value;
         }
 
         [HttpPost("Create")]

@@ -5,8 +5,8 @@ namespace DeployApp
 {
     public static class ExecuteScript
     {
-        private const string folderNameField = "folder";
-        private const string scriptNameFiled = "name";
+        private const string _folderNameField = "folder";
+        private const string _scriptNameFiled = "name";
 
         public static ScriptModel GetExecutedScripts(ref SqlConnection conn)
         {
@@ -17,12 +17,12 @@ namespace DeployApp
                 var cmd = new SqlCommand(query, conn);
                 var reader = cmd.ExecuteReader();
                 reader.Read();
-                result.Folder = reader[folderNameField].ToString();
-                result.ScriptNumber = Convert.ToInt32(reader[scriptNameFiled].ToString().Split(".")[0]);
+                result.Folder = reader[_folderNameField].ToString();
+                result.ScriptNumber = Convert.ToInt32(reader[_scriptNameFiled].ToString()?.Split(".")[0]);
                 reader.Close();
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 result.Folder = null;
                 result.ScriptNumber = null;
@@ -35,18 +35,17 @@ namespace DeployApp
         {
             executedScripts.ScriptNumber++;
             var scriptPath = $"{basePath}{Path.DirectorySeparatorChar}Script{Path.DirectorySeparatorChar}";
-            List<string> executedSql = new List<string>();
+            List<string> executedSql = new();
             var cmd = new SqlCommand
             {
                 Connection = conn
             };
-            bool ok = true;
 
             while (Directory.Exists($"{scriptPath}{executedScripts.Folder}"))
             {
                 while (true)
                 {
-                    var fiels = Directory.EnumerateFiles($"{scriptPath}{executedScripts.Folder}", $"{executedScripts.ScriptNumber.Value.ToString("00")}.*.sql");
+                    var fiels = Directory.EnumerateFiles($"{scriptPath}{executedScripts.Folder}", $"{executedScripts.ScriptNumber!.Value:00}.*.sql");
 
                     if (!fiels.Any())
                     {
@@ -58,7 +57,7 @@ namespace DeployApp
 
                         var pathArray = file.Split(Path.DirectorySeparatorChar);
                         var fileName = pathArray.Last();
-                        var folder = pathArray[pathArray.Length - 2];
+                        var folder = pathArray[^2];
                         try
                         {
                             var content = File.ReadAllText(file);

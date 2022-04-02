@@ -13,7 +13,7 @@ namespace Deliver.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private const string RefrehTokenCookieName = "refreshToken";
+        private const string _refrehTokenCookieName = "refreshToken";
 
         public UserController(IUserService userService)
         {
@@ -37,7 +37,7 @@ namespace Deliver.Controllers
         [AllowAnonymous]
         public async Task<BaseResponse<AuthResponse>> RefreshToken()
         {
-            var token = Request.Cookies[RefrehTokenCookieName];
+            var token = Request.Cookies[_refrehTokenCookieName];
             var ipAddress = getIpAddress() ?? "unknown";
             var response = await _userService.RefreshToken(token, ipAddress);
             if (response.IsSuccess)
@@ -54,7 +54,7 @@ namespace Deliver.Controllers
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddDays(7),
             };
-            Response.Cookies.Append(RefrehTokenCookieName, token, cookieOption);
+            Response.Cookies.Append(_refrehTokenCookieName, token, cookieOption);
         }
 
         private string? getIpAddress() =>

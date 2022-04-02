@@ -15,7 +15,7 @@ namespace Tests.Service
 {
     public class JwtUtilsTest
     {
-        private IQueryable<RefreshToken> _refreshTokens = new List<RefreshToken>
+        private readonly IQueryable<RefreshToken> _refreshTokens = new List<RefreshToken>
         {
             new RefreshToken
             {
@@ -42,7 +42,7 @@ namespace Tests.Service
             }
         }.BuildMock();
 
-        private readonly AppSettings _appSettings = new AppSettings
+        private readonly AppSettings _appSettings = new()
         {
             Secret = "secret key for mock tests"
         };
