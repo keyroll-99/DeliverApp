@@ -87,7 +87,7 @@ namespace Tests.Service
             };
 
             // act
-            var response = await _service.GenerateRefreshToken(user, "local");
+            var response = await _service.GenerateRefreshToken(user, "locall");
 
             // assert
             response.User.Should().BeOfType<User>();
