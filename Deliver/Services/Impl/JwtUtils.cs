@@ -68,7 +68,7 @@ public class JwtUtils : IJwtUtils
         }
     }
 
-    public int? ValidateJwtToken(string token)
+    public int? ValidateJwtToken(string? token)
     {
         if (token is null)
         {

@@ -6,12 +6,20 @@ public class BaseResponse<T>
     public bool IsSuccess { get; set; }
     public string? Error { get; set; }
 
-    public static BaseResponse<T> Fail(String error)
-    {
-        return new BaseResponse<T>
+    public static BaseResponse<T> Fail(String error) =>
+         new BaseResponse<T>
+         {
+             IsSuccess = false,
+             Error = error
+         };
+
+    public static BaseResponse<T> Success(T data) =>
+        new BaseResponse<T>
         {
-            IsSuccess = false,
-            Error = error
+            IsSuccess = true,
+            Data = data
         };
-    }
+
+    public static implicit operator T(BaseResponse<T> response) => response.Data;
+    public static implicit operator BaseResponse<T>(T response) => BaseResponse<T>.Success(response);
 }

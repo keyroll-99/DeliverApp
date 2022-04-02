@@ -9,5 +9,5 @@ public interface IUserService
 {
     Task<BaseResponse<AuthResponse>> Login(LoginRequest loginRequest, string ipAddress);
     Task<BaseResponse<AuthResponse>> RefreshToken(string? token, string ipAddress);
-    Task<User> GetById(long id);
+    Task<User?> GetById(long id);
 }

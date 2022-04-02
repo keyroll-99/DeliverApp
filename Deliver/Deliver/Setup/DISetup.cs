@@ -14,6 +14,7 @@ public static class DISetup
     {
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<ICompanyRepository, CompanyRepository>();
         return services;
     }
 
@@ -21,6 +22,7 @@ public static class DISetup
     {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IJwtUtils, JwtUtils>();
+        services.AddScoped<ICompanyService, CompanyService>();
         return services;
     }
 

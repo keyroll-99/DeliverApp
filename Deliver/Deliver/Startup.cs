@@ -1,4 +1,5 @@
-﻿using Deliver.Setup;
+﻿using Deliver.Middleware;
+using Deliver.Setup;
 using Models;
 using Models.Intefrations;
 
@@ -31,6 +32,9 @@ namespace Deliver
             services.Configure<MailSettings>(_configuration.GetSection("Mail"))
                 .AddScoped<MailSettings>();
 
+            services.Configure<LoggedUser>(_configuration.GetSection("AppUser"))
+                .AddScoped<LoggedUser>();
+
             services.RegisterService();
             services.RegisterIntegrations();
 
@@ -59,6 +63,8 @@ namespace Deliver
                  .AllowAnyMethod()
                  .AllowAnyHeader()
                  .AllowCredentials());
+
+            app.UseMiddleware<JwtMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {

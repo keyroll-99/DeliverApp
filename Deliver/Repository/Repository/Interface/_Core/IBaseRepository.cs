@@ -6,7 +6,7 @@ public interface IBaseRepository<T>
     where T : BaseModel
 {
     public Task<bool> AddAsync(T model);
-    public Task<T> GetByIdAsync(long id);
+    public Task<T?> GetByIdAsync(long id);
     public Task<bool> UpdateAsync(T model);
     public Task<bool> UpdateRangeAsync(List<T> models);
     public Task<bool> DeleteAsync(T model);

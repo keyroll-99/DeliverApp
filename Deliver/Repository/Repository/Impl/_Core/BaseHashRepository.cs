@@ -11,7 +11,7 @@ public class BaseHashRepository<T> : BaseRepository<T>, IBaseHashRepository<T>
     {
     }
 
-    public async Task<T> GetByHashAsync(Guid hash)
+    public async Task<T?> GetByHashAsync(Guid hash)
     {
         return await Entities.FirstOrDefaultAsync(x => x.Hash == hash);
     }
