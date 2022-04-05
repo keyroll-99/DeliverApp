@@ -68,7 +68,7 @@ public class RoleUtilsTest
         // arrange
         var reguest = new HasPermissionToAddUserRequest
         {
-            LoggedUser = new LoggedUser { Roles = new List<string> { SystemRoles.Driver } },
+            LoggedUser = new LoggedUser { Roles = new List<string> { userRole } },
             TargetCompanyHash = Guid.Parse(targetCompanyHash),
             LoggedUserCompany = new Company
             {

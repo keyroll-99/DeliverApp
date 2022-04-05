@@ -60,13 +60,6 @@ namespace Deliver.Controllers
             return response;
         }
 
-        [HttpGet("throw")]
-        public IActionResult Test()
-        {
-            throw new AppException("test");
-            return Ok();
-        }
-
         private void setTokenCookie(string token)
         {
             var cookieOption = new CookieOptions

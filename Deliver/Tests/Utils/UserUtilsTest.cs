@@ -31,7 +31,7 @@ public class UserUtilsTest
     #endregion
 
     private readonly IUserRepository _userRepository;
-    private IUserUtils _service;
+    private readonly IUserUtils _service;
 
     public UserUtilsTest()
     {

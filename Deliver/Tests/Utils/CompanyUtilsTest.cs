@@ -17,7 +17,7 @@ public class CompanyUtilsTest
 {
     #region mock
 
-    private IQueryable<Company> _companyDataMock = new List<Company>
+    private readonly IQueryable<Company> _companyDataMock = new List<Company>
     {
         new Company
         {
@@ -35,7 +35,7 @@ public class CompanyUtilsTest
     #endregion
 
     private readonly ICompanyRepository _companyRepositoryMock;
-    private ICompanyUtils _service;
+    private readonly ICompanyUtils _service;
 
     public CompanyUtilsTest()
     {
