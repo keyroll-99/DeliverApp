@@ -1,6 +1,6 @@
 ﻿using Models.Db;
 
-namespace Services.Interface;
+namespace Services.Interface.Utils;
 
 public interface IJwtUtils
 {

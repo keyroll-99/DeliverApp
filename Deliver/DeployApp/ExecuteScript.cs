@@ -65,8 +65,12 @@ namespace DeployApp
                             cmd.ExecuteNonQuery();
                             executedSql.Add(content);
                             var insertSql =
-                                $"INSERT INTO deployScripts (name, folder) VALUES ('{fileName}', '{folder}')";
+                                $"INSERT INTO deployScripts (name, folder) VALUES (@fileName, @folder)";
+
                             cmd.CommandText = insertSql;
+                            cmd.Parameters.AddWithValue("@fileName", fileName);
+                            cmd.Parameters.AddWithValue("@folder", folder);
+
                             cmd.ExecuteNonQuery();
                         }
                         catch (SqlException ex)

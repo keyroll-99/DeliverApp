@@ -1,0 +1,2 @@
+﻿ALTER TABLE "Users"
+	ADD PhoneNumber VARCHAR(15) NULL;

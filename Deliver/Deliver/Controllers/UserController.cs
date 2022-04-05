@@ -1,5 +1,7 @@
 ﻿using Deliver.CustomAttribute;
 using Microsoft.AspNetCore.Mvc;
+using Models.Db.ConstValues;
+using Models.Exceptions;
 using Models.Request.User;
 using Models.Response._Core;
 using Models.Response.User;
@@ -9,7 +11,6 @@ namespace Deliver.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -22,7 +23,7 @@ namespace Deliver.Controllers
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<BaseResponse<AuthResponse>> Login(LoginRequest loginRequest)
+        public async Task<BaseRespons<AuthResponse>> Login(LoginRequest loginRequest)
         {
             var ipAddress = getIpAddress() ?? "unknown";
             var response = await _userService.Login(loginRequest, ipAddress);
@@ -35,7 +36,7 @@ namespace Deliver.Controllers
 
         [HttpPost("Refresh")]
         [AllowAnonymous]
-        public async Task<BaseResponse<AuthResponse>> RefreshToken()
+        public async Task<BaseRespons<AuthResponse>> RefreshToken()
         {
             var token = Request.Cookies[_refrehTokenCookieName];
             var ipAddress = getIpAddress() ?? "unknown";
@@ -45,6 +46,25 @@ namespace Deliver.Controllers
                 setTokenCookie(response.Data!.RefreshToken);
             }
             return response;
+        }
+
+        [HttpPost("Create")]
+        [Authorize(SystemRoles.Admin, SystemRoles.CompanyAdmin, SystemRoles.HR, SystemRoles.CompanyOwner)]
+        public async Task<BaseRespons<UserReponse>> Create(CreateUserRequest createRequest)
+        {
+            var response = await _userService.CreateUser(createRequest);
+            if (response.IsSuccess)
+            {
+                await _userService.AddRoleToUser(response.Data.Hash, createRequest.RoleIds);
+            }
+            return response;
+        }
+
+        [HttpGet("throw")]
+        public IActionResult Test()
+        {
+            throw new AppException("test");
+            return Ok();
         }
 
         private void setTokenCookie(string token)

@@ -1,25 +1,46 @@
-﻿namespace Models.Response._Core;
-
-public class BaseResponse<T>
+﻿namespace Models.Response._Core
 {
-    public T Data { get; set; }
-    public bool IsSuccess { get; set; }
-    public string Error { get; set; }
 
-    public static BaseResponse<T> Fail(String error) =>
-         new()
-         {
-             IsSuccess = false,
-             Error = error
-         };
+    public class BaseRespons
+    {
+        public bool IsSuccess { get; set; }
+        public string Error { get; set; }
 
-    public static BaseResponse<T> Success(T data) =>
-        new()
-        {
-            IsSuccess = true,
-            Data = data
-        };
+        public static BaseRespons Fail(string error)
+            => new()
+            {
+                Error = error,
+                IsSuccess = false
+            };
 
-    public static implicit operator T(BaseResponse<T> response) => response.Data;
-    public static implicit operator BaseResponse<T>(T response) => BaseResponse<T>.Success(response);
+        public static BaseRespons Success()
+            => new()
+            {
+                Error = null,
+                IsSuccess = true
+            };
+
+    }
+
+    public class BaseRespons<T> : BaseRespons
+    {
+        public T Data { get; set; }
+
+        public static new BaseRespons<T> Fail(string error) =>
+             new()
+             {
+                 IsSuccess = false,
+                 Error = error
+             };
+
+        public static BaseRespons<T> Success(T data) =>
+            new()
+            {
+                IsSuccess = true,
+                Data = data
+            };
+
+        public static implicit operator T(BaseRespons<T> response) => response.Data;
+        public static implicit operator BaseRespons<T>(T response) => Success(response);
+    }
 }
