@@ -1,4 +1,5 @@
-﻿using Models.Db;
+﻿using Microsoft.EntityFrameworkCore;
+using Models.Db;
 using Models.Request.Company;
 using Models.Response._Core;
 using Models.Response.Company;
@@ -16,11 +17,11 @@ public class CompanyService : ICompanyService
         _companyRepository = companyRepository;
     }
 
-    public async Task<BaseResponse<CompanyResponse>> Create(CreateCompanyRequest request)
+    public async Task<BaseRespons<CompanyResponse>> Create(CreateCompanyRequest request)
     {
-        if(request is null || !request.IsValid)
+        if (request is null || !request.IsValid)
         {
-            return BaseResponse<CompanyResponse>.Fail("Ivalid Data");
+            return BaseRespons<CompanyResponse>.Fail("Ivalid Data");
         }
 
         var company = new Company
@@ -34,7 +35,7 @@ public class CompanyService : ICompanyService
         var isSuccess = await _companyRepository.AddAsync(company);
         if (!isSuccess)
         {
-            return BaseResponse<CompanyResponse>.Fail("Something went wrong");
+            return BaseRespons<CompanyResponse>.Fail("Something went wrong");
         }
 
         return new CompanyResponse

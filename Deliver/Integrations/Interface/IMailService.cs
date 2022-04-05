@@ -1,4 +1,4 @@
-﻿using Models.Intefrations;
+﻿using Models.Integration;
 
 namespace Integrations.Interface;
 

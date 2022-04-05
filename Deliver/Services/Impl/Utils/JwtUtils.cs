@@ -4,13 +4,13 @@ using Microsoft.IdentityModel.Tokens;
 using Models;
 using Models.Db;
 using Repository.Repository.Interface;
-using Services.Interface;
+using Services.Interface.Utils;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace Services.Impl;
+namespace Services.Impl.Utils;
 
 public class JwtUtils : IJwtUtils
 {

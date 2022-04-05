@@ -8,7 +8,7 @@ using Services.Impl;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Tests.Service;
+namespace Tests.Utils;
 
 public class CompanyServiceTest
 {

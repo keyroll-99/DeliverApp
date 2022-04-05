@@ -1,4 +1,4 @@
-﻿namespace Models.Intefrations;
+﻿namespace Models.Integration;
 
 public class MailSettings
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Models;
-using Services.Interface;
+using Services.Interface.Utils;
 
 namespace Deliver.Middleware;
 
@@ -15,7 +15,7 @@ public class JwtMiddleware
         _loggedUser = options;
     }
 
-    public async Task Invoke(HttpContext context, IUserService userService, IJwtUtils jwtUtils)
+    public async Task Invoke(HttpContext context, IUserUtils userService, IJwtUtils jwtUtils)
     {
         var token = context.Request.Headers["Authorization"].FirstOrDefault()?.Split(" ").Last();
         var userId = jwtUtils.ValidateJwtToken(token);
@@ -31,12 +31,7 @@ public class JwtMiddleware
                 context.Items["Roles"] = _loggedUser.Value.Roles;
             }
         }
-        try
-        {
-            await _next(context);
-        }catch (Exception ex)
-        {
-            Console.WriteLine(ex.ToString());
-        }
+
+       await _next(context);
     }
 }

@@ -6,5 +6,5 @@ namespace Services.Interface;
 
 public interface ICompanyService
 {
-    Task<BaseResponse<CompanyResponse>> Create(CreateCompanyRequest request);
+    Task<BaseRespons<CompanyResponse>> Create(CreateCompanyRequest request);
 }

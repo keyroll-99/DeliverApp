@@ -7,15 +7,15 @@ namespace Deliver.CustomAttribute;
 [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
 public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 {
-    private readonly string? _requireRole;
+    private readonly List<string> _requireRole = new();
 
     public AuthorizeAttribute()
     {
     }
 
-    public AuthorizeAttribute(string requireRole)
+    public AuthorizeAttribute(params string[] requireRole)
     {
-        _requireRole = requireRole;
+        _requireRole = requireRole.ToList();
     }
 
     public void OnAuthorization(AuthorizationFilterContext context)
@@ -30,7 +30,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         var roles = context.HttpContext.Items["Roles"] as List<string>;
 
         var haveValidRole = _requireRole is not null
-            ? roles?.Contains(_requireRole)
+            ? roles?.Any(x => _requireRole.Contains(x))
             : true;
 
         if (user is null || !haveValidRole.GetValueOrDefault(false))

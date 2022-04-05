@@ -1,9 +1,13 @@
 ﻿using Integrations.Impl;
 using Integrations.Interface;
+using Models;
+using Models.Integration;
 using Repository.Repository.Impl;
 using Repository.Repository.Interface;
 using Services.Impl;
+using Services.Impl.Utils;
 using Services.Interface;
+using Services.Interface.Utils;
 using System.Net.Mail;
 
 namespace Deliver.Setup;
@@ -15,13 +19,14 @@ public static class DISetup
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<ICompanyRepository, CompanyRepository>();
+        services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
         return services;
     }
 
     public static IServiceCollection RegisterService(this IServiceCollection services)
     {
         services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IJwtUtils, JwtUtils>();
         services.AddScoped<ICompanyService, CompanyService>();
         return services;
     }
@@ -30,6 +35,29 @@ public static class DISetup
     {
         services.AddScoped<IMailService, MailService>();
         services.AddScoped<SmtpClient>();
+        return services;
+    }
+
+    public static IServiceCollection RegisterUtils(this IServiceCollection services)
+    {
+        services.AddScoped<IJwtUtils, JwtUtils>();
+        services.AddScoped<IRoleUtils, RoleUtils>();
+        services.AddScoped<ICompanyUtils, CompanyUtils>();
+        services.AddScoped<IUserUtils, UserUtils>();
+        return services;
+    }
+
+    public static IServiceCollection RegisterSettings(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<AppSettings>(configuration.GetSection("AppSettings"))
+            .AddScoped<AppSettings>();
+
+        services.Configure<MailSettings>(configuration.GetSection("Mail"))
+            .AddScoped<MailSettings>();
+
+        services.Configure<LoggedUser>(configuration.GetSection("AppUser"))
+            .AddScoped<LoggedUser>();
+
         return services;
     }
 }

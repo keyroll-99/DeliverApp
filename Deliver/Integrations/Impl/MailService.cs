@@ -1,6 +1,6 @@
 ﻿using Integrations.Interface;
 using Microsoft.Extensions.Options;
-using Models.Intefrations;
+using Models.Integration;
 using System.Net;
 using System.Net.Mail;
 
