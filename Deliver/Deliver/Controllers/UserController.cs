@@ -1,7 +1,6 @@
 ﻿using Deliver.CustomAttribute;
 using Microsoft.AspNetCore.Mvc;
 using Models.Db.ConstValues;
-using Models.Exceptions;
 using Models.Request.User;
 using Models.Response._Core;
 using Models.Response.User;
@@ -27,10 +26,7 @@ namespace Deliver.Controllers
         {
             var ipAddress = getIpAddress() ?? "unknown";
             var response = await _userService.Login(loginRequest, ipAddress);
-            if (response.IsSuccess)
-            {
-                setTokenCookie(response.Data!.RefreshToken);
-            }
+            setTokenCookie(response.RefreshToken);
             return response;
         }
 
@@ -41,10 +37,7 @@ namespace Deliver.Controllers
             var token = Request.Cookies[_refrehTokenCookieName];
             var ipAddress = getIpAddress() ?? "unknown";
             var response = await _userService.RefreshToken(token, ipAddress);
-            if (response.IsSuccess)
-            {
-                setTokenCookie(response.Data!.RefreshToken);
-            }
+            setTokenCookie(response.RefreshToken);
             return response;
         }
 
@@ -53,10 +46,7 @@ namespace Deliver.Controllers
         public async Task<BaseRespons<UserReponse>> Create(CreateUserRequest createRequest)
         {
             var response = await _userService.CreateUser(createRequest);
-            if (response.IsSuccess)
-            {
-                await _userService.AddRoleToUser(response.Data.Hash, createRequest.RoleIds);
-            }
+            await _userService.AddRoleToUser(response.Hash, createRequest.RoleIds);
             return response;
         }
 

@@ -101,11 +101,10 @@ namespace Tests.Utils
             var response = await _service.Login(request, "127.0.0.1");
 
             // assert
-            response.IsSuccess.Should().BeTrue();
-            response.Data.Should().NotBeNull();
-            response.Data.Name.Should().Be("TestName");
-            response.Data.Surname.Should().Be("TestSurname");
-            response.Data.Username.Should().Be("test");
+            response.Should().NotBeNull();
+            response.Name.Should().Be("TestName");
+            response.Surname.Should().Be("TestSurname");
+            response.Username.Should().Be("test");
         }
 
         [Theory]
@@ -123,12 +122,10 @@ namespace Tests.Utils
             };
 
             // act
-            var response = await _service.Login(request, "local");
+            Func<Task> act = async () => await _service.Login(request, "local");
 
             // assert
-            response.IsSuccess.Should().BeFalse();
-            response.Data.Should().BeNull();
-            response.Error.Should().Be("Invalid username or password");
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidLoginOrPassword);
         }
 
         [Fact]
@@ -140,11 +137,10 @@ namespace Tests.Utils
             _jwtUtilsMock.GetRefreshTokenByToken(Arg.Any<string>()).Returns(null as RefreshToken);
 
             // act
-            var response = await _service.RefreshToken(token, ip);
+            Func<Task> act = async () => await _service.RefreshToken(token, ip);
 
             // assert
-            response.IsSuccess.Should().BeFalse();
-            response.Error.Should().Be("Invalid token");
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidToken);
         }
 
         [Fact]
@@ -160,11 +156,10 @@ namespace Tests.Utils
             });
 
             // act
-            var response = await _service.RefreshToken(token, ip);
+            Func<Task> act = async () => await _service.RefreshToken(token, ip);
 
             // assert
-            response.IsSuccess.Should().BeFalse();
-            response.Error.Should().Be("Token already taken");
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.TokenAlreadyTaken);
         }
 
         [Theory]
@@ -186,11 +181,10 @@ namespace Tests.Utils
             };
 
             // act
-            var response = await _service.CreateUser(request);
+            Func<Task> act = async () => await _service.CreateUser(request);
 
             // assert
-            response.Should().NotBeNull();
-            response.IsSuccess.Should().BeFalse();
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidData);
         }
 
         [Fact]
@@ -215,12 +209,10 @@ namespace Tests.Utils
             _roleUtilsMock.HasPermissionToAddUser(Arg.Any<HasPermissionToAddUserRequest>()).Returns(false);
 
             // act
-            var response = await _service.CreateUser(request);
+            Func<Task> act = async () => await _service.CreateUser(request);
 
             // assert
-
-            response.Should().NotBeNull();
-            response.IsSuccess.Should().BeFalse();
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidRole);
         }
 
 
@@ -248,11 +240,10 @@ namespace Tests.Utils
             _roleUtilsMock.HasPermissionToAddUser(Arg.Any<HasPermissionToAddUserRequest>()).Returns(true);
 
             // act
-            var response = await _service.CreateUser(request);
+            Func<Task> act = async () => await _service.CreateUser(request);
 
             // assert
-            response.Should().NotBeNull();
-            response.IsSuccess.Should().BeFalse();
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.CompanyDoesntExists);
         }
 
         [Fact]
@@ -285,8 +276,7 @@ namespace Tests.Utils
             var response = await _service.CreateUser(request);
 
             // assert
-            response.IsSuccess.Should().BeTrue();
-            response.Data.Should().NotBeNull();
+            response.Should().NotBeNull();
 
             await _mailServiceMock
                 .Received(1)

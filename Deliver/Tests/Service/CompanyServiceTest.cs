@@ -1,10 +1,12 @@
 ﻿using FluentAssertions;
 using Models.Db;
+using Models.Exceptions;
 using Models.Request.Company;
 using Models.Response.Company;
 using NSubstitute;
 using Repository.Repository.Interface;
 using Services.Impl;
+using System;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -39,34 +41,10 @@ public class CompanyServiceTest
         };
 
         // act
-        var response = await _service.Create(request);
+        Func<Task> act = async () => await _service.Create(request);
 
         // assert
-        response.Should().NotBeNull();
-        response.IsSuccess.Should().BeFalse();
-        response.Error.Should().Be("Ivalid Data");
-    }
-
-    [Fact]
-    public async Task Create_WhenCannotAddToDb_ThenReturnError()
-    {
-        // arrange
-        var request = new CreateCompanyRequest
-        {
-            Name = "test",
-            PhoneNumber = "111-111-111",
-            Email = "test@test.com"
-        };
-
-        _companyRepository.AddAsync(Arg.Any<Company>()).Returns(false);
-
-        // act
-        var response = await _service.Create(request);
-
-        // assert
-        response.Should().NotBeNull();
-        response.IsSuccess.Should().BeFalse();
-        response.Error.Should().Be("Something went wrong");
+        await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidData);
     }
 
     [Fact]
@@ -93,8 +71,6 @@ public class CompanyServiceTest
         };
 
         response.Should().NotBeNull(); ;
-        response.IsSuccess.Should().BeTrue();
-        response.Error.Should().BeNull();
-        response.Data.Should().BeEquivalentTo(expectetCompanyResponse, o => o.Excluding(x => x.Hash));
+        response.Should().BeEquivalentTo(expectetCompanyResponse, o => o.Excluding(x => x.Hash));
     }
 }
