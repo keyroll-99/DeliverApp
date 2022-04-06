@@ -1,7 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Models.Db;
+﻿using Models.Db;
+using Models.Exceptions;
 using Models.Request.Company;
-using Models.Response._Core;
 using Models.Response.Company;
 using Repository.Repository.Interface;
 using Services.Interface;
@@ -17,11 +16,11 @@ public class CompanyService : ICompanyService
         _companyRepository = companyRepository;
     }
 
-    public async Task<BaseRespons<CompanyResponse>> Create(CreateCompanyRequest request)
+    public async Task<CompanyResponse> Create(CreateCompanyRequest request)
     {
         if (request is null || !request.IsValid)
         {
-            return BaseRespons<CompanyResponse>.Fail("Ivalid Data");
+            throw new AppException(ErrorMessage.InvalidData);
         }
 
         var company = new Company
@@ -32,11 +31,7 @@ public class CompanyService : ICompanyService
             PhoneNumber = request.PhoneNumber,
         };
 
-        var isSuccess = await _companyRepository.AddAsync(company);
-        if (!isSuccess)
-        {
-            return BaseRespons<CompanyResponse>.Fail("Something went wrong");
-        }
+        await _companyRepository.AddAsync(company);
 
         return new CompanyResponse
         {

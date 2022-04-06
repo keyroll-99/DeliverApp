@@ -7,7 +7,6 @@ using Models.Exceptions;
 using Models.Integration;
 using Models.Request.User;
 using Models.Request.utils;
-using Models.Response._Core;
 using Models.Response.User;
 using Repository.Repository.Interface;
 using Services.Interface;
@@ -41,7 +40,7 @@ namespace Services.Impl
             _mailService = mailService;
         }
 
-        public async Task<BaseRespons<AuthResponse>> Login(LoginRequest loginRequest, string ipAddress)
+        public async Task<AuthResponse> Login(LoginRequest loginRequest, string ipAddress)
         {
 
             var user = await _userRepository
@@ -52,7 +51,7 @@ namespace Services.Impl
 
             if (user is null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
             {
-                return BaseRespons<AuthResponse>.Fail("Invalid username or password");
+                throw new AppException(ErrorMessage.InvalidLoginOrPassword);
             }
 
             var jwtTokne = _jwtUtils.GenerateJwtToken(user);
@@ -70,18 +69,18 @@ namespace Services.Impl
             };
         }
 
-        public async Task<BaseRespons<AuthResponse>> RefreshToken(string? token, string ipAddress)
+        public async Task<AuthResponse> RefreshToken(string? token, string ipAddress)
         {
             var refreshToken = await _jwtUtils.GetRefreshTokenByToken(token);
             if (refreshToken is null)
             {
-                return BaseRespons<AuthResponse>.Fail("Invalid token");
+                throw new AppException(ErrorMessage.InvalidToken);
             }
 
             if (refreshToken.IsUsed)
             {
                 await _jwtUtils.RevokeRefreshToken(refreshToken, ipAddress);
-                return BaseRespons<AuthResponse>.Fail("Token already taken");
+                throw new AppException(ErrorMessage.TokenAlreadyTaken);
             }
 
             var user = await _userRepository
@@ -92,7 +91,7 @@ namespace Services.Impl
 
             if (user is null)
             {
-                return BaseRespons<AuthResponse>.Fail("Error with fetch user");
+                throw new AppException(ErrorMessage.UserDosentExists);
             }
 
             await _jwtUtils.RevokeRefreshToken(refreshToken, ipAddress);
@@ -110,55 +109,55 @@ namespace Services.Impl
             };
         }
 
-        public async Task<BaseRespons<UserReponse>> CreateUser(CreateUserRequest createUserRequest)
+        public async Task<UserReponse> CreateUser(CreateUserRequest createUserRequest)
         {
             if (createUserRequest is null || !createUserRequest.IsValid)
             {
-                return BaseRespons<UserReponse>.Fail("Invalid Data");
+                throw new AppException(ErrorMessage.InvalidData);
             }
 
             var userCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
             var hasPerrmisionToAdd = _roleUtils.HasPermissionToAddUser(new HasPermissionToAddUserRequest
-                {
-                    LoggedUser = _loggedUser,
-                    LoggedUserCompany = userCompany,
-                    TargetCompanyHash = createUserRequest.CompanyHash
-                });
+            {
+                LoggedUser = _loggedUser,
+                LoggedUserCompany = userCompany,
+                TargetCompanyHash = createUserRequest.CompanyHash
+            });
 
             if (!hasPerrmisionToAdd)
             {
-                return BaseRespons<UserReponse>.Fail("Invalid roles");
+                throw new AppException(ErrorMessage.InvalidRole);
             }
 
             var company = await _companyUtils.GetCompanyByHash(createUserRequest.CompanyHash);
             if (company is null)
             {
-                return BaseRespons<UserReponse>.Fail("Invalid company");
+                throw new AppException(ErrorMessage.CompanyDoesntExists);
             }
-            
+
             var password = Convert.ToBase64String(RandomNumberGenerator.GetBytes(5)).Replace("=", "");
             var newUser = new User
-                {
-                    Hash = Guid.NewGuid(),
-                    Name = createUserRequest.Name,
-                    Surname = createUserRequest.Surname,
-                    CompanyId = company.Id,
-                    Email = createUserRequest.Email,
-                    PhoneNumber = createUserRequest.PhoneNumber,
-                    Username = createUserRequest.Username,
-                    Password = BCrypt.Net.BCrypt.HashPassword(password),
-                };
+            {
+                Hash = Guid.NewGuid(),
+                Name = createUserRequest.Name,
+                Surname = createUserRequest.Surname,
+                CompanyId = company.Id,
+                Email = createUserRequest.Email,
+                PhoneNumber = createUserRequest.PhoneNumber,
+                Username = createUserRequest.Username,
+                Password = BCrypt.Net.BCrypt.HashPassword(password),
+            };
 
             await _userRepository.AddAsync(newUser);
-            
+
             await _mailService.SendWelcomeMessage(new WelcomeMessageModel
-                {
-                    Email = createUserRequest.Email,
-                    Name = createUserRequest.Name,
-                    Password = password,
-                    Surname = createUserRequest.Surname,
-                    Username = createUserRequest.Username
-                });
+            {
+                Email = createUserRequest.Email,
+                Name = createUserRequest.Name,
+                Password = password,
+                Surname = createUserRequest.Surname,
+                Username = createUserRequest.Username
+            });
 
             return new UserReponse
             {
@@ -175,7 +174,7 @@ namespace Services.Impl
         public async Task AddRoleToUser(Guid userHash, List<long> RolesId)
         {
             var user = await _userRepository.GetByHashAsync(userHash);
-            if(user is null)
+            if (user is null)
             {
                 throw new AppException(ErrorMessage.UserDosentExists);
             }
@@ -186,19 +185,19 @@ namespace Services.Impl
         {
             var company = await _companyUtils.GetCompanyByHash(companyHash);
             var user = await _userRepository.GetByHashAsync(userHash);
-            
-            if(company is null)
+
+            if (company is null)
             {
                 throw new AppException(ErrorMessage.CompanyDoesntExists);
             }
-            if(user is null)
+            if (user is null)
             {
                 throw new AppException(ErrorMessage.UserDosentExists);
             }
 
             user.Company = company;
             user.CompanyId = company.Id;
-            
+
             await _userRepository.UpdateAsync(user);
         }
     }
