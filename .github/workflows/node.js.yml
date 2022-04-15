@@ -23,5 +23,6 @@ jobs:
               with:
                   node-version: 16.x
                   cache: "npm"
+                  cache-dependency-path: "./jsApps/launcher/package-lock.json"
             - run: npm ci
             - run: npm run test
