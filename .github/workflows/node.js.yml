@@ -13,8 +13,8 @@ jobs:
     build:
         runs-on: ubuntu-latest
         defaults:
-          run:
-            working-directory: ./jsApps/launcher
+            run:
+                working-directory: ./jsApps/launcher
 
         steps:
             - uses: actions/checkout@v3
@@ -23,6 +23,5 @@ jobs:
               with:
                   node-version: 16.x
                   cache: "npm"
-                  cache
             - run: npm ci
             - run: npm run test
