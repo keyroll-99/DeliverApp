@@ -1,8 +1,5 @@
 ﻿using Deliver.CustomAttribute;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using Models;
 using Models.Db.ConstValues;
 using Models.Request.Company;
 using Models.Response._Core;
@@ -11,7 +8,7 @@ using Services.Interface;
 
 namespace Deliver.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class CompanyController : ControllerBase
     {

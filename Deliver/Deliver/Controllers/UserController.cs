@@ -8,7 +8,7 @@ using Services.Interface;
 
 namespace Deliver.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("Api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
     {
@@ -56,6 +56,8 @@ namespace Deliver.Controllers
             {
                 HttpOnly = true,
                 Expires = DateTime.UtcNow.AddDays(7),
+                Secure = true,
+                SameSite = SameSiteMode.None
             };
             Response.Cookies.Append(_refrehTokenCookieName, token, cookieOption);
         }

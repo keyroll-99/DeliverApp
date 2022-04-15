@@ -23,18 +23,8 @@ namespace Deliver.Setup
             var roles = appDbContext.Roles;
             var userRoles = appDbContext.UserRoles;
 
-            var adminRole = await roles.FirstOrDefaultAsync(x => x.Name == "admin");
-            var admin = await users.FirstOrDefaultAsync(x => x.Name == "admin");
-
-            if (adminRole is null)
-            {
-                adminRole = new Role
-                {
-                    Name = "admin",
-                    CreateTime = DateTime.Now,
-                };
-                roles.Add(adminRole);
-            }
+            var adminRole = await roles.FirstOrDefaultAsync(x => x.Name == "Admin");
+            var admin = await users.FirstOrDefaultAsync(x => x.Name == "Admin");
 
             if (admin is null)
             {

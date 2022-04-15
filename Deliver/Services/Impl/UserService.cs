@@ -65,6 +65,7 @@ namespace Services.Impl
                 RefreshToken = refreshToken.Token,
                 Username = user.Username,
                 JwtToken = jwtTokne,
+                ExpireDate = DateTime.Now.AddMinutes(15),
                 Roles = user.UserRole.Select(x => x.Role.Name).ToList(),
             };
         }
@@ -105,6 +106,7 @@ namespace Services.Impl
                 RefreshToken = refreshToken.Token,
                 Username = user.Username,
                 JwtToken = jwtToken,
+                ExpireDate = DateTime.Now.AddMinutes(15),
                 Roles = user.UserRole.Select(x => x.Role.Name).ToList()
             };
         }
@@ -116,15 +118,7 @@ namespace Services.Impl
                 throw new AppException(ErrorMessage.InvalidData);
             }
 
-            var userCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
-            var hasPerrmisionToAdd = _roleUtils.HasPermissionToAddUser(new HasPermissionToAddUserRequest
-            {
-                LoggedUser = _loggedUser,
-                LoggedUserCompany = userCompany,
-                TargetCompanyHash = createUserRequest.CompanyHash
-            });
-
-            if (!hasPerrmisionToAdd)
+            if(!(await VerifyPerrmisionToAddUser(createUserRequest.CompanyHash)))
             {
                 throw new AppException(ErrorMessage.InvalidRole);
             }
@@ -135,29 +129,7 @@ namespace Services.Impl
                 throw new AppException(ErrorMessage.CompanyDoesntExists);
             }
 
-            var password = Convert.ToBase64String(RandomNumberGenerator.GetBytes(5)).Replace("=", "");
-            var newUser = new User
-            {
-                Hash = Guid.NewGuid(),
-                Name = createUserRequest.Name,
-                Surname = createUserRequest.Surname,
-                CompanyId = company.Id,
-                Email = createUserRequest.Email,
-                PhoneNumber = createUserRequest.PhoneNumber,
-                Username = createUserRequest.Username,
-                Password = BCrypt.Net.BCrypt.HashPassword(password),
-            };
-
-            await _userRepository.AddAsync(newUser);
-
-            await _mailService.SendWelcomeMessage(new WelcomeMessageModel
-            {
-                Email = createUserRequest.Email,
-                Name = createUserRequest.Name,
-                Password = password,
-                Surname = createUserRequest.Surname,
-                Username = createUserRequest.Username
-            });
+            var newUser = await AddUserAndSendMail(createUserRequest.AsUser(), company);
 
             return new UserReponse
             {
@@ -169,6 +141,41 @@ namespace Services.Impl
                 Surname = newUser.Surname,
                 Username = newUser.Username,
             };
+        }
+
+        private async Task<bool> VerifyPerrmisionToAddUser(Guid hash)
+        {
+            var userCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
+            return _roleUtils.HasPermissionToAddUser(new HasPermissionToAddUserRequest
+            {
+                LoggedUser = _loggedUser,
+                LoggedUserCompany = userCompany,
+                TargetCompanyHash = hash
+            });
+        }
+
+        private async Task<User> AddUserAndSendMail(User user, Company company)
+        {
+            var password = Convert.ToBase64String(RandomNumberGenerator.GetBytes(5)).Replace("=", "");
+            user.Hash = Guid.NewGuid();
+            user.Password = BCrypt.Net.BCrypt.HashPassword(password);
+            user.CompanyId = company.Id;
+
+            await _userRepository.AddAsync(user);
+            await SendWelcomeMail(user, password);
+            return user;
+        }
+
+        private async Task SendWelcomeMail(User user, string password)
+        {
+            await _mailService.SendWelcomeMessage(new WelcomeMessageModel
+            {
+                Email = user.Email,
+                Name = user.Name,
+                Password = password,
+                Surname = user.Surname,
+                Username = user.Username
+            });
         }
 
         public async Task AddRoleToUser(Guid userHash, List<long> RolesId)
