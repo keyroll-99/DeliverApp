@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { observer } from "mobx-react";
+import { useEffect, useState } from "react";
+import { useQueries, useQuery, useQueryClient } from "react-query";
+import { RefreshToken } from "./service/userService/UserService";
+import { UseStore } from "./stores/Store";
+import Router from "./utils/Route/Router";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const { userStore } = UseStore();
+    const { isLoading, error } = RefreshToken();
 
-export default App;
+    if (isLoading) {
+        return <h1>loading...</h1>;
+    }
+
+    return <Router />;
+};
+
+export default observer(App);
