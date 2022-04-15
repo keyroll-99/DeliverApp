@@ -1,0 +1,17 @@
+name: react
+
+on: [push, pull_request]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+    steps:
+        - uses: actions/checkout@v3
+        - name: Setup node
+          uses: actions/setup-node@v3
+          with:
+              note-version: 16.x
+              cache: "npm"
+      - run: npm  install .\jsApps\launcher\
+      - run: npm --prefix .\jsApps\launcher\ run test
+
