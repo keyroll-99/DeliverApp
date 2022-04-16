@@ -58,25 +58,22 @@ export const RefreshToken = (): FetchProcessing<null> => {
     };
 };
 
-export const Login = (onSuccess: () => void): MutationProcessing<LoginForm, AuthResponse> => {
+export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse>> => {
     const { userStore } = UseStore();
-    const { isLoading, data, mutate } = useMutation((request: LoginForm) => LoginRequest(request), {
+    const { isLoading, data, mutate, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
         onSuccess: () => {
             if (data?.isSuccess) {
                 userStore.setUser(data!.data!);
             }
-            onSuccess();
         },
     });
-    if (!isLoading && data?.isSuccess) {
-        console.log("wow");
-        userStore.setUser(data!.data!);
-    }
+
     return {
         isLoading: isLoading,
         error: data?.error,
         isSuccess: data?.isSuccess,
         mutate: mutate,
-        data: data?.data,
+        data: data,
+        mutateAsync: mutateAsync,
     };
 };

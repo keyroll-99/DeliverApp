@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
+import Navbar from "../../layout/navbar/Navbar";
 import { UseStore } from "../../stores/Store";
 import Path from "./Path";
 
@@ -16,10 +16,10 @@ const RequireAuth = ({ children }: props) => {
     }
 
     return (
-        <>
+        <div className="container">
             <Navbar />
             {children}
-        </>
+        </div>
     );
 };
 

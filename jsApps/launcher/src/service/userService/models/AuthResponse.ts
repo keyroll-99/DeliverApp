@@ -3,7 +3,7 @@ export default interface AuthResponse {
     username: string;
     name: string;
     surname: string;
-    jwtToken: string;
+    jwt: string;
     expireDate: Date;
     roles: string[];
 }
