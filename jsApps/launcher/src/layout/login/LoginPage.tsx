@@ -1,5 +1,6 @@
 import { AccountCircle } from "@mui/icons-material";
-import { Box, Button, Container, TextField } from "@mui/material";
+import { Box, Container, TextField } from "@mui/material";
+import { LoadingButton } from "@mui/lab";
 import { observer } from "mobx-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,22 +17,23 @@ const isValidForm = (form: LoginForm): boolean => {
 
 const LoginPage = () => {
     const [loginForm, setLoginForm] = useState<LoginForm>({ Username: "", Password: "" });
+    const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-
-    const onSuccess = () => {
-        navigate(Path.home);
-    };
-    const { isLoading, mutate } = Login(onSuccess);
+    const { isLoading, mutateAsync } = Login();
 
     const submitForm = async () => {
         if (isValidForm(loginForm)) {
-            mutate(loginForm);
+            const response = await mutateAsync(loginForm);
+
+            if (response.isSuccess) {
+                navigate(Path.home);
+            } else {
+                setError(response.error);
+            }
+        } else {
+            setError("please fill in all fields");
         }
     };
-
-    if (isLoading) {
-        return <h1>loading...</h1>;
-    }
 
     return (
         <Container fixed className={baseClass} sx={{ display: "flex" }}>
@@ -44,6 +46,8 @@ const LoginPage = () => {
                         variant="standard"
                         onChange={(e) => setLoginForm({ ...loginForm, Username: e.target.value })}
                         value={loginForm.Username}
+                        error={error ? true : false}
+                        helperText={error}
                     />
                 </Box>
                 <Box className={CreateClass(baseClass, "box")} sx={{ display: "flex", alignItems: "flex-end" }}>
@@ -54,10 +58,14 @@ const LoginPage = () => {
                         type="password"
                         onChange={(e) => setLoginForm({ ...loginForm, Password: e.target.value })}
                         value={loginForm.Password}
+                        error={error ? true : false}
+                        helperText={error}
                     />
                 </Box>
                 <Box className={CreateClass(baseClass, "box")} sx={{ display: "flex", alignItems: "flex-end" }}>
-                    <Button onClick={submitForm}>Login</Button>
+                    <LoadingButton onClick={submitForm} loading={isLoading}>
+                        Login
+                    </LoadingButton>
                 </Box>
             </span>
         </Container>

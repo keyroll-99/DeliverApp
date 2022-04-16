@@ -9,7 +9,7 @@ jest.mock("../../stores/Store", () => ({
 
 jest.mock("react-router-dom", () => ({ Navigate: jest.fn() }));
 
-jest.mock("../../components/Navbar", () => () => <div>navbar</div>);
+jest.mock("../../layout/navbar/Navbar", () => () => <div>navbar</div>);
 
 beforeEach(() => {
     mockLoggedIn = true;

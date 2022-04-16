@@ -3,13 +3,13 @@ import User from "./models/User";
 
 export const MapAuthResponseToUser = (response: AuthResponse): User => {
     return {
-        Hash: response.hash,
-        JwtToken: response.jwtToken,
-        Name: response.name,
-        Roles: response.roles,
-        Surname: response.surname,
-        Username: response.surname,
-        ExpireDate: response.expireDate,
+        hash: response.hash,
+        jwt: response.jwt,
+        name: response.name,
+        roles: response.roles,
+        surname: response.surname,
+        username: response.surname,
+        expireDate: response.expireDate,
     };
 };
 

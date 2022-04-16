@@ -1,0 +1,15 @@
+.navbar {
+    width: 20%;
+    height: 100%;
+    background-color: #333742;
+
+    @media screen and( max-width: 768px) {
+        width: 100%;
+    }
+
+    .navbar-item {
+        background-color: #3f424b;
+        border-radius: 5px;
+        color: whitesmoke;
+    }
+}
