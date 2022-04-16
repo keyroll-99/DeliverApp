@@ -64,7 +64,7 @@ namespace Services.Impl
                 Surname = user.Surname,
                 RefreshToken = refreshToken.Token,
                 Username = user.Username,
-                JwtToken = jwtTokne,
+                Jwt = jwtTokne,
                 ExpireDate = DateTime.Now.AddMinutes(15),
                 Roles = user.UserRole.Select(x => x.Role.Name).ToList(),
             };
@@ -105,7 +105,7 @@ namespace Services.Impl
                 Name = user.Name,
                 RefreshToken = refreshToken.Token,
                 Username = user.Username,
-                JwtToken = jwtToken,
+                Jwt = jwtToken,
                 ExpireDate = DateTime.Now.AddMinutes(15),
                 Roles = user.UserRole.Select(x => x.Role.Name).ToList()
             };

@@ -8,7 +8,7 @@ public class AuthResponse
     public string Username { get; set; }
     public string Name { get; set; }
     public string Surname { get; set; }
-    public string JwtToken { get; set; }
+    public string Jwt { get; set; }
     public DateTime ExpireDate { get; set; }
     public List<string> Roles { get; set; }
 

@@ -1,6 +1,7 @@
 ﻿using Models.Exceptions;
 using Models.Response._Core;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace Deliver.Middleware
 {
@@ -15,6 +16,15 @@ namespace Deliver.Middleware
 
         public async Task Invoke(HttpContext context, IHostEnvironment environment)
         {
+            var jsonSerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new CamelCaseNamingStrategy(),
+                },
+                Formatting = Formatting.Indented,
+            };
+
             try
             {
                 await _next(context);
@@ -23,7 +33,7 @@ namespace Deliver.Middleware
             {
                 context.Response.StatusCode = 200;
                 await context.Response
-                    .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail(ex.Message)));
+                    .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail(ex.Message), jsonSerializerSettings));
             }
             catch (Exception ex)
             {
@@ -31,12 +41,12 @@ namespace Deliver.Middleware
                 if (environment.IsProduction())
                 {
                     await context.Response
-                        .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail("Something went wrong.")));
+                        .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail("Something went wrong."), jsonSerializerSettings));
                 }
                 else
                 {
                     await context.Response
-                        .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail(ex.Message)));
+                        .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail(ex.Message), jsonSerializerSettings));
                 }
             }
         }

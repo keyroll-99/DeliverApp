@@ -1,5 +1,6 @@
 ﻿using Deliver.Middleware;
 using Deliver.Setup;
+using System.Text.Json;
 
 namespace Deliver
 {
@@ -28,7 +29,11 @@ namespace Deliver
 
             services.RegisterIntegrations();
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+            });
 
             if (_environment.IsDevelopment())
             {
