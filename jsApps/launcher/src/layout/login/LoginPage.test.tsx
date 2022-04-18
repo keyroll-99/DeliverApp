@@ -23,7 +23,7 @@ jest.mock("@mui/lab", () => ({
     LoadingButton: () => <div>loading button</div>,
 }));
 
-jest.mock("../../service/userService/UserService", () => ({
+jest.mock("../../service/userService/AuthenticationService", () => ({
     Login: () => jest.fn().mockRejectedValue(mockMutationProcessing),
 }));
 

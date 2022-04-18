@@ -14,11 +14,16 @@ public class UserUtils : IUserUtils
         _userRepository = userRepository;
     }
 
-
     public async Task<User?> GetById(long id) =>
         await _userRepository
             .GetAll()
             .Include(x => x.UserRole)
             .ThenInclude(y => y.Role)
             .FirstOrDefaultAsync(x => x.Id == id);
+
+    public async Task<List<User>> GetUsersFromCompany(Company company) =>
+        await _userRepository
+            .GetAll()
+            .Where(x => x.CompanyId == company.Id)
+            .ToListAsync();
 }

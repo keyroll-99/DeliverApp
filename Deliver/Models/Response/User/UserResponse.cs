@@ -1,6 +1,6 @@
 ﻿namespace Models.Response.User;
 
-public class UserReponse
+public class UserResponse
 {
     public Guid Hash { get; set; }
     public string Username { get; set; }

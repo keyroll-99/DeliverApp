@@ -1,6 +1,6 @@
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../../layout/navbar/Navbar";
-import { UseStore } from "../../stores/Store";
+import { RefreshToken } from "../../service/userService/AuthenticationService";
 import Path from "./Path";
 
 interface props {
@@ -8,17 +8,22 @@ interface props {
 }
 
 const RequireAuth = ({ children }: props) => {
-    const { userStore } = UseStore();
+    const { isLoading, isSuccess } = RefreshToken();
+    const navigation = useNavigate();
 
-    if (!userStore.getIsLogged) {
-        Navigate({ to: Path.login, replace: true });
-        return <></>;
+    if (!isSuccess && !isLoading) {
+        navigation(Path.login);
+        return null;
+    }
+
+    if (isLoading) {
+        return <h1>loading...</h1>;
     }
 
     return (
         <div className="container">
             <Navbar />
-            {children}
+            <div className="content">{children}</div>
         </div>
     );
 };

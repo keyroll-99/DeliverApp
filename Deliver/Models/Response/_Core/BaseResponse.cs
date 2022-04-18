@@ -19,7 +19,6 @@
                 Error = null,
                 IsSuccess = true
             };
-
     }
 
     public class BaseRespons<T> : BaseRespons

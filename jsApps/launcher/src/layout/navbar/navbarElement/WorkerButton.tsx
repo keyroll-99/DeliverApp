@@ -1,26 +1,26 @@
 import { ListItemButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import HasRole, { Roles } from "../../../service/userService/Roles";
+import Path from "../../../utils/route/Path";
+import PersonIcon from "@mui/icons-material/Person";
 
 interface props {
     roles: string[];
 }
 
-const PersonalButton = ({ roles }: props) => {
+const WorkerButton = ({ roles }: props) => {
     const navigation = useNavigate();
 
     if (!HasRole(roles, [Roles.Admin, Roles.CompanyAdmin, Roles.CompanyOwner, Roles.Hr])) {
-        console.log("hello");
-
         return null;
     }
-    console.log("hello but why??");
 
     return (
-        <ListItemButton color="" className="navbar-item" onClick={() => navigation("/test")}>
-            Personel
+        <ListItemButton className="navbar-item" onClick={() => navigation(Path.workersList)}>
+            <PersonIcon />
+            <p>Workers</p>
         </ListItemButton>
     );
 };
 
-export default PersonalButton;
+export default WorkerButton;

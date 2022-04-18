@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { LoadConfig } from "./utils/_core/Config";
 import "./assets/index.scss";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +21,7 @@ fetch(`./config.json`)
                     <QueryClientProvider client={queryClient}>
                         <BrowserRouter>
                             <App />
+                            <ReactQueryDevtools initialIsOpen={false} />
                         </BrowserRouter>
                     </QueryClientProvider>
                 </StoreContext.Provider>

@@ -5,18 +5,18 @@ import { observer } from "mobx-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "../../service/userService/models/LoginForm";
-import { Login } from "../../service/userService/UserService";
-import Path from "../../utils/Route/Path";
+import { Login } from "../../service/userService/AuthenticationService";
+import Path from "../../utils/route/Path";
 import CreateClass from "../../utils/style/CreateClass";
 
 const baseClass = "login";
 
 const isValidForm = (form: LoginForm): boolean => {
-    return form.Username !== "" && form.Password !== "";
+    return form.username !== "" && form.password !== "";
 };
 
 const LoginPage = () => {
-    const [loginForm, setLoginForm] = useState<LoginForm>({ Username: "", Password: "" });
+    const [loginForm, setLoginForm] = useState<LoginForm>({ username: "", password: "" });
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const { isLoading, mutateAsync } = Login();
@@ -44,8 +44,8 @@ const LoginPage = () => {
                     <TextField
                         label="Login"
                         variant="standard"
-                        onChange={(e) => setLoginForm({ ...loginForm, Username: e.target.value })}
-                        value={loginForm.Username}
+                        onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
+                        value={loginForm.username}
                         error={error ? true : false}
                         helperText={error}
                     />
@@ -56,8 +56,8 @@ const LoginPage = () => {
                         label="Password"
                         variant="standard"
                         type="password"
-                        onChange={(e) => setLoginForm({ ...loginForm, Password: e.target.value })}
-                        value={loginForm.Password}
+                        onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                        value={loginForm.password}
                         error={error ? true : false}
                         helperText={error}
                     />
