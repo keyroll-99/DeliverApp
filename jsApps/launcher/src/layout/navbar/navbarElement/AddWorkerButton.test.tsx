@@ -1,5 +1,4 @@
 import { render } from "@testing-library/react";
-import WorkerButton from "./WorkerButton";
 import HasRole from "../../../service/userService/Roles";
 import AddWorkerButton from "./AddWorkerButton";
 
@@ -16,6 +15,10 @@ jest.mock("../../../service/userService/Roles", () => ({
 
 jest.mock("react-router-dom", () => ({
     useNavigate: jest.fn(),
+}));
+
+jest.mock("../../../utils/route/Path", () => ({
+    workersList: "/",
 }));
 
 test("should render item when user has valid role", () => {

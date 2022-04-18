@@ -17,6 +17,10 @@ jest.mock("react-router-dom", () => ({
     useNavigate: jest.fn(),
 }));
 
+jest.mock("../../../utils/route/Path", () => ({
+    workersList: "/",
+}));
+
 test("should render item when user has valid role", () => {
     // arrange
     (HasRole as jest.MockedFunction<typeof HasRole>).mockReturnValue(true);

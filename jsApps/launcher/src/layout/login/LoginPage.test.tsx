@@ -27,6 +27,10 @@ jest.mock("../../service/userService/AuthenticationService", () => ({
     Login: () => jest.fn().mockRejectedValue(mockMutationProcessing),
 }));
 
+jest.mock("../../utils/route/Path", () => ({
+    workersList: "/",
+}));
+
 test("should render login page is not loading", () => {
     // act
     const component = render(<LoginPage />);
