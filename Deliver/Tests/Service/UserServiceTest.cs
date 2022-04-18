@@ -108,12 +108,12 @@ namespace Tests.Utils
             var request = new CreateUserRequest
             {
                 CompanyHash = Guid.NewGuid(),
-                Name = "test",
+                Name = "test2",
                 Email = "test@test.com",
                 PhoneNumber = "11-11-11",
                 RoleIds = new List<long> { 1 },
                 Surname = "test",
-                Username = "test"
+                Username = "test2"
             };
 
             _companyUtilsMock.GetUserCompany(Arg.Any<long>()).Returns(new Company
@@ -137,12 +137,12 @@ namespace Tests.Utils
             var request = new CreateUserRequest
             {
                 CompanyHash = Guid.NewGuid(),
-                Name = "test",
+                Name = "test2",
                 Email = "test@test.com",
                 PhoneNumber = "11-11-11",
                 RoleIds = new List<long> { 1 },
                 Surname = "test",
-                Username = "test"
+                Username = "test2"
             };
 
             _companyUtilsMock.GetUserCompany(Arg.Any<long>()).Returns(new Company
@@ -167,12 +167,12 @@ namespace Tests.Utils
             var request = new CreateUserRequest
             {
                 CompanyHash = Guid.NewGuid(),
-                Name = "test",
+                Name = "test2",
                 Email = "test@test.com",
                 PhoneNumber = "11-11-11",
                 RoleIds = new List<long> { 1 },
                 Surname = "test",
-                Username = "test"
+                Username = "test2"
             };
 
             _companyUtilsMock.GetUserCompany(Arg.Any<long>()).Returns(new Company
