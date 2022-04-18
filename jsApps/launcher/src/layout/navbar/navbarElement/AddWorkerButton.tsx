@@ -2,7 +2,6 @@ import { ListItemButton } from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import HasRole, { Roles } from "../../../service/userService/Roles";
 import { useNavigate } from "react-router-dom";
-import Path from "../../../utils/route/Path";
 
 interface props {
     roles: string[];
@@ -16,7 +15,8 @@ const AddWorkerButton = ({ roles }: props) => {
     }
 
     return (
-        <ListItemButton className="navbar-item" onClick={() => navigation(Path.addWorker)}>
+        // tmp solition for not working import on CI
+        <ListItemButton className="navbar-item" onClick={() => navigation("/workers/add")}>
             <PersonAddIcon />
             <p>Add worker</p>
         </ListItemButton>
