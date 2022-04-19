@@ -26,8 +26,7 @@ const LoginPage = () => {
             const response = await mutateAsync(loginForm);
 
             if (response.isSuccess) {
-                // tmp solition for not working import on CI
-                navigate("/");
+                navigate(Path.home);
             } else {
                 setError(response.error);
             }
