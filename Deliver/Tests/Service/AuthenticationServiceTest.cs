@@ -28,7 +28,11 @@ namespace Tests.Service
                 Username = "test",
                 Password = BCrypt.Net.BCrypt.HashPassword("test"),
                 Name = "TestName",
-                Surname = "TestSurname"
+                Surname = "TestSurname",
+                Company = new Company
+                {
+                    Hash = Guid.NewGuid()
+                }
             }
         }.BuildMock();
         #endregion
