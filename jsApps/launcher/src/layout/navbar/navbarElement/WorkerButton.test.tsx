@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import WorkerButton from "./WorkerButton";
-import HasRole from "../../../service/userService/Roles";
+import HasRole from "service/userService/Roles";
 
 jest.mock("@mui/material", () => ({
     ListItemButton: () => <div>ListItemMock</div>,

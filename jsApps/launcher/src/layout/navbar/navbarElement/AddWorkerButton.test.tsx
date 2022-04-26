@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import HasRole from "../../../service/userService/Roles";
+import HasRole from "service/userService/Roles";
 import AddWorkerButton from "./AddWorkerButton";
 
 jest.mock("@mui/material", () => ({
@@ -7,7 +7,7 @@ jest.mock("@mui/material", () => ({
 }));
 
 jest.mock("../../../service/userService/Roles", () => ({
-    __esModule: true, // this property makes it work
+    __esModule: true,
     default: jest.fn(),
     HasRole: jest.fn(),
     Roles: ["test1"],

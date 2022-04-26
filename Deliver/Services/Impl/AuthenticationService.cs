@@ -26,6 +26,7 @@ public class AuthenticationService : IAuthenticationService
             .GetAll()
             .Include(x => x.UserRole)
             .ThenInclude(x => x.Role)
+            .Include(x => x.Company)
             .FirstOrDefaultAsync(x => x.Username == loginRequest.Username);
 
         if (user is null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
@@ -44,6 +45,7 @@ public class AuthenticationService : IAuthenticationService
             RefreshToken = refreshToken.Token,
             Username = user.Username,
             Jwt = jwtTokne,
+            CompanyHash = user.Company.Hash,
             ExpireDate = DateTime.Now.AddMinutes(15),
             Roles = user.UserRole.Select(x => x.Role.Name).ToList(),
         };
@@ -67,6 +69,7 @@ public class AuthenticationService : IAuthenticationService
             .GetAll()
             .Include(x => x.UserRole)
             .ThenInclude(x => x.Role)
+            .Include(x => x.Company)
             .FirstOrDefaultAsync(x => x.Id == refreshToken.UserId);
 
         if (user is null)
@@ -85,6 +88,8 @@ public class AuthenticationService : IAuthenticationService
             RefreshToken = refreshToken.Token,
             Username = user.Username,
             Jwt = jwtToken,
+            CompanyHash = user.Company.Hash,
+            Surname = user.Surname,
             ExpireDate = DateTime.Now.AddMinutes(15),
             Roles = user.UserRole.Select(x => x.Role.Name).ToList()
         };

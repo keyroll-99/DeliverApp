@@ -10,6 +10,7 @@ export const MapAuthResponseToUser = (response: AuthResponse): User => {
         surname: response.surname,
         username: response.surname,
         expireDate: response.expireDate,
+        companyHash: response.companyHash,
     };
 };
 

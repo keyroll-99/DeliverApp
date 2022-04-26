@@ -4,6 +4,7 @@ export default interface User {
     name: string;
     surname: string;
     jwt: string;
+    companyHash: string;
     expireDate: Date;
     roles: string[];
 }

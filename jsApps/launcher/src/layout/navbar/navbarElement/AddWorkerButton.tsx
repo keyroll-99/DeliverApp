@@ -1,8 +1,8 @@
-import { ListItemButton } from "@mui/material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import HasRole, { Roles } from "../../../service/userService/Roles";
+import { ListItemButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Path from "../../../utils/route/Path";
+import HasRole, { Roles } from "service/userService/Roles";
+import Path from "utils/route/Path";
 
 interface props {
     roles: string[];

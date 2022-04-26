@@ -1,3 +1,5 @@
+import { CircularProgress } from "@mui/material";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../../layout/navbar/Navbar";
 import { RefreshToken } from "../../service/userService/AuthenticationService";
@@ -11,13 +13,17 @@ const RequireAuth = ({ children }: props) => {
     const { isLoading, isSuccess } = RefreshToken();
     const navigation = useNavigate();
 
-    if (!isSuccess && !isLoading) {
-        navigation(Path.login);
-        return null;
-    }
+    useEffect(() => {
+        if (!isSuccess && !isLoading) {
+            navigation(Path.login);
+        }
+    }, [isSuccess, isLoading]);
 
     if (isLoading) {
-        return <h1>loading...</h1>;
+        return <CircularProgress />;
+    }
+    if (!isSuccess && !isLoading) {
+        return null;
     }
 
     return (

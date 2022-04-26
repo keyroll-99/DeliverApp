@@ -8,7 +8,7 @@
 
     &-list {
         background-color: #333742;
-        @media screen and( max-width: 768px) {
+        @include mobile {
             width: 100%;
             height: 100%;
         }

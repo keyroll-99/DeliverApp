@@ -1,12 +1,12 @@
-import { GetWorkers } from "../../service/companyService/WorkersServices";
-import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { CircularProgress } from "@mui/material";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
+import { GetWorkers } from "service/companyService/WorkersServices";
 
 const columns: GridColDef[] = [
     { field: "username", headerName: "Username" },
-    { field: "name", headerName: "Name", width: 100, editable: true },
-    { field: "surname", headerName: "Surname", width: 150, editable: true },
-    { field: "email", headerName: "E-mail", width: 250, editable: true },
+    { field: "name", headerName: "Name", width: 100 },
+    { field: "surname", headerName: "Surname", width: 150 },
+    { field: "email", headerName: "E-mail", width: 250 },
     { field: "roles", headerName: "Roles", width: 250 },
 ];
 

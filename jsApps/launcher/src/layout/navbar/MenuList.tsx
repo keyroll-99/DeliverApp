@@ -1,5 +1,5 @@
 import { List } from "@mui/material";
-import { UseStore } from "../../stores/Store";
+import { UseStore } from "stores/Store";
 import AddWorkerButton from "./navbarElement/AddWorkerButton";
 import WorkerButton from "./navbarElement/WorkerButton";
 

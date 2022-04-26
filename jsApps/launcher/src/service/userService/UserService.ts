@@ -1,9 +1,10 @@
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from "axios";
+import { format } from "path";
 import { useMutation } from "react-query";
-import { UseStore } from "../../stores/Store";
-import Endpoints from "../../utils/axios/Endpoints";
-import GetHeader from "../../utils/axios/GetHeader";
-import Config from "../../utils/_core/Config";
+import { UseStore } from "stores/Store";
+import Endpoints from "utils/axios/Endpoints";
+import GetHeader from "utils/axios/GetHeader";
+import Config from "utils/_core/Config";
 import { BaseResponse, MutationProcessing } from "../_core/Models";
 import CreateUserForm from "./models/CreateUserForm";
 import UserResponse from "./models/UserResponse";
@@ -12,11 +13,13 @@ export const CreateUserRequest = async (
     form: CreateUserForm,
     header: AxiosRequestHeaders
 ): Promise<BaseResponse<UserResponse>> => {
+    console.log(header);
+
     const response = await axios
         .post<CreateUserForm, AxiosResponse<BaseResponse<UserResponse>>>(
             `${Config.serverUrl}${Endpoints.User.Create}`,
             form,
-            header
+            { headers: header }
         )
         .then((resp) => resp.data)
         .catch(
@@ -33,8 +36,13 @@ export const CreateUser = (): MutationProcessing<CreateUserForm, BaseResponse<Us
     const { userStore } = UseStore();
     const header = GetHeader(userStore.getUser!.jwt);
 
-    const { isLoading, mutate, mutateAsync, data } = useMutation((form: CreateUserForm) =>
-        CreateUserRequest(form, header)
+    const { isLoading, mutate, mutateAsync, data } = useMutation(
+        (form: CreateUserForm) => CreateUserRequest(form, header),
+        {
+            onMutate: (form) => {
+                form.companyHash = userStore.getUser!.companyHash;
+            },
+        }
     );
 
     return {

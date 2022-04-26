@@ -1,10 +1,10 @@
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
-import { UseStore } from "../../stores/Store";
-import Endpoints from "../../utils/axios/Endpoints";
-import GetHeader from "../../utils/axios/GetHeader";
-import Config from "../../utils/_core/Config";
-import { BaseResponse, FetchProcessing } from "../_core/Models";
+import { BaseResponse, FetchProcessing } from "service/_core/Models";
+import { UseStore } from "stores/Store";
+import Endpoints from "utils/axios/Endpoints";
+import GetHeader from "utils/axios/GetHeader";
+import Config from "utils/_core/Config";
 import RoleResponse from "./models/RoleResponse";
 
 const FetchRole = async (header: AxiosRequestHeaders): Promise<BaseResponse<RoleResponse[]>> => {

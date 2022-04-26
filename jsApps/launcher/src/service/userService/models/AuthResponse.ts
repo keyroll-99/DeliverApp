@@ -5,5 +5,6 @@ export default interface AuthResponse {
     surname: string;
     jwt: string;
     expireDate: Date;
+    companyHash: string;
     roles: string[];
 }

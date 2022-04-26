@@ -9,6 +9,7 @@ public class AuthResponse
     public string Name { get; set; }
     public string Surname { get; set; }
     public string Jwt { get; set; }
+    public Guid CompanyHash { get; set; }
     public DateTime ExpireDate { get; set; }
     public List<string> Roles { get; set; }
 

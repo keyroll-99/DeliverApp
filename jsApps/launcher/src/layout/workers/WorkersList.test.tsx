@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
-import { GetWorkers } from "../../service/companyService/WorkersServices";
-import UserResponse from "../../service/userService/models/UserResponse";
+import { GetWorkers } from "service/companyService/WorkersServices";
+import UserResponse from "service/userService/models/UserResponse";
 import WorkersList from "./WorkersList";
 
 const mockUserResponse: UserResponse = {

@@ -47,7 +47,7 @@ const RefreshTokenRequest = async (): Promise<BaseResponse<AuthResponse>> => {
 
 export const RefreshToken = (): FetchProcessing<AuthResponse> => {
     const { userStore } = UseStore();
-    const { isLoading, data } = useQuery("RefreshToken", RefreshTokenRequest);
+    const { isLoading, data } = useQuery("RefreshToken", RefreshTokenRequest, { refetchInterval: 180000 });
     if (!isLoading && data?.isSuccess) {
         userStore.setUser(data!.data!);
     }

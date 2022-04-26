@@ -1,8 +1,8 @@
 import PersonIcon from "@mui/icons-material/Person";
 import { ListItemButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import HasRole, { Roles } from "../../../service/userService/Roles";
-import Path from "../../../utils/route/Path";
+import HasRole, { Roles } from "service/userService/Roles";
+import Path from "utils/route/Path";
 
 interface props {
     roles: string[];
