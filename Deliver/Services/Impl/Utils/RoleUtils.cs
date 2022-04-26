@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Models;
 using Models.Db;
 using Models.Db.ConstValues;
 using Models.Exceptions;
-using Models.Request.utils;
+using Models.Request.Utils;
 using Repository.Repository.Interface;
 using Services.Interface.Utils;
 
@@ -56,6 +57,11 @@ public class RoleUtils : IRoleUtils
 
             await _userRoleRepository.AddAsync(userRole);
         }
+    }
+
+    public bool HasPermissionToGetAllCompany(LoggedUser loggedUser)
+    {
+        return HasPermission(loggedUser.Roles, SystemRoles.Admin);
     }
 
     private static bool HasPermission(List<string> roles, string permission)

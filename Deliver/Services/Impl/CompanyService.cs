@@ -1,7 +1,9 @@
-﻿using Models.Db;
+﻿using Microsoft.EntityFrameworkCore;
+using Models.Db;
 using Models.Exceptions;
 using Models.Request.Company;
 using Models.Response.Company;
+using Models.Response.User;
 using Repository.Repository.Interface;
 using Services.Interface;
 
@@ -40,5 +42,36 @@ public class CompanyService : ICompanyService
             Name = company.Name,
             PhoneNumber = company.PhoneNumber
         };
+    }
+
+    public async Task<List<UserResponse>> GetCompanyWorkers(long companyId)
+    {
+        var company = await _companyRepository
+            .GetAll()
+            .Include(x => x.Users)
+            .ThenInclude(x => x.UserRole)
+            .ThenInclude(x => x.Role)
+            .FirstOrDefaultAsync(x => x.Id == companyId);
+
+        if (company is null)
+        {
+            throw new AppException(ErrorMessage.CompanyDoesntExists);
+        }
+
+        var users = company
+            .Users.
+            Select(x => new UserResponse
+            {
+                CompanyHash = company.Hash,
+                CompanyName = company.Name,
+                Email = x.Email,
+                Hash = x.Hash,
+                Name = x.Name,
+                Surname = x.Surname,
+                Username = x.Username,
+                Roles = x.UserRole.Select(x => x.Role.Name).ToList()
+            }).ToList();
+
+        return users;
     }
 }

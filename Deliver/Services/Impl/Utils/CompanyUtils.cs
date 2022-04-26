@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models.Db;
+using Models.Exceptions;
 using Repository.Repository.Interface;
 using Services.Interface.Utils;
 
@@ -17,9 +18,9 @@ public class CompanyUtils : ICompanyUtils
     public async Task<Company?> GetCompanyByHash(Guid hash) =>
             await _companyRepository.GetAll().FirstOrDefaultAsync(x => x.Hash == hash);
 
-    public async Task<Company?> GetUserCompany(long userId)
-        => await _companyRepository
+    public async Task<Company> GetUserCompany(long userId)
+        => (await _companyRepository
             .GetAll()
             .Include(x => x.Users)
-            .FirstOrDefaultAsync(x => x.Users.Any(u => u.Id == userId));
+            .FirstOrDefaultAsync(x => x.Users.Any(u => u.Id == userId))) ?? throw new AppException(ErrorMessage.UserDosentHaveCompany);
 }

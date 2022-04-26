@@ -3,7 +3,7 @@ using MockQueryable.NSubstitute;
 using Models;
 using Models.Db;
 using Models.Db.ConstValues;
-using Models.Request.utils;
+using Models.Request.Utils;
 using NSubstitute;
 using Repository.Repository.Interface;
 using Services.Impl.Utils;

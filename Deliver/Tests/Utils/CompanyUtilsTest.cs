@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using MockQueryable.NSubstitute;
 using Models.Db;
+using Models.Exceptions;
 using NSubstitute;
 using Repository.Repository.Interface;
 using Services.Impl.Utils;
@@ -68,5 +69,15 @@ public class CompanyUtilsTest
         // assert
         result.Should().NotBeNull();
         result.Users.Should().Contain(x => x.Id == 1);
+    }
+
+    [Fact]
+    public async Task GetUserCompany_WhenUserDoesntHaveCompany_ReturnThorwException()
+    {
+        // act
+        Func<Task> act = async () => await _service.GetUserCompany(2);
+
+        // assert
+        await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.UserDosentHaveCompany);
     }
 }

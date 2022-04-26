@@ -8,7 +8,7 @@ using Models.Db.ConstValues;
 using Models.Exceptions;
 using Models.Integration;
 using Models.Request.User;
-using Models.Request.utils;
+using Models.Request.Utils;
 using NSubstitute;
 using Repository.Repository.Interface;
 using Services.Impl;
@@ -46,7 +46,6 @@ namespace Tests.Utils
         #endregion
 
         private readonly IUserRepository _userRepositoryMock;
-        private readonly IJwtUtils _jwtUtilsMock;
         private readonly ICompanyUtils _companyUtilsMock;
         private readonly IOptions<LoggedUser> _optionsMock;
         private readonly IRoleUtils _roleUtilsMock;
@@ -59,8 +58,6 @@ namespace Tests.Utils
             _userRepositoryMock = Substitute.For<IUserRepository>();
             _userRepositoryMock.GetAll().Returns(_userDataMock);
 
-            _jwtUtilsMock = Substitute.For<IJwtUtils>();
-
             _companyUtilsMock = Substitute.For<ICompanyUtils>();
 
             _optionsMock = Substitute.For<IOptions<LoggedUser>>();
@@ -72,94 +69,11 @@ namespace Tests.Utils
 
             _service = new UserService(
                 _userRepositoryMock,
-                _jwtUtilsMock,
                 _companyUtilsMock,
                 _optionsMock,
                 _roleUtilsMock,
                 _mailServiceMock
             );
-        }
-
-        [Fact]
-        public async Task Login_WhenLoginValid_ReturnAuthReposne()
-        {
-            // arrnage
-            var request = new LoginRequest
-            {
-                Username = "test",
-                Password = "test"
-            };
-            var jwtToken = Guid.NewGuid().ToString();
-
-            _jwtUtilsMock.GenerateJwtToken(Arg.Any<User>()).Returns(jwtToken);
-            _jwtUtilsMock.GenerateRefreshToken(Arg.Any<User>(), Arg.Any<string>()).Returns(new RefreshToken
-            {
-                Token = jwtToken,
-            });
-
-            // act
-            var response = await _service.Login(request, "127.0.0.1");
-
-            // assert
-            response.Should().NotBeNull();
-            response.Name.Should().Be("TestName");
-            response.Surname.Should().Be("TestSurname");
-            response.Username.Should().Be("test");
-        }
-
-        [Theory]
-        [InlineData("test", "asdasd")]
-        [InlineData("erter", "test")]
-        [InlineData("", "test")]
-        [InlineData("test", "")]
-        public async Task Login_WhenRequestIsInvalid_ThenReturnError(string username, string password)
-        {
-            // arrange
-            var request = new LoginRequest
-            {
-                Password = password,
-                Username = username
-            };
-
-            // act
-            Func<Task> act = async () => await _service.Login(request, "local");
-
-            // assert
-            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidLoginOrPassword);
-        }
-
-        [Fact]
-        public async Task RefreshToken_WhenTokenDoesntExist_RetrunError()
-        {
-            // arrange
-            var token = "token";
-            var ip = "ip";
-            _jwtUtilsMock.GetRefreshTokenByToken(Arg.Any<string>()).Returns(null as RefreshToken);
-
-            // act
-            Func<Task> act = async () => await _service.RefreshToken(token, ip);
-
-            // assert
-            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidToken);
-        }
-
-        [Fact]
-        public async Task RefreshToken_WhenTokenIsUsed_RetrunError()
-        {
-            // arrange
-            var token = "token";
-            var ip = "local";
-            _jwtUtilsMock.GetRefreshTokenByToken(Arg.Any<string>()).Returns(new RefreshToken
-            {
-                Id = 1,
-                IsUsed = true
-            });
-
-            // act
-            Func<Task> act = async () => await _service.RefreshToken(token, ip);
-
-            // assert
-            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.TokenAlreadyTaken);
         }
 
         [Theory]
@@ -194,12 +108,12 @@ namespace Tests.Utils
             var request = new CreateUserRequest
             {
                 CompanyHash = Guid.NewGuid(),
-                Name = "test",
+                Name = "test2",
                 Email = "test@test.com",
                 PhoneNumber = "11-11-11",
                 RoleIds = new List<long> { 1 },
                 Surname = "test",
-                Username = "test"
+                Username = "test2"
             };
 
             _companyUtilsMock.GetUserCompany(Arg.Any<long>()).Returns(new Company
@@ -223,12 +137,12 @@ namespace Tests.Utils
             var request = new CreateUserRequest
             {
                 CompanyHash = Guid.NewGuid(),
-                Name = "test",
+                Name = "test2",
                 Email = "test@test.com",
                 PhoneNumber = "11-11-11",
                 RoleIds = new List<long> { 1 },
                 Surname = "test",
-                Username = "test"
+                Username = "test2"
             };
 
             _companyUtilsMock.GetUserCompany(Arg.Any<long>()).Returns(new Company
@@ -253,12 +167,12 @@ namespace Tests.Utils
             var request = new CreateUserRequest
             {
                 CompanyHash = Guid.NewGuid(),
-                Name = "test",
+                Name = "test2",
                 Email = "test@test.com",
                 PhoneNumber = "11-11-11",
                 RoleIds = new List<long> { 1 },
                 Surname = "test",
-                Username = "test"
+                Username = "test2"
             };
 
             _companyUtilsMock.GetUserCompany(Arg.Any<long>()).Returns(new Company

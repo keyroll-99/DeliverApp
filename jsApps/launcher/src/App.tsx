@@ -1,12 +1,13 @@
+import { CircularProgress } from "@mui/material";
 import { observer } from "mobx-react";
-import { RefreshToken } from "./service/userService/UserService";
-import Router from "./utils/Route/Router";
+import { LoadConfig } from "utils/_core/Config";
+import Router from "./utils/route/Router";
 
 const App = () => {
-    const { isLoading } = RefreshToken();
+    const { isLoading } = LoadConfig();
 
     if (isLoading) {
-        return <h1>loading...</h1>;
+        return <CircularProgress />;
     }
 
     return <Router />;

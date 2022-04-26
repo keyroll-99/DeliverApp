@@ -6,7 +6,7 @@ using Models.Db;
 using Models.Exceptions;
 using Models.Integration;
 using Models.Request.User;
-using Models.Request.utils;
+using Models.Request.Utils;
 using Models.Response.User;
 using Repository.Repository.Interface;
 using Services.Interface;
@@ -18,7 +18,6 @@ namespace Services.Impl
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
-        private readonly IJwtUtils _jwtUtils;
         private readonly ICompanyUtils _companyUtils;
         private readonly LoggedUser _loggedUser;
         private readonly IRoleUtils _roleUtils;
@@ -26,99 +25,31 @@ namespace Services.Impl
 
         public UserService(
             IUserRepository userRepository,
-            IJwtUtils jwtUtils,
             ICompanyUtils companyUtils,
             IOptions<LoggedUser> loggedUser,
             IRoleUtils roleUtils,
             IMailService mailService)
         {
             _userRepository = userRepository;
-            _jwtUtils = jwtUtils;
             _companyUtils = companyUtils;
             _loggedUser = loggedUser.Value;
             _roleUtils = roleUtils;
             _mailService = mailService;
         }
 
-        public async Task<AuthResponse> Login(LoginRequest loginRequest, string ipAddress)
-        {
-
-            var user = await _userRepository
-                .GetAll()
-                .Include(x => x.UserRole)
-                .ThenInclude(x => x.Role)
-                .FirstOrDefaultAsync(x => x.Username == loginRequest.Username);
-
-            if (user is null || !BCrypt.Net.BCrypt.Verify(loginRequest.Password, user.Password))
-            {
-                throw new AppException(ErrorMessage.InvalidLoginOrPassword);
-            }
-
-            var jwtTokne = _jwtUtils.GenerateJwtToken(user);
-            var refreshToken = await _jwtUtils.GenerateRefreshToken(user, ipAddress);
-
-            return new AuthResponse
-            {
-                Hash = user.Hash,
-                Name = user.Name,
-                Surname = user.Surname,
-                RefreshToken = refreshToken.Token,
-                Username = user.Username,
-                Jwt = jwtTokne,
-                ExpireDate = DateTime.Now.AddMinutes(15),
-                Roles = user.UserRole.Select(x => x.Role.Name).ToList(),
-            };
-        }
-
-        public async Task<AuthResponse> RefreshToken(string? token, string ipAddress)
-        {
-            var refreshToken = await _jwtUtils.GetRefreshTokenByToken(token);
-            if (refreshToken is null)
-            {
-                throw new AppException(ErrorMessage.InvalidToken);
-            }
-
-            if (refreshToken.IsUsed)
-            {
-                await _jwtUtils.RevokeRefreshToken(refreshToken, ipAddress);
-                throw new AppException(ErrorMessage.TokenAlreadyTaken);
-            }
-
-            var user = await _userRepository
-                .GetAll()
-                .Include(x => x.UserRole)
-                .ThenInclude(x => x.Role)
-                .FirstOrDefaultAsync(x => x.Id == refreshToken.UserId);
-
-            if (user is null)
-            {
-                throw new AppException(ErrorMessage.UserDosentExists);
-            }
-
-            await _jwtUtils.RevokeRefreshToken(refreshToken, ipAddress);
-            refreshToken = await _jwtUtils.GenerateRefreshToken(user, ipAddress);
-            var jwtToken = _jwtUtils.GenerateJwtToken(user);
-
-            return new AuthResponse
-            {
-                Hash = user.Hash,
-                Name = user.Name,
-                RefreshToken = refreshToken.Token,
-                Username = user.Username,
-                Jwt = jwtToken,
-                ExpireDate = DateTime.Now.AddMinutes(15),
-                Roles = user.UserRole.Select(x => x.Role.Name).ToList()
-            };
-        }
-
-        public async Task<UserReponse> CreateUser(CreateUserRequest createUserRequest)
+        public async Task<UserResponse> CreateUser(CreateUserRequest createUserRequest)
         {
             if (createUserRequest is null || !createUserRequest.IsValid)
             {
                 throw new AppException(ErrorMessage.InvalidData);
             }
 
-            if(!(await VerifyPerrmisionToAddUser(createUserRequest.CompanyHash)))
+            if ((await _userRepository.GetAll().AnyAsync(x => x.Username == createUserRequest.Username)))
+            {
+                throw new AppException(ErrorMessage.UserExists);
+            }
+
+            if (!(await VerifyPerrmisionToAddUser(createUserRequest.CompanyHash)))
             {
                 throw new AppException(ErrorMessage.InvalidRole);
             }
@@ -131,7 +62,7 @@ namespace Services.Impl
 
             var newUser = await AddUserAndSendMail(createUserRequest.AsUser(), company);
 
-            return new UserReponse
+            return new UserResponse
             {
                 CompanyHash = company.Hash,
                 CompanyName = company.Name,

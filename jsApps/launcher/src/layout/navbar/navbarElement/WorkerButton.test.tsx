@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
-import PersonalButton from "./PersonalButton";
-import HasRole from "../../../service/userService/Roles";
+import WorkerButton from "./WorkerButton";
+import HasRole from "service/userService/Roles";
 
 jest.mock("@mui/material", () => ({
     ListItemButton: () => <div>ListItemMock</div>,
@@ -22,7 +22,7 @@ test("should render item when user has valid role", () => {
     (HasRole as jest.MockedFunction<typeof HasRole>).mockReturnValue(true);
 
     // act
-    const { queryByText } = render(<PersonalButton roles={["test1"]} />);
+    const { queryByText } = render(<WorkerButton roles={["test1"]} />);
 
     // assert
     expect(queryByText("ListItemMock")).toBeInTheDocument();
@@ -33,7 +33,7 @@ test("should not render item when user has not valid role", () => {
     (HasRole as jest.MockedFunction<typeof HasRole>).mockReturnValue(false);
 
     // act
-    const { queryByText } = render(<PersonalButton roles={["test1"]} />);
+    const { queryByText } = render(<WorkerButton roles={["test1"]} />);
 
     // assert
     expect(queryByText("ListItemMock")).not.toBeInTheDocument();

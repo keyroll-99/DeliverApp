@@ -28,6 +28,8 @@ public static class DISetup
     {
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<ICompanyService, CompanyService>();
+        services.AddScoped<IAuthenticationService, AuthenticationService>();
+        services.AddScoped<IRoleService, RoleService>();
         return services;
     }
 

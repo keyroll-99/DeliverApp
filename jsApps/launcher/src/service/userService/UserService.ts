@@ -1,79 +1,56 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { useMutation, useQuery } from "react-query";
-import { UseStore } from "../../stores/Store";
-import Endpoints from "../../utils/axios/Endpoints";
-import Config from "../../utils/_core/Config";
-import { BaseResponse, FetchProcessing, MutationProcessing } from "../_core/Models";
-import AuthResponse from "./models/AuthResponse";
-import LoginForm from "./models/LoginForm";
+import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from "axios";
+import { format } from "path";
+import { useMutation } from "react-query";
+import { UseStore } from "stores/Store";
+import Endpoints from "utils/axios/Endpoints";
+import GetHeader from "utils/axios/GetHeader";
+import Config from "utils/_core/Config";
+import { BaseResponse, MutationProcessing } from "../_core/Models";
+import CreateUserForm from "./models/CreateUserForm";
+import UserResponse from "./models/UserResponse";
 
-export const LoginRequest = async (form: LoginForm): Promise<BaseResponse<AuthResponse>> => {
+export const CreateUserRequest = async (
+    form: CreateUserForm,
+    header: AxiosRequestHeaders
+): Promise<BaseResponse<UserResponse>> => {
+    console.log(header);
+
     const response = await axios
-        .post<LoginForm, AxiosResponse<BaseResponse<AuthResponse>>>(
-            `${Config.serverUrl}${Endpoints.User.Login}`,
+        .post<CreateUserForm, AxiosResponse<BaseResponse<UserResponse>>>(
+            `${Config.serverUrl}${Endpoints.User.Create}`,
             form,
-            {
-                withCredentials: true,
-            }
+            { headers: header }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => {
-            return {
-                isSuccess: false,
-                error: error.message,
-            } as BaseResponse<AuthResponse>;
-        });
+        .catch(
+            (error: AxiosError) =>
+                ({
+                    isSuccess: false,
+                    error: error.message,
+                } as BaseResponse<UserResponse>)
+        );
     return response;
 };
 
-const RefreshTokenRequest = async (): Promise<BaseResponse<AuthResponse>> => {
-    const response = await axios
-        .post<undefined, AxiosResponse<BaseResponse<AuthResponse>>>(
-            `${Config.serverUrl}${Endpoints.User.Refresh}`,
-            null,
-            {
-                withCredentials: true,
-            }
-        )
-        .then((resp) => resp.data)
-        .catch((error: AxiosError) => {
-            return {
-                isSuccess: false,
-                error: error.message,
-            } as BaseResponse<AuthResponse>;
-        });
-    return response;
-};
-
-export const RefreshToken = (): FetchProcessing<null> => {
+export const CreateUser = (): MutationProcessing<CreateUserForm, BaseResponse<UserResponse>> => {
     const { userStore } = UseStore();
-    const { isLoading, data } = useQuery("RefreshToken", RefreshTokenRequest);
-    if (!isLoading && data?.isSuccess) {
-        userStore.setUser(data!.data!);
-    }
-    return {
-        isLoading: isLoading,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
-    };
-};
+    const header = GetHeader(userStore.getUser!.jwt);
 
-export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse>> => {
-    const { userStore } = UseStore();
-    const { isLoading, data, mutate, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
-        onSuccess: () => {
-            if (data?.isSuccess) {
-                userStore.setUser(data!.data!);
-            }
-        },
-    });
+    const { isLoading, mutate, mutateAsync, data } = useMutation(
+        (form: CreateUserForm) => CreateUserRequest(form, header),
+        {
+            onMutate: (form) => {
+                form.companyHash = userStore.getUser!.companyHash;
+            },
+        }
+    );
 
     return {
         isLoading: isLoading,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
         mutate: mutate,
-        data: data,
         mutateAsync: mutateAsync,
+        data: data,
+        error: data?.error,
+        isSuccess: data?.isSuccess,
     };
 };

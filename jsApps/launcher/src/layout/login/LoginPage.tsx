@@ -1,32 +1,41 @@
 import { AccountCircle } from "@mui/icons-material";
-import { Box, Container, TextField } from "@mui/material";
+import LockIcon from "@mui/icons-material/Lock";
 import { LoadingButton } from "@mui/lab";
+import { Box, Container } from "@mui/material";
+import TextFieldInput from "components/inputs/TextFieldInput";
 import { observer } from "mobx-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LoginForm from "../../service/userService/models/LoginForm";
-import { Login } from "../../service/userService/UserService";
-import Path from "../../utils/Route/Path";
-import CreateClass from "../../utils/style/CreateClass";
+import { Login } from "service/userService/AuthenticationService";
+import LoginForm from "service/userService/models/LoginForm";
+import Path from "utils/route/Path";
+import CreateClass from "utils/style/CreateClass";
 
 const baseClass = "login";
 
 const isValidForm = (form: LoginForm): boolean => {
-    return form.Username !== "" && form.Password !== "";
+    return form.username !== "" && form.password !== "";
 };
 
 const LoginPage = () => {
-    const [loginForm, setLoginForm] = useState<LoginForm>({ Username: "", Password: "" });
+    const [loginForm, setLoginForm] = useState<LoginForm>({ username: "", password: "" });
+    const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const { isLoading, mutateAsync } = Login();
+
+    useEffect(() => {
+        if (isSuccess) {
+            navigate(Path.home);
+        }
+    }, [isSuccess]);
 
     const submitForm = async () => {
         if (isValidForm(loginForm)) {
             const response = await mutateAsync(loginForm);
 
             if (response.isSuccess) {
-                navigate(Path.home);
+                setIsSuccess(true);
             } else {
                 setError(response.error);
             }
@@ -39,29 +48,24 @@ const LoginPage = () => {
         <Container fixed className={baseClass} sx={{ display: "flex" }}>
             <h1>Deliver system</h1>
             <span className={CreateClass(baseClass, "form")}>
-                <Box className={CreateClass(baseClass, "box")} sx={{ display: "flex", alignItems: "flex-end" }}>
-                    <AccountCircle />
-                    <TextField
-                        label="Login"
-                        variant="standard"
-                        onChange={(e) => setLoginForm({ ...loginForm, Username: e.target.value })}
-                        value={loginForm.Username}
-                        error={error ? true : false}
-                        helperText={error}
-                    />
-                </Box>
-                <Box className={CreateClass(baseClass, "box")} sx={{ display: "flex", alignItems: "flex-end" }}>
-                    <AccountCircle />
-                    <TextField
-                        label="Password"
-                        variant="standard"
-                        type="password"
-                        onChange={(e) => setLoginForm({ ...loginForm, Password: e.target.value })}
-                        value={loginForm.Password}
-                        error={error ? true : false}
-                        helperText={error}
-                    />
-                </Box>
+                <TextFieldInput
+                    baseClass={baseClass}
+                    label="Login"
+                    onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
+                    error={error}
+                    icon={<AccountCircle />}
+                    value={loginForm.username}
+                    type="text"
+                />
+                <TextFieldInput
+                    baseClass={baseClass}
+                    label="Password"
+                    onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                    error={error}
+                    type="password"
+                    value={loginForm.password}
+                    icon={<LockIcon />}
+                />
                 <Box className={CreateClass(baseClass, "box")} sx={{ display: "flex", alignItems: "flex-end" }}>
                     <LoadingButton onClick={submitForm} loading={isLoading}>
                         Login
