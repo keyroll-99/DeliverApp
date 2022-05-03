@@ -70,12 +70,8 @@ export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse
     const { isLoading, data, mutate, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
         onSuccess: (result) => {
             if (result?.isSuccess) {
-                console.log("successLogin", result);
-
                 userStore.setUser(result!.data!);
             } else {
-                console.log("go back", result);
-
                 navigation(Path.login);
             }
         },
