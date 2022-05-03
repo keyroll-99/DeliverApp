@@ -12,5 +12,8 @@
         "process": "^0.11.10",
         "process-types": "^0.0.1",
         "process.argv": "^0.6.0"
+    },
+    "volta": {
+        "node": "16.15.0"
     }
 }

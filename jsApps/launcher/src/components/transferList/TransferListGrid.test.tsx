@@ -20,10 +20,7 @@ describe("TrensferListGrid", () => {
             />
         );
 
-        const container = component.container;
-
         // assert
-
         expect(component.queryByText("left title")).toBeInTheDocument();
         expect(component.queryByText("right title")).toBeInTheDocument();
     });
@@ -47,7 +44,7 @@ describe("TrensferListGrid", () => {
         );
 
         const container = component.container;
-        const toSelectedButton = container.querySelector("[role='to-seleted']");
+        const toSelectedButton = container.querySelector(".test_to-seleted");
 
         fireEvent(
             toSelectedButton!,
@@ -80,7 +77,7 @@ describe("TrensferListGrid", () => {
         );
 
         const container = component.container;
-        const toAvaliableButton = container.querySelector("[role='to-avaliable']");
+        const toAvaliableButton = container.querySelector(".test_to-avaliable");
 
         fireEvent(
             toAvaliableButton!,

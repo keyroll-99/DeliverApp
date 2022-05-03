@@ -28,7 +28,7 @@ const LoginPage = () => {
         if (isSuccess) {
             navigate(Path.home);
         }
-    }, [isSuccess]);
+    }, [isSuccess, navigate]);
 
     const submitForm = async () => {
         if (isValidForm(loginForm)) {

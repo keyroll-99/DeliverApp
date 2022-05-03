@@ -10,6 +10,7 @@ namespace Deliver.Controllers
 {
     [Route("Api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -26,6 +27,25 @@ namespace Deliver.Controllers
             var response = await _userService.CreateUser(createRequest);
             await _userService.AddRoleToUser(response.Hash, createRequest.RoleIds);
             return response;
+        }
+
+        [HttpPut("ChangePassword")]
+        public async Task<BaseRespons> UpdatePassword(ChangePasswordRequest updatePasswordRequest)
+        {
+            await _userService.UpdatePassword(updatePasswordRequest);
+            return BaseRespons.Success();
+        }
+
+        [HttpPut("Update")]
+        public async Task<BaseRespons<UserResponse>> Update(UpdateUserRequest updateUserRequest)
+        {
+            return await _userService.UpdateUser(updateUserRequest);
+        }
+
+        [HttpGet("{userHash}")]
+        public async Task<BaseRespons<UserResponse>> GetUser(Guid userHash)
+        {
+            return await _userService.GetUser(userHash);
         }
     }
 }

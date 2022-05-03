@@ -11,9 +11,9 @@ public class CreateUserRequest
     public List<long> RoleIds { get; set; } = new List<long>();
 
     public bool IsValid =>
-        !string.IsNullOrEmpty(Name)
-        && !string.IsNullOrEmpty(Surname)
-        && !string.IsNullOrEmpty(Email)
-        && RoleIds.Count > 0
-        && !string.IsNullOrEmpty(Username);
+        !string.IsNullOrWhiteSpace(Name)
+        && !string.IsNullOrWhiteSpace(Surname)
+        && !string.IsNullOrWhiteSpace(Email)
+        && RoleIds.Any()
+        && !string.IsNullOrWhiteSpace(Username);
 }

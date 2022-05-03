@@ -1,0 +1,35 @@
+$content-left-padding: 10px;
+
+.account {
+    @include card-layout;
+    background-color: #fff;
+    width: 80%;
+    margin: 20px auto;
+    border: 1px solid black;
+    padding: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: large;
+
+    &-title {
+        padding-left: $content-left-padding;
+    }
+
+    &-item {
+        display: flex;
+        gap: 10px;
+        padding-left: $content-left-padding;
+        margin: 5px 0;
+    }
+
+    &-list {
+        display: block;
+        list-style-position: inside;
+        overflow: hidden;
+
+        @include mobile {
+            list-style-position: unset;
+        }
+    }
+}

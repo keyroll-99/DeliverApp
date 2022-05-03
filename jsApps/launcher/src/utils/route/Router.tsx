@@ -1,8 +1,10 @@
-import { Routes, Route } from "react-router-dom";
+import EditWorker from "layout/workers/account/editWorker/EditWorker";
+import Account from "layout/workers/account/profile/Account";
+import { Route, Routes } from "react-router-dom";
 import Login from "../../layout/login/LoginPage";
 import Menu from "../../layout/menu/Menu";
-import AddWorker from "../../layout/workers/AddWorker";
-import WorkersList from "../../layout/workers/WorkersList";
+import AddWorker from "../../layout/workers/addWorker/AddWorker";
+import WorkersList from "../../layout/workers/workerList/WorkersList";
 import Path from "./Path";
 import RequireAuth from "./RequireAuth";
 
@@ -30,6 +32,22 @@ const Router = () => {
                 element={
                     <RequireAuth>
                         <AddWorker />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.account}
+                element={
+                    <RequireAuth>
+                        <Account />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.editWorker}
+                element={
+                    <RequireAuth>
+                        <EditWorker />
                     </RequireAuth>
                 }
             />

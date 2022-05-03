@@ -8,4 +8,7 @@ public interface IUserService
     Task<UserResponse> CreateUser(CreateUserRequest createUserRequest);
     Task AddRoleToUser(Guid userHash, List<long> RolesId);
     Task AddUserToCompany(Guid userHash, Guid companyHash);
+    Task UpdatePassword(ChangePasswordRequest updatePasswordRequest);
+    Task<UserResponse> UpdateUser(UpdateUserRequest updateUserRequest);
+    Task<UserResponse> GetUser(Guid userHash);
 }

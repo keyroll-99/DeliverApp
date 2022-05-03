@@ -3,6 +3,7 @@ using MockQueryable.NSubstitute;
 using Models;
 using Models.Db;
 using Models.Db.ConstValues;
+using Models.Exceptions;
 using Models.Request.Utils;
 using NSubstitute;
 using Repository.Repository.Interface;
@@ -47,26 +48,26 @@ public class RoleUtilsTest
     }
 
     [Fact]
-    public void HasPermissionToAddUser_WhenLoggedUserIsNull_ThorwArgumentException()
+    public void HasPermissionToUserAction_WhenLoggedUserIsNull_ThorwArgumentException()
     {
         // arrange
-        var reguest = new HasPermissionToAddUserRequest();
+        var reguest = new HasPermissionToActionOnUserRequest();
 
         // act
-        Action act = () => _service.HasPermissionToAddUser(reguest);
+        Action act = () => _service.HasPermissionToUserAction(reguest);
 
         // assert
-        act.Should().Throw<ArgumentException>();
+        act.Should().Throw<AppException>();
     }
 
     [Theory]
     [InlineData(SystemRoles.HR, "d8c5ae68-56bc-4ba2-8359-ee5490bf581e", "cddc1c81-1dad-4c0b-a432-b19b25f6ac35")]
     [InlineData(SystemRoles.CompanyAdmin, "d8c5ae68-56bc-4ba2-8359-ee5490bf581e", "cddc1c81-1dad-4c0b-a432-b19b25f6ac35")]
     [InlineData(SystemRoles.Driver, "cddc1c81-1dad-4c0b-a432-b19b25f6ac35", "cddc1c81-1dad-4c0b-a432-b19b25f6ac35")]
-    public void HasPermissionToAddUser_WhenUserDoesntHavePerrmisionOrIsNotInThisSameCompany_ReturnFalse(string userRole, string userCompanyHash, string targetCompanyHash)
+    public void HasPermissionToUserAction_WhenUserDoesntHavePerrmisionOrIsNotInThisSameCompany_ReturnFalse(string userRole, string userCompanyHash, string targetCompanyHash)
     {
         // arrange
-        var reguest = new HasPermissionToAddUserRequest
+        var reguest = new HasPermissionToActionOnUserRequest
         {
             LoggedUser = new LoggedUser { Roles = new List<string> { userRole } },
             TargetCompanyHash = Guid.Parse(targetCompanyHash),
@@ -77,7 +78,7 @@ public class RoleUtilsTest
         };
 
         // act
-        var response = _service.HasPermissionToAddUser(reguest);
+        var response = _service.HasPermissionToUserAction(reguest);
 
         // assert
         response.Should().BeFalse();
@@ -87,11 +88,11 @@ public class RoleUtilsTest
     [InlineData(SystemRoles.Admin)]
     [InlineData(SystemRoles.HR)]
     [InlineData(SystemRoles.CompanyAdmin)]
-    public void HasPermissionToAddUser_WhenUserHavePerrmision_ReturnTrue(string userRole)
+    public void HasPermissionToUserAction_WhenUserHavePerrmision_ReturnTrue(string userRole)
     {
         // arrange
         var hash = Guid.NewGuid();
-        var request = new HasPermissionToAddUserRequest
+        var request = new HasPermissionToActionOnUserRequest
         {
             LoggedUser = new LoggedUser
             {
@@ -106,7 +107,7 @@ public class RoleUtilsTest
         };
 
         // act
-        var response = _service.HasPermissionToAddUser(request);
+        var response = _service.HasPermissionToUserAction(request);
 
         // act
         response.Should().BeTrue();

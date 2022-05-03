@@ -11,6 +11,7 @@ const mockUserResponse: UserResponse = {
     roles: ["admin"],
     surname: "surname",
     username: "username",
+    email: "email",
 };
 
 jest.mock("@mui/x-data-grid", () => ({
@@ -21,8 +22,12 @@ jest.mock("@mui/material", () => ({
     CircularProgress: () => <div>loader</div>,
 }));
 
-jest.mock("../../service/companyService/WorkersServices", () => ({
+jest.mock("service/companyService/WorkersServices", () => ({
     GetWorkers: jest.fn(),
+}));
+
+jest.mock("react-router-dom", () => ({
+    useNavigate: jest.fn(),
 }));
 
 test("should render dataGrid when fetch data with success", () => {

@@ -1,4 +1,4 @@
-import PersonIcon from "@mui/icons-material/Person";
+import SupervisorAccountIcon from "@mui/icons-material/SupervisorAccount";
 import { ListItemButton } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import HasRole, { Roles } from "service/userService/Roles";
@@ -16,9 +16,8 @@ const WorkerButton = ({ roles }: props) => {
     }
 
     return (
-        // tmp solition for not working import on CI
         <ListItemButton className="navbar-item" onClick={() => navigation(Path.workersList)}>
-            <PersonIcon />
+            <SupervisorAccountIcon />
             <p>Workers</p>
         </ListItemButton>
     );
