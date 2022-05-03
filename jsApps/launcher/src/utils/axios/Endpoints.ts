@@ -5,6 +5,9 @@ const Endpoints = {
     },
     User: {
         Create: "Api/User/Create",
+        GetUser: (hash: string) => `Api/User/${hash}`,
+        ChagnePassword: "Api/User/ChangePassword",
+        UpdateUser: "Api/User/Update",
     },
     Company: {
         Workers: "Api/Company/Workers",

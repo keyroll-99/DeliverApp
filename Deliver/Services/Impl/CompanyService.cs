@@ -69,6 +69,7 @@ public class CompanyService : ICompanyService
                 Name = x.Name,
                 Surname = x.Surname,
                 Username = x.Username,
+                PhoneNumber = x.PhoneNumber,
                 Roles = x.UserRole.Select(x => x.Role.Name).ToList()
             }).ToList();
 

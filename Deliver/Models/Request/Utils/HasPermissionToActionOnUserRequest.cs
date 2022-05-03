@@ -1,6 +1,6 @@
 ﻿namespace Models.Request.Utils;
 
-public class HasPermissionToAddUserRequest
+public class HasPermissionToActionOnUserRequest
 {
     public LoggedUser LoggedUser { get; set; }
     public Db.Company LoggedUserCompany { get; set; }

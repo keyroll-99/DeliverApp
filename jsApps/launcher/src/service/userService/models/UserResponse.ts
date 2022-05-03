@@ -6,4 +6,6 @@ export default interface UserResponse {
     roles: string[];
     companyName: string;
     companyHash: string;
+    phoneNumber?: string;
+    email: string;
 }

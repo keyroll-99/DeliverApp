@@ -1,14 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { QueryClient, QueryClientProvider } from "react-query";
+import { BrowserRouter } from "react-router-dom";
 import App from "./App";
+import "./assets/index.scss";
 import reportWebVitals from "./reportWebVitals";
 import { store, StoreContext } from "./stores/Store";
-import { BrowserRouter } from "react-router-dom";
-import { LoadConfig } from "./utils/_core/Config";
-import "./assets/index.scss";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-import SuccessSnackbar from "components/snackbar/SuccessSnackbar";
 
 const queryClient = new QueryClient();
 

@@ -1,5 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
+import Path from "utils/route/Path";
 import { UseStore } from "../../stores/Store";
 import Endpoints from "../../utils/axios/Endpoints";
 import Config from "../../utils/_core/Config";
@@ -48,9 +50,11 @@ const RefreshTokenRequest = async (): Promise<BaseResponse<AuthResponse>> => {
 export const RefreshToken = (): FetchProcessing<AuthResponse> => {
     const { userStore } = UseStore();
     const { isLoading, data } = useQuery("RefreshToken", RefreshTokenRequest, { refetchInterval: 180000 });
+
     if (!isLoading && data?.isSuccess) {
         userStore.setUser(data!.data!);
     }
+
     return {
         isLoading: isLoading,
         error: data?.error,
@@ -61,10 +65,18 @@ export const RefreshToken = (): FetchProcessing<AuthResponse> => {
 
 export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse>> => {
     const { userStore } = UseStore();
+    const navigation = useNavigate();
+
     const { isLoading, data, mutate, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
-        onSuccess: () => {
-            if (data?.isSuccess) {
-                userStore.setUser(data!.data!);
+        onSuccess: (result) => {
+            if (result?.isSuccess) {
+                console.log("successLogin", result);
+
+                userStore.setUser(result!.data!);
+            } else {
+                console.log("go back", result);
+
+                navigation(Path.login);
             }
         },
     });

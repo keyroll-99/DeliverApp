@@ -29,7 +29,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
         var user = context.HttpContext.Items["User"] as User;
         var roles = context.HttpContext.Items["Roles"] as List<string>;
 
-        var haveValidRole = _requireRole is not null
+        var haveValidRole = _requireRole is not null && _requireRole.Any()
             ? roles?.Any(x => _requireRole.Contains(x))
             : true;
 

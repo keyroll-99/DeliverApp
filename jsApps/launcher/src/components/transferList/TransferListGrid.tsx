@@ -79,10 +79,15 @@ const TransferListGrid = ({
                 </Grid>
                 <Grid item>
                     <Grid container direction="column" alignItems="center">
-                        <Button role={"to-seleted"} variant="outlined" size="small" onClick={onClickToSeleted}>
+                        <Button className="test_to-seleted" variant="outlined" size="small" onClick={onClickToSeleted}>
                             &gt;
                         </Button>
-                        <Button role={"to-avaliable"} variant="outlined" size="small" onClick={onClickToAvaliable}>
+                        <Button
+                            className="test_to-avaliable"
+                            variant="outlined"
+                            size="small"
+                            onClick={onClickToAvaliable}
+                        >
                             &lt;
                         </Button>
                     </Grid>

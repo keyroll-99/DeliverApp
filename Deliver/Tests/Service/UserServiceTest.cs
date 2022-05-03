@@ -19,7 +19,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Tests.Utils
+namespace Tests.Service
 {
     public class UserServiceTest
     {
@@ -34,6 +34,18 @@ namespace Tests.Utils
                 Password = BCrypt.Net.BCrypt.HashPassword("test"),
                 Name = "TestName",
                 Surname = "TestSurname"
+            },
+            new User
+            {
+                Id = 2,
+                Username = "test",
+                Name = "user_2",
+                Surname = "user_2",
+                Hash = Guid.Parse("b07b6398-47c7-4e0d-8d5b-27a199ae63a5"),
+                Company = new Company
+                {
+                    Hash = Guid.Parse("63165844-94a4-4769-bcef-bcb0692d9d06")
+                }
             }
         }.BuildMock();
 
@@ -120,7 +132,7 @@ namespace Tests.Utils
             {
                 Hash = Guid.NewGuid(),
             });
-            _roleUtilsMock.HasPermissionToAddUser(Arg.Any<HasPermissionToAddUserRequest>()).Returns(false);
+            _roleUtilsMock.HasPermissionToUserAction(Arg.Any<HasPermissionToActionOnUserRequest>()).Returns(false);
 
             // act
             Func<Task> act = async () => await _service.CreateUser(request);
@@ -151,7 +163,7 @@ namespace Tests.Utils
             });
             _companyUtilsMock.GetCompanyByHash(Arg.Any<Guid>()).Returns(null as Company);
 
-            _roleUtilsMock.HasPermissionToAddUser(Arg.Any<HasPermissionToAddUserRequest>()).Returns(true);
+            _roleUtilsMock.HasPermissionToUserAction(Arg.Any<HasPermissionToActionOnUserRequest>()).Returns(true);
 
             // act
             Func<Task> act = async () => await _service.CreateUser(request);
@@ -184,7 +196,7 @@ namespace Tests.Utils
                 Hash = Guid.NewGuid(),
             });
 
-            _roleUtilsMock.HasPermissionToAddUser(Arg.Any<HasPermissionToAddUserRequest>()).Returns(true);
+            _roleUtilsMock.HasPermissionToUserAction(Arg.Any<HasPermissionToActionOnUserRequest>()).Returns(true);
 
             // act
             var response = await _service.CreateUser(request);
@@ -289,6 +301,81 @@ namespace Tests.Utils
                     x.Id == 1
                     && x.CompanyId == 1
             ));
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("l")]
+        public async Task UpdatePassword_WhenInvalidPassowrdLenght_ThrowException(string newPassword)
+        {
+            // act
+            Func<Task> act = async () => await _service.UpdatePassword(new ChangePasswordRequest { Password = newPassword, OldPassword = "old-password" });
+
+            // assert
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidNewPassword);
+        }
+
+        [Fact]
+        public async Task UpdatePassword_WhenUserIsNull_ThorwException()
+        {
+            // arrange
+            _userRepositoryMock.GetByIdAsync(Arg.Any<long>()).Returns(null as User);
+
+            // act
+            Func<Task> act = async () => await _service.UpdatePassword(new ChangePasswordRequest { Password = "password", OldPassword = "old-password" });
+
+            // assert
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.CommonMessage);
+        }
+
+        [Fact]
+        public async Task UpdatePassword_WhenOldPasswordIsIncorrect_ThenThrowException()
+        {
+            // arrange
+            _userRepositoryMock.GetByIdAsync(Arg.Any<long>()).Returns(new User { Password = BCrypt.Net.BCrypt.HashPassword("old-password") });
+
+            // act
+            Func<Task> act = async () => await _service.UpdatePassword(new ChangePasswordRequest { Password = "password", OldPassword = "super-old-password" });
+
+            // assert
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidPassword);
+        }
+
+        [Fact]
+        public async Task UpdatePassword_WhenRequestIsValid_UdpateUser()
+        {
+            // arrange
+            _userRepositoryMock.GetByIdAsync(Arg.Any<long>()).Returns(new User { Password = BCrypt.Net.BCrypt.HashPassword("old-password") });
+
+            // act
+            await _service.UpdatePassword(new ChangePasswordRequest { Password = "password", OldPassword = "old-password" });
+
+            // assert
+            await _userRepositoryMock.Received(1).UpdateAsync(Arg.Is<User>(x => x.Password != null));
+        }
+
+        [Fact]
+        public async Task GetUser_WhenUserDoesntExist_ThrowError()
+        {
+            // act
+            Func<Task> act = async () => await _service.GetUser(Guid.NewGuid());
+
+            // assert
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.UserDosentExists);
+        }
+
+        [Fact]
+        public async Task GetUser_WhenUserHasInvalidRole_ThrowError()
+        {
+            // arrange
+            var userHash = Guid.Parse("b07b6398-47c7-4e0d-8d5b-27a199ae63a5");
+            _roleUtilsMock.HasPermissionToUserAction(Arg.Any<HasPermissionToActionOnUserRequest>()).Returns(false);
+
+            // act
+            Func<Task> act = async () => await _service.GetUser(userHash);
+
+            // assert
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidRole);
         }
     }
 }

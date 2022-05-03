@@ -5,10 +5,10 @@ import CreateClass from "utils/style/CreateClass";
 interface props {
     baseClass: string;
     label: string;
-    error: string | null;
+    error?: string | null;
     icon?: ReactNode;
-    value: string;
-    type: "text" | "password" | "email";
+    value?: string;
+    type: "text" | "password" | "email" | "tel";
     onChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 

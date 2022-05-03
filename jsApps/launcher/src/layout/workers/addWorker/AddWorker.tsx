@@ -1,6 +1,6 @@
 import { Button, CircularProgress } from "@mui/material";
 import TextFieldInput from "components/inputs/TextFieldInput";
-import SuccessSnackbar from "components/snackbar/SuccessSnackbar";
+import Snackbar from "components/snackbar/Snackbar";
 import TransferListGrid from "components/transferList/TransferListGrid";
 import { transferListItemType } from "components/transferList/TransferListType";
 import { useState } from "react";
@@ -13,12 +13,18 @@ import CreateClass from "utils/style/CreateClass";
 
 const baseClassName = "add-worker";
 
+const onlyNumber = (value: string): boolean => /^[0-9]+$/.test(value);
+
 const isValidForm = (form: CreateUserForm): string | null => {
     const isValidForm =
         form.email !== "" && form.name !== "" && form.surname !== "" && form.username !== "" && form.roleIds.length > 0;
 
     if (!isValidForm) {
         return "please fill in all fields";
+    }
+
+    if (form.phoneNumber && !onlyNumber(form.phoneNumber!)) {
+        return "invalid phone number";
     }
     return null;
 };
@@ -27,7 +33,8 @@ const submitForm = async (
     form: CreateUserForm,
     createUser: MutationProcessing<CreateUserForm, BaseResponse<UserResponse>>,
     setError: (value: string | null) => void,
-    setForm: (value: CreateUserForm) => void
+    setForm: (value: CreateUserForm) => void,
+    setShowSnackbar: (value: boolean) => void
 ) => {
     const formError = isValidForm(form);
 
@@ -43,6 +50,7 @@ const submitForm = async (
                 surname: "",
                 username: "",
             });
+            setShowSnackbar(true);
         } else {
             setError(response.error);
         }
@@ -60,6 +68,7 @@ const AddWorker = () => {
         surname: "",
         username: "",
     });
+    const [showSnackbar, setShowSnackbar] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const getRoleRequest = GetRoles();
     const createUser = CreateUser();
@@ -123,6 +132,14 @@ const AddWorker = () => {
                         type="text"
                         value={form.username}
                     />
+                    <TextFieldInput
+                        baseClass={baseClassName}
+                        error={error}
+                        label="Phone number"
+                        onChange={(e) => setForm({ ...form, phoneNumber: e.target.value })}
+                        type="tel"
+                        value={form.phoneNumber}
+                    />
                 </div>
                 <TransferListGrid
                     availableItems={availableItems}
@@ -138,13 +155,13 @@ const AddWorker = () => {
                     <Button
                         className={CreateClass(baseClassName, "submit")}
                         size="large"
-                        onClick={() => submitForm(form, createUser, setError, setForm)}
+                        onClick={() => submitForm(form, createUser, setError, setForm, setShowSnackbar)}
                     >
                         submit
                     </Button>
                 </div>
             </span>
-            <SuccessSnackbar message="User added" isOpen={createUser.data?.isSuccess} />
+            <Snackbar variant="success" setIsOpen={setShowSnackbar} message="User added" isOpen={showSnackbar} />
         </>
     );
 };

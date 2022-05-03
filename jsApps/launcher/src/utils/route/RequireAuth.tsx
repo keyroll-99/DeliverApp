@@ -17,7 +17,7 @@ const RequireAuth = ({ children }: props) => {
         if (!isSuccess && !isLoading) {
             navigation(Path.login);
         }
-    }, [isSuccess, isLoading]);
+    }, [isSuccess, isLoading, navigation]);
 
     if (isLoading) {
         return <CircularProgress />;

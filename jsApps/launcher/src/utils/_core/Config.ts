@@ -17,8 +17,6 @@ const fetchConfig = async (): Promise<ConfigType> => {
 export const LoadConfig = (): FetchProcessing<ConfigType> => {
     const { isLoading, data } = useQuery("fetch appsetings", fetchConfig, {
         onSuccess: (data) => {
-            console.log("success");
-
             Object.assign(Config, data);
         },
         cacheTime: -1,

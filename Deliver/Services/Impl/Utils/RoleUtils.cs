@@ -20,28 +20,6 @@ public class RoleUtils : IRoleUtils
         _userRoleRepository = userRoleRepository;
     }
 
-    public bool HasPermissionToAddUser(HasPermissionToAddUserRequest request)
-    {
-        if(request.LoggedUser is null)
-        {
-            throw new ArgumentException(ErrorMessage.LoggedUserIsNull);
-        }
-
-        var userRoles = request.LoggedUser.Roles;
-        if (HasPermission(userRoles, SystemRoles.Admin))
-        {
-            return true;
-        }
-
-        return
-            request.LoggedUserCompany is not null
-            && request.TargetCompanyHash == request.LoggedUserCompany.Hash
-            && (
-               HasPermission(userRoles, SystemRoles.HR)
-               || HasPermission(userRoles, SystemRoles.CompanyAdmin)
-            );
-    }
-
     public async Task AddRolesToUser(User user, List<long> roleIds)
     {
         var roles = await _roleRepository.GetAll().Where(role => roleIds.Contains(role.Id)).ToListAsync();
@@ -64,6 +42,29 @@ public class RoleUtils : IRoleUtils
         return HasPermission(loggedUser.Roles, SystemRoles.Admin);
     }
 
+    public bool HasPermissionToUserAction(HasPermissionToActionOnUserRequest request)
+    {
+        if (request.LoggedUser is null)
+        {
+            throw new AppException(ErrorMessage.InvalidRole);
+        }
+
+        var roles = request.LoggedUser.Roles;
+        if (HasPermission(roles, SystemRoles.Admin))
+        {
+            return true;
+        }
+
+        return
+            request.LoggedUserCompany is not null
+            && request.TargetCompanyHash == request.LoggedUserCompany.Hash
+            && (
+               HasPermission(roles, SystemRoles.HR)
+               || HasPermission(roles, SystemRoles.CompanyAdmin)
+            );
+    }
+
     private static bool HasPermission(List<string> roles, string permission)
         => roles.Contains(permission);
+
 }
