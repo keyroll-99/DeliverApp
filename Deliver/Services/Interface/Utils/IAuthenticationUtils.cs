@@ -2,7 +2,7 @@
 
 namespace Services.Interface.Utils;
 
-public interface IJwtUtils
+public interface IAuthenticationUtils
 {
     string GenerateJwtToken(User user);
     int? ValidateJwtToken(string? token);

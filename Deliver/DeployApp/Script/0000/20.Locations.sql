@@ -1,0 +1,4 @@
+﻿ALTER TABLE Locations
+ADD
+	Country VARCHAR(100),
+	Region VARCHAR(100);

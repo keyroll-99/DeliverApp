@@ -8,5 +8,5 @@
 	Username VARCHAR(120) NOT NULL,
 	Password VARCHAR(120) NOT NULL,
 	EMail VARCHAR(50),
-	CompanyId BIGINT
+	CompanyId BIGINT NOT NULL
 );

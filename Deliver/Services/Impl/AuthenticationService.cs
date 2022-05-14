@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Models;
 using Models.Exceptions;
 using Models.Request.Authentication;
 using Models.Response.Authentication;
@@ -10,13 +12,15 @@ namespace Services.Impl;
 
 public class AuthenticationService : IAuthenticationService
 {
-    private readonly IJwtUtils _jwtUtils;
+    private readonly IAuthenticationUtils _authenticationUtils;
     private readonly IUserRepository _userRepository;
+    private readonly LoggedUser _loggedUser;
 
-    public AuthenticationService(IJwtUtils jwtUtils, IUserRepository userRepository)
+    public AuthenticationService(IAuthenticationUtils authenticationUtils, IUserRepository userRepository, IOptions<LoggedUser> loggedUser)
     {
-        _jwtUtils = jwtUtils;
+        _authenticationUtils = authenticationUtils;
         _userRepository = userRepository;
+        _loggedUser = loggedUser.Value;
     }
 
     public async Task<AuthResponse> Login(LoginRequest loginRequest, string ipAddress)
@@ -34,8 +38,8 @@ public class AuthenticationService : IAuthenticationService
             throw new AppException(ErrorMessage.InvalidLoginOrPassword);
         }
 
-        var jwtTokne = _jwtUtils.GenerateJwtToken(user);
-        var refreshToken = await _jwtUtils.GenerateRefreshToken(user, ipAddress);
+        var jwtTokne = _authenticationUtils.GenerateJwtToken(user);
+        var refreshToken = await _authenticationUtils.GenerateRefreshToken(user, ipAddress);
 
         return new AuthResponse
         {
@@ -51,9 +55,15 @@ public class AuthenticationService : IAuthenticationService
         };
     }
 
+    public async Task Logout(string ipAddress)
+    {
+        var user = await _userRepository.GetByIdAsync(_loggedUser.Id);
+        await _authenticationUtils.RevokeAllRefreshTokenForUser(user, ipAddress);
+    }
+
     public async Task<AuthResponse> RefreshToken(string? token, string ipAddress)
     {
-        var refreshToken = await _jwtUtils.GetRefreshTokenByToken(token);
+        var refreshToken = await _authenticationUtils.GetRefreshTokenByToken(token);
         if (refreshToken is null)
         {
             throw new AppException(ErrorMessage.InvalidToken);
@@ -61,7 +71,7 @@ public class AuthenticationService : IAuthenticationService
 
         if (refreshToken.IsUsed)
         {
-            await _jwtUtils.RevokeRefreshToken(refreshToken, ipAddress);
+            await _authenticationUtils.RevokeRefreshToken(refreshToken, ipAddress);
             throw new AppException(ErrorMessage.TokenAlreadyTaken);
         }
 
@@ -77,9 +87,9 @@ public class AuthenticationService : IAuthenticationService
             throw new AppException(ErrorMessage.UserDosentExists);
         }
 
-        await _jwtUtils.RevokeRefreshToken(refreshToken, ipAddress);
-        refreshToken = await _jwtUtils.GenerateRefreshToken(user, ipAddress);
-        var jwtToken = _jwtUtils.GenerateJwtToken(user);
+        await _authenticationUtils.RevokeRefreshToken(refreshToken, ipAddress);
+        refreshToken = await _authenticationUtils.GenerateRefreshToken(user, ipAddress);
+        var jwtToken = _authenticationUtils.GenerateJwtToken(user);
 
         return new AuthResponse
         {

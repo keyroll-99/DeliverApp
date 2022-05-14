@@ -15,7 +15,6 @@ describe("AddWorker", () => {
     beforeEach(() => {
         (CreateUser as jest.MockedFunction<typeof CreateUser>).mockReturnValue({
             isLoading: false,
-            mutate: jest.fn(),
             mutateAsync: jest.fn(),
         });
     });

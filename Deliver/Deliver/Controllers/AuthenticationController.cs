@@ -40,6 +40,14 @@ public class AuthenticationController : ControllerBase
         return response;
     }
 
+    [HttpPost("Logout")]
+    [Authorize]
+    public async Task<BaseRespons> Logout()
+    {
+        await _authenticateService.Logout(getIpAddress() ?? "unknow");
+        return BaseRespons.Success();
+    }
+
     private void setTokenCookie(string token)
     {
         var cookieOption = new CookieOptions

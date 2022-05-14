@@ -1,3 +1,6 @@
+import CreateLocation from "layout/location/createLocation/CreateLocation";
+import EditLocation from "layout/location/editLocation/EditLocation";
+import LocationList from "layout/location/list/LocationList";
 import EditWorker from "layout/workers/account/editWorker/EditWorker";
 import Account from "layout/workers/account/profile/Account";
 import { Route, Routes } from "react-router-dom";
@@ -48,6 +51,30 @@ const Router = () => {
                 element={
                     <RequireAuth>
                         <EditWorker />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.locationAdd}
+                element={
+                    <RequireAuth>
+                        <CreateLocation />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.locationList}
+                element={
+                    <RequireAuth>
+                        <LocationList />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.locationUpdate}
+                element={
+                    <RequireAuth>
+                        <EditLocation />
                     </RequireAuth>
                 }
             />

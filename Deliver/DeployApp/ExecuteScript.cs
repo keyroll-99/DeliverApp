@@ -79,6 +79,7 @@ namespace DeployApp
                             throw new Exception(ex.Message);
                         }
                     }
+                    cmd.Parameters.Clear();
                     executedScripts.ScriptNumber++;
                 }
                 executedScripts.Folder = (Convert.ToDecimal(executedScripts.Folder) + 1).ToString("0000");

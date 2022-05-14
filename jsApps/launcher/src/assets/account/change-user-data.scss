@@ -1,6 +1,6 @@
 .change-user-data {
     @include card-layout;
-    @include account-card;
+    @include form-layout;
 
     &-fields {
         @include flex-form-fields;

@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Tests.Utils;
 
-public class JwtUtilsTest
+public class AuthenticationUtilsTest
 {
     private readonly IQueryable<RefreshToken> _refreshTokens = new List<RefreshToken>
     {
@@ -49,9 +49,9 @@ public class JwtUtilsTest
 
     private readonly IRefreshTokenRepository _refreshTokenRepositoryMock;
     private readonly IOptions<AppSettings> _appSettignsMock;
-    private readonly JwtUtils _service;
+    private readonly AuthenticationUtils _service;
 
-    public JwtUtilsTest()
+    public AuthenticationUtilsTest()
     {
         _refreshTokenRepositoryMock = Substitute.For<IRefreshTokenRepository>();
         _refreshTokenRepositoryMock.AddAsync(Arg.Any<RefreshToken>()).Returns(true);
@@ -61,7 +61,7 @@ public class JwtUtilsTest
         _appSettignsMock = Substitute.For<IOptions<AppSettings>>();
         _appSettignsMock.Value.Returns(_appSettings);
 
-        _service = new JwtUtils(_refreshTokenRepositoryMock, _appSettignsMock);
+        _service = new AuthenticationUtils(_refreshTokenRepositoryMock, _appSettignsMock);
     }
 
     [Fact]

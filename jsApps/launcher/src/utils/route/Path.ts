@@ -5,6 +5,9 @@ const Path = {
     addWorker: "/workers/add",
     account: "/account",
     editWorker: "/workers/:userHash",
+    locationAdd: "/location/add",
+    locationList: "/location/list",
+    locationUpdate: "/location/:locationHash",
 };
 
 export const GetPathWithParam = (url: string, value: string) => {
