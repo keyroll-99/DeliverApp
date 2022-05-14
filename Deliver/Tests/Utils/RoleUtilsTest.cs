@@ -34,6 +34,7 @@ public class RoleUtilsTest
 
     private readonly IRoleRepository _roleRepository;
     private readonly IUserRoleRepository _userRoleRepository;
+    private readonly IRolePermissionRepository _rolePermissionRepository;
 
     private readonly IRoleUtils _service;
 
@@ -42,75 +43,11 @@ public class RoleUtilsTest
         _roleRepository = Substitute.For<IRoleRepository>();
         _roleRepository.GetAll().Returns(_rolesDataMock);
 
+        _rolePermissionRepository = Substitute.For<IRolePermissionRepository>();
+
         _userRoleRepository = Substitute.For<IUserRoleRepository>();
 
-        _service = new RoleUtils(_roleRepository, _userRoleRepository);
-    }
-
-    [Fact]
-    public void HasPermissionToUserAction_WhenLoggedUserIsNull_ThorwArgumentException()
-    {
-        // arrange
-        var reguest = new HasPermissionToActionOnUserRequest();
-
-        // act
-        Action act = () => _service.HasPermissionToUserAction(reguest);
-
-        // assert
-        act.Should().Throw<AppException>();
-    }
-
-    [Theory]
-    [InlineData(SystemRoles.HR, "d8c5ae68-56bc-4ba2-8359-ee5490bf581e", "cddc1c81-1dad-4c0b-a432-b19b25f6ac35")]
-    [InlineData(SystemRoles.CompanyAdmin, "d8c5ae68-56bc-4ba2-8359-ee5490bf581e", "cddc1c81-1dad-4c0b-a432-b19b25f6ac35")]
-    [InlineData(SystemRoles.Driver, "cddc1c81-1dad-4c0b-a432-b19b25f6ac35", "cddc1c81-1dad-4c0b-a432-b19b25f6ac35")]
-    public void HasPermissionToUserAction_WhenUserDoesntHavePerrmisionOrIsNotInThisSameCompany_ReturnFalse(string userRole, string userCompanyHash, string targetCompanyHash)
-    {
-        // arrange
-        var reguest = new HasPermissionToActionOnUserRequest
-        {
-            LoggedUser = new LoggedUser { Roles = new List<string> { userRole } },
-            TargetCompanyHash = Guid.Parse(targetCompanyHash),
-            LoggedUserCompany = new Company
-            {
-                Hash = Guid.Parse(userCompanyHash)
-            }
-        };
-
-        // act
-        var response = _service.HasPermissionToUserAction(reguest);
-
-        // assert
-        response.Should().BeFalse();
-    }
-
-    [Theory]
-    [InlineData(SystemRoles.Admin)]
-    [InlineData(SystemRoles.HR)]
-    [InlineData(SystemRoles.CompanyAdmin)]
-    public void HasPermissionToUserAction_WhenUserHavePerrmision_ReturnTrue(string userRole)
-    {
-        // arrange
-        var hash = Guid.NewGuid();
-        var request = new HasPermissionToActionOnUserRequest
-        {
-            LoggedUser = new LoggedUser
-            {
-                Id = 1,
-                Roles = new List<string> { userRole }
-            },
-            TargetCompanyHash = hash,
-            LoggedUserCompany = new Company
-            {
-                Hash = hash,
-            }
-        };
-
-        // act
-        var response = _service.HasPermissionToUserAction(request);
-
-        // act
-        response.Should().BeTrue();
+        _service = new RoleUtils(_roleRepository, _userRoleRepository, _rolePermissionRepository);
     }
 
     [Fact]

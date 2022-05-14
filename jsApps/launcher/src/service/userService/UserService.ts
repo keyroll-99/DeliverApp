@@ -46,7 +46,6 @@ export const CreateUser = (): MutationProcessing<CreateUserForm, BaseResponse<Us
 
     return {
         isLoading: isLoading,
-        mutate: mutate,
         mutateAsync: mutateAsync,
         data: data,
         error: data?.error,
@@ -110,7 +109,6 @@ export const ChangePasswordAction = (): MutationProcessing<ChangePasswordForm, B
 
     return {
         isLoading: isLoading,
-        mutate: mutate,
         mutateAsync: mutateAsync,
         data: data,
         error: data?.error,
@@ -144,7 +142,6 @@ export const UpdateUserAction = (): MutationProcessing<UpdateUserForm, BaseRespo
 
     return {
         isLoading: isLoading,
-        mutate: mutate,
         mutateAsync: mutateAsync,
         data: data,
         error: data?.error,

@@ -17,7 +17,7 @@ const columns: GridColDef[] = [
     },
 ];
 
-const baseName = "workersList";
+const baseName = "workers-list";
 
 const WorkersList = () => {
     const { isLoading, data, isSuccess } = GetWorkers();
@@ -39,6 +39,7 @@ const WorkersList = () => {
                     components={{
                         Toolbar: GridToolbar,
                     }}
+                    disableDensitySelector={true}
                 />
             ) : (
                 <CircularProgress />

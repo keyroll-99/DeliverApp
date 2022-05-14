@@ -3,10 +3,13 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models;
 using Models.Db;
+using Models.Db.ConstValues;
 using Models.Exceptions;
 using Models.Integration;
+using Models.Mapper;
 using Models.Request.User;
 using Models.Request.Utils;
+using Models.Request.Utils.Role;
 using Models.Response.User;
 using Repository.Repository.Interface;
 using Services.Interface;
@@ -49,7 +52,7 @@ public class UserService : IUserService
             throw new AppException(ErrorMessage.UserExists);
         }
 
-        if (!(await VerifyPerrmisonToActionOnUser(createUserRequest.CompanyHash)))
+        if (!(await VerifyPerrmisonToActionOnUser(createUserRequest.CompanyHash, PermissionActionEnum.Create)))
         {
             throw new AppException(ErrorMessage.InvalidRole);
         }
@@ -147,7 +150,7 @@ public class UserService : IUserService
             throw new AppException(ErrorMessage.UserDosentExists);
         }
 
-        if (!await VerifyPerrmisionToActionOnExistsUser(updateUser))
+        if (!await VerifyPerrmisonToActionOnUser(updateUser.Company.Hash, PermissionActionEnum.Update))
         {
             throw new AppException(ErrorMessage.InvalidRole);
         }
@@ -184,7 +187,7 @@ public class UserService : IUserService
             throw new AppException(ErrorMessage.UserDosentExists);
         }
 
-        if (!await VerifyPerrmisionToActionOnExistsUser(user))
+        if (!await VerifyPerrmisonToActionOnUser(user.Company.Hash, PermissionActionEnum.Get))
         {
             throw new AppException(ErrorMessage.InvalidRole);
         }
@@ -203,25 +206,21 @@ public class UserService : IUserService
         };
     }
 
-    private async Task<bool> VerifyPerrmisionToActionOnExistsUser(User user)
+    private async Task<bool> VerifyPerrmisonToActionOnUser(Guid targetCompany, PermissionActionEnum action)
     {
-        if (user.Id == _loggedUser.Id)
+        var hasRole = await _roleUtils.HasPermission(new HasPermissionRequest
         {
-            return true;
+            Action = action,
+            PermissionTo = PermissionToEnum.User,
+            Roles = _loggedUser.Roles
+        });
+
+        var isUserCompany = true;
+        if (action != PermissionActionEnum.Create) { 
+            isUserCompany = await _companyUtils.IsUserCompany(targetCompany, _loggedUser.Id);
         }
 
-        return await VerifyPerrmisonToActionOnUser(user.Company.Hash);
-    }
-
-    private async Task<bool> VerifyPerrmisonToActionOnUser(Guid targetCompany)
-    {
-        var userCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
-        return _roleUtils.HasPermissionToUserAction(new HasPermissionToActionOnUserRequest
-        {
-            LoggedUser = _loggedUser,
-            LoggedUserCompany = userCompany,
-            TargetCompanyHash = targetCompany
-        });
+        return isUserCompany && hasRole;
     }
 
     private async Task<User> AddUserAndSendMail(User user, Company company)

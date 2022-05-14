@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import GetHeader from "utils/axios/GetHeader";
 import Path from "utils/route/Path";
 import { UseStore } from "../../stores/Store";
 import Endpoints from "../../utils/axios/Endpoints";
@@ -81,8 +82,34 @@ export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse
         isLoading: isLoading,
         error: data?.error,
         isSuccess: data?.isSuccess,
-        mutate: mutate,
         data: data,
+        mutateAsync: mutateAsync,
+    };
+};
+
+const LogoutRequest = async (jwt: string): Promise<BaseResponse<null>> => {
+    const reponse = await axios
+        .post<null, AxiosResponse<BaseResponse<null>>>(
+            `${Config.serverUrl}${Endpoints.Authentication.Logout}`,
+            {},
+            { headers: GetHeader(jwt) }
+        )
+        .then((resp) => resp.data)
+        .catch((error: AxiosError) => ({ error: error.message, isSuccess: false } as BaseResponse<null>));
+
+    return reponse;
+};
+
+export const Logout = (): MutationProcessing<undefined, BaseResponse<null>> => {
+    const { userStore } = UseStore();
+
+    const { isLoading, data, mutate, mutateAsync } = useMutation("logout", () => LogoutRequest(userStore.getUser!.jwt));
+
+    return {
+        isLoading: isLoading,
+        data: data,
+        error: data?.error,
+        isSuccess: data?.isSuccess,
         mutateAsync: mutateAsync,
     };
 };

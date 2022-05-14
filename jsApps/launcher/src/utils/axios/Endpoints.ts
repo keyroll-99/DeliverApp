@@ -2,6 +2,7 @@ const Endpoints = {
     Authentication: {
         Login: "Api/Authentication/Login",
         Refresh: "Api/Authentication/Refresh",
+        Logout: "Api/Authentication/Logout",
     },
     User: {
         Create: "Api/User/Create",
@@ -14,6 +15,12 @@ const Endpoints = {
     },
     Role: {
         GetAll: "Api/Role",
+    },
+    Location: {
+        Create: "Api/Location",
+        GetList: "Api/Location/List",
+        Update: "Api/Location",
+        GetByHash: (hash: string) => `Api/Location/${hash}`,
     },
 };
 export default Endpoints;

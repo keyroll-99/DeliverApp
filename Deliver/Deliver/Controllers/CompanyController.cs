@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Models;
 using Models.Db.ConstValues;
-using Models.Exceptions;
 using Models.Request.Company;
 using Models.Response._Core;
 using Models.Response.Company;

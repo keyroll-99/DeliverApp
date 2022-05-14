@@ -21,6 +21,8 @@ public static class DISetup
         services.AddScoped<ICompanyRepository, CompanyRepository>();
         services.AddScoped<IUserRoleRepository, UserRoleRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<ILocationReposiotry, LocationRepository>();
+        services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         return services;
     }
 
@@ -30,6 +32,7 @@ public static class DISetup
         services.AddScoped<ICompanyService, CompanyService>();
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<ILocationService, LocationService>();
         return services;
     }
 
@@ -42,7 +45,7 @@ public static class DISetup
 
     public static IServiceCollection RegisterUtils(this IServiceCollection services)
     {
-        services.AddScoped<IJwtUtils, JwtUtils>();
+        services.AddScoped<IAuthenticationUtils, AuthenticationUtils>();
         services.AddScoped<IRoleUtils, RoleUtils>();
         services.AddScoped<ICompanyUtils, CompanyUtils>();
         services.AddScoped<IUserUtils, UserUtils>();

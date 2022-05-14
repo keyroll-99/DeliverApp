@@ -1,8 +1,12 @@
-﻿INSERT INTO "Roles"
-	(CreateTime, "Name")
+﻿SET IDENTITY_INSERT "Roles" ON
+
+INSERT INTO "Roles"
+	(Id, CreateTime, "Name")
 VALUES
-	(getdate(), 'Admin'),
-	(getdate(), 'CompanyAdmin'),
-	(getdate(), 'HR'),
-	(getdate(), 'CompanyOwner'),
-	(getdate(), 'Driver');
+	(1, getdate(), 'Admin'),
+	(2, getdate(), 'CompanyAdmin'),
+	(3, getdate(), 'HR'),
+	(4, getdate(), 'CompanyOwner'),
+	(5, getdate(), 'Driver');
+
+SET IDENTITY_INSERT "Roles" OFF

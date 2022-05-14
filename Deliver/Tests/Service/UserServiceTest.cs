@@ -9,6 +9,7 @@ using Models.Exceptions;
 using Models.Integration;
 using Models.Request.User;
 using Models.Request.Utils;
+using Models.Request.Utils.Role;
 using NSubstitute;
 using Repository.Repository.Interface;
 using Services.Impl;
@@ -71,6 +72,7 @@ namespace Tests.Service
             _userRepositoryMock.GetAll().Returns(_userDataMock);
 
             _companyUtilsMock = Substitute.For<ICompanyUtils>();
+            _companyUtilsMock.IsUserCompany(Arg.Any<Guid>(), Arg.Any<long>()).Returns(true);
 
             _optionsMock = Substitute.For<IOptions<LoggedUser>>();
             _optionsMock.Value.Returns(_loggedUser);
@@ -132,7 +134,7 @@ namespace Tests.Service
             {
                 Hash = Guid.NewGuid(),
             });
-            _roleUtilsMock.HasPermissionToUserAction(Arg.Any<HasPermissionToActionOnUserRequest>()).Returns(false);
+            _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(false);
 
             // act
             Func<Task> act = async () => await _service.CreateUser(request);
@@ -163,7 +165,7 @@ namespace Tests.Service
             });
             _companyUtilsMock.GetCompanyByHash(Arg.Any<Guid>()).Returns(null as Company);
 
-            _roleUtilsMock.HasPermissionToUserAction(Arg.Any<HasPermissionToActionOnUserRequest>()).Returns(true);
+            _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(true);
 
             // act
             Func<Task> act = async () => await _service.CreateUser(request);
@@ -196,7 +198,7 @@ namespace Tests.Service
                 Hash = Guid.NewGuid(),
             });
 
-            _roleUtilsMock.HasPermissionToUserAction(Arg.Any<HasPermissionToActionOnUserRequest>()).Returns(true);
+            _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(true);
 
             // act
             var response = await _service.CreateUser(request);
@@ -306,7 +308,7 @@ namespace Tests.Service
         [Theory]
         [InlineData(null)]
         [InlineData("l")]
-        public async Task UpdatePassword_WhenInvalidPassowrdLenght_ThrowException(string newPassword)
+        public async Task UpdatePassword_WhenInvalidPassowrdLenght_ThenThrowException(string newPassword)
         {
             // act
             Func<Task> act = async () => await _service.UpdatePassword(new ChangePasswordRequest { Password = newPassword, OldPassword = "old-password" });
@@ -342,7 +344,7 @@ namespace Tests.Service
         }
 
         [Fact]
-        public async Task UpdatePassword_WhenRequestIsValid_UdpateUser()
+        public async Task UpdatePassword_WhenRequestIsValid_ThenUdpateUser()
         {
             // arrange
             _userRepositoryMock.GetByIdAsync(Arg.Any<long>()).Returns(new User { Password = BCrypt.Net.BCrypt.HashPassword("old-password") });
@@ -355,7 +357,7 @@ namespace Tests.Service
         }
 
         [Fact]
-        public async Task GetUser_WhenUserDoesntExist_ThrowError()
+        public async Task GetUser_WhenUserDoesntExist_ThenThrowError()
         {
             // act
             Func<Task> act = async () => await _service.GetUser(Guid.NewGuid());
@@ -365,11 +367,11 @@ namespace Tests.Service
         }
 
         [Fact]
-        public async Task GetUser_WhenUserHasInvalidRole_ThrowError()
+        public async Task GetUser_WhenUserHasInvalidRole_ThenThrowError()
         {
             // arrange
             var userHash = Guid.Parse("b07b6398-47c7-4e0d-8d5b-27a199ae63a5");
-            _roleUtilsMock.HasPermissionToUserAction(Arg.Any<HasPermissionToActionOnUserRequest>()).Returns(false);
+            _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(false);
 
             // act
             Func<Task> act = async () => await _service.GetUser(userHash);

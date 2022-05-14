@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Models;
 using Models.Db;
-using Models.Db.ConstValues;
-using Models.Exceptions;
-using Models.Request.Utils;
+using Models.Request.Utils.Role;
 using Repository.Repository.Interface;
 using Services.Interface.Utils;
 
@@ -13,11 +10,16 @@ public class RoleUtils : IRoleUtils
 {
     private readonly IRoleRepository _roleRepository;
     private readonly IUserRoleRepository _userRoleRepository;
+    private readonly IRolePermissionRepository _rolePermissionRepository;
 
-    public RoleUtils(IRoleRepository roleRepository, IUserRoleRepository userRoleRepository)
+    public RoleUtils(
+        IRoleRepository roleRepository,
+        IUserRoleRepository userRoleRepository,
+        IRolePermissionRepository rolePermissionRepository)
     {
         _roleRepository = roleRepository;
         _userRoleRepository = userRoleRepository;
+        _rolePermissionRepository = rolePermissionRepository;
     }
 
     public async Task AddRolesToUser(User user, List<long> roleIds)
@@ -37,34 +39,26 @@ public class RoleUtils : IRoleUtils
         }
     }
 
-    public bool HasPermissionToGetAllCompany(LoggedUser loggedUser)
+    public async Task<bool> HasPermission(HasPermissionRequest permissionRequest)
     {
-        return HasPermission(loggedUser.Roles, SystemRoles.Admin);
-    }
+        var rolesIds = await GetAllRolesIds(permissionRequest.Roles);
 
-    public bool HasPermissionToUserAction(HasPermissionToActionOnUserRequest request)
-    {
-        if (request.LoggedUser is null)
-        {
-            throw new AppException(ErrorMessage.InvalidRole);
-        }
+        var hasPermission =
+            await (from permission in _rolePermissionRepository.GetAll()
+                   where
+                       rolesIds.Contains(permission.RoleId)
+                       && permission.PermissionAction == permissionRequest.Action
+                       && permission.PermissionTo == permissionRequest.PermissionTo
+                   select permission).AnyAsync();
 
-        var roles = request.LoggedUser.Roles;
-        if (HasPermission(roles, SystemRoles.Admin))
-        {
-            return true;
-        }
-
-        return
-            request.LoggedUserCompany is not null
-            && request.TargetCompanyHash == request.LoggedUserCompany.Hash
-            && (
-               HasPermission(roles, SystemRoles.HR)
-               || HasPermission(roles, SystemRoles.CompanyAdmin)
-            );
+        return hasPermission;
     }
 
     private static bool HasPermission(List<string> roles, string permission)
         => roles.Contains(permission);
+
+    private async Task<List<long>> GetAllRolesIds(List<string> roles)
+        => await _roleRepository.GetAll().Where(x => roles.Contains(x.Name)).Select(x => x.Id).ToListAsync();
+
 
 }

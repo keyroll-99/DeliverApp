@@ -1,9 +1,10 @@
 ﻿using FluentAssertions;
+using Microsoft.Extensions.Options;
 using MockQueryable.NSubstitute;
+using Models;
 using Models.Db;
 using Models.Exceptions;
 using Models.Request.Authentication;
-using Models.Request.User;
 using NSubstitute;
 using Repository.Repository.Interface;
 using Services.Impl;
@@ -35,20 +36,32 @@ public class AuthenticationServiceTest
             }
         }
     }.BuildMock();
+
+
+    private readonly LoggedUser _loggedUser = new LoggedUser
+    {
+        Id = 1,
+        Roles = new List<string> { "testRole" }
+    };
+
     #endregion
 
     private readonly IUserRepository _userRepositoryMock;
-    private readonly IJwtUtils _jwtUtilsMock;
+    private readonly IAuthenticationUtils _jwtUtilsMock;
     private readonly IAuthenticationService _service;
+    private readonly IOptions<LoggedUser> _options;
 
     public AuthenticationServiceTest()
     {
         _userRepositoryMock = Substitute.For<IUserRepository>();
         _userRepositoryMock.GetAll().Returns(_userDataMock);
 
-        _jwtUtilsMock = Substitute.For<IJwtUtils>();
+        _jwtUtilsMock = Substitute.For<IAuthenticationUtils>();
 
-        _service = new AuthenticationService(_jwtUtilsMock, _userRepositoryMock);
+        _options = Substitute.For<IOptions<LoggedUser>>();
+        _options.Value.Returns(_loggedUser);
+
+        _service = new AuthenticationService(_jwtUtilsMock, _userRepositoryMock, _options);
     }
 
     [Fact]

@@ -43,7 +43,6 @@ describe("UpdateUser", () => {
             data: { isSuccess: true, error: "" },
             isLoading: false,
             mutateAsync: mockMute.mockReturnValue({ isSuccess: true, error: "" } as BaseResponse<UserResponse>),
-            mutate: mockMute,
         });
 
         // act
@@ -87,7 +86,6 @@ describe("UpdateUser", () => {
                 isSuccess: false,
                 error: "simple-error",
             } as BaseResponse<UserResponse>),
-            mutate: mockMute,
         });
 
         // act

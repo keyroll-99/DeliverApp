@@ -12,12 +12,12 @@ using System.Text;
 
 namespace Services.Impl.Utils;
 
-public class JwtUtils : IJwtUtils
+public class AuthenticationUtils : IAuthenticationUtils
 {
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly AppSettings _appSettings;
 
-    public JwtUtils(IRefreshTokenRepository refreshTokenRepository, IOptions<AppSettings> appSettings)
+    public AuthenticationUtils(IRefreshTokenRepository refreshTokenRepository, IOptions<AppSettings> appSettings)
     {
         _refreshTokenRepository = refreshTokenRepository;
         _appSettings = appSettings.Value;

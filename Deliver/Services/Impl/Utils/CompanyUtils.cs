@@ -23,4 +23,11 @@ public class CompanyUtils : ICompanyUtils
             .GetAll()
             .Include(x => x.Users)
             .FirstOrDefaultAsync(x => x.Users.Any(u => u.Id == userId))) ?? throw new AppException(ErrorMessage.UserDosentHaveCompany);
+
+    public async Task<bool> IsUserCompany(Guid companyHash, long userId)
+    {
+        return await _companyRepository.GetAll()
+            .Include(x => x.Users)
+            .AnyAsync(x => x.Hash == companyHash && x.Users.Any(u => u.Id == userId));
+    }
 }
