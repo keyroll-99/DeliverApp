@@ -22,5 +22,12 @@ const Endpoints = {
         Update: "Api/Location",
         GetByHash: (hash: string) => `Api/Location/${hash}`,
     },
+    Delivery: {
+        GetList: "Api/Delivery/List",
+        GetByHash: (hash: string) => `Api/Delivery/${hash}`,
+        Create: "Api/Delivery",
+        ChangeStatus: "Api/Delivery/Status",
+        Update: "Api/Delivery",
+    },
 };
 export default Endpoints;

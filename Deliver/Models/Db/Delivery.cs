@@ -1,14 +1,16 @@
-﻿namespace Models.Db;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-public class Deliver : BaseHashModel
+namespace Models.Db;
+
+[Table("Deliveries")]
+public class Delivery : BaseHashModel
 {
     public string Name { get; set; }
-    public string Description { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public int Status { get; set; }
     
-    public long CarId { get; set; }
+    public long? CarId { get; set; }
     public Car Car { get; set; }
 
     public long FromId { get; set; }

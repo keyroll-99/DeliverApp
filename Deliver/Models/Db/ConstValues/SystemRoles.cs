@@ -7,5 +7,6 @@
         public const string CompanyOwner = "CompanyOwner";
         public const string HR = "HR";
         public const string Driver = "Driver";
+        public const string Dispatcher = "Dipatcher";
     }
 }

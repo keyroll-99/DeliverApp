@@ -4,6 +4,7 @@ export const Roles = {
     CompanyOwner: "CompanyOwner",
     Hr: "HR",
     Driver: "Driver",
+    Dispatcher: "Dispatcher",
 };
 
 const HasRole = (roles: string[], requiresRole: string[]): boolean => {

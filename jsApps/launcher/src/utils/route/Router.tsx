@@ -1,3 +1,6 @@
+import CreateDelivery from "layout/delivery/create/CreateDelivery";
+import DeliveryList from "layout/delivery/list/DeliveryList";
+import EditDelivery from "layout/delivery/update/EditDelivery";
 import CreateLocation from "layout/location/createLocation/CreateLocation";
 import EditLocation from "layout/location/editLocation/EditLocation";
 import LocationList from "layout/location/list/LocationList";
@@ -75,6 +78,30 @@ const Router = () => {
                 element={
                     <RequireAuth>
                         <EditLocation />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.deliveryList}
+                element={
+                    <RequireAuth>
+                        <DeliveryList />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.deliveryCreate}
+                element={
+                    <RequireAuth>
+                        <CreateDelivery />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.deliveryUpdate}
+                element={
+                    <RequireAuth>
+                        <EditDelivery />
                     </RequireAuth>
                 }
             />

@@ -3,6 +3,6 @@ using Repository.Repository.Interface._Core;
 
 namespace Repository.Repository.Interface;
 
-public interface IDeliverRepository : IBaseHashRepository<Deliver>
+public interface IDeliveryRepository : IBaseHashRepository<Delivery>
 {
 }

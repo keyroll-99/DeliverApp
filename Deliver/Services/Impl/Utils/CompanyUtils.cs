@@ -19,10 +19,19 @@ public class CompanyUtils : ICompanyUtils
             await _companyRepository.GetAll().FirstOrDefaultAsync(x => x.Hash == hash);
 
     public async Task<Company> GetUserCompany(long userId)
-        => (await _companyRepository
+    { 
+        var company = (await _companyRepository
             .GetAll()
             .Include(x => x.Users)
             .FirstOrDefaultAsync(x => x.Users.Any(u => u.Id == userId))) ?? throw new AppException(ErrorMessage.UserDosentHaveCompany);
+
+        if(company is null)
+        {
+            throw new AppException(ErrorMessage.InvalidData);
+        }
+
+        return company;
+    }
 
     public async Task<bool> IsUserCompany(Guid companyHash, long userId)
     {

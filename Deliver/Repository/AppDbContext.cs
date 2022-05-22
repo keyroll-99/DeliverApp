@@ -13,7 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<Company> Company { get; set; }
     public DbSet<Location> Locations { get; set; }
     public DbSet<Car> Cars { get; set; }
-    public DbSet<Deliver> Delivers { get; set; }
+    public DbSet<Delivery> Delivers { get; set; }
     public DbSet<UserRole> UserRoles { get; set; }
     public DbSet<Role> Roles { get; set; }
     public DbSet<RefreshToken> RefreshTokens { get; set; }
@@ -57,14 +57,14 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder
-            .Entity<Deliver>()
+            .Entity<Delivery>()
             .HasOne(x => x.To)
             .WithMany(x => x.Pickup)
             .HasForeignKey(x => x.ToId)
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder
-            .Entity<Deliver>()
+            .Entity<Delivery>()
             .HasOne(x => x.From)
             .WithMany(x => x.Send)
             .HasForeignKey(x => x.FromId)

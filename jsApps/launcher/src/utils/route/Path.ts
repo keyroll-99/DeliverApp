@@ -8,6 +8,9 @@ const Path = {
     locationAdd: "/location/add",
     locationList: "/location/list",
     locationUpdate: "/location/:locationHash",
+    deliveryList: "/delivery/list",
+    deliveryCreate: "/delivery/create",
+    deliveryUpdate: "/delivery/:deliveryHash",
 };
 
 export const GetPathWithParam = (url: string, value: string) => {

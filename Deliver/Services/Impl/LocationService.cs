@@ -20,18 +20,21 @@ public class LocationService : ILocationService
     private readonly LoggedUser _loggedUser;
     private readonly ICompanyUtils _companyUtils;
     private readonly IRoleUtils _roleUtils;
+    private readonly ILocationUtils _locationUtils;
 
     public LocationService(
         ILocationReposiotry locationReposiotry,
         IOptions<LoggedUser> loggedUser,
         ICompanyUtils companyUtils,
-        IRoleUtils roleUtils
+        IRoleUtils roleUtils,
+        ILocationUtils locationUtils
         )
     {
         _locationReposiotry = locationReposiotry;
         _loggedUser = loggedUser.Value;
         _companyUtils = companyUtils;
         _roleUtils = roleUtils;
+        _locationUtils = locationUtils;
     }
 
     public async Task<LocationResponse> CreateLocation(CreateLocationRequest createLocationRequest)
@@ -71,14 +74,7 @@ public class LocationService : ILocationService
 
     public async Task<LocationResponse> GetLocationByHash(Guid hash)
     {
-        var location = await _locationReposiotry
-            .GetAll()
-            .FirstOrDefaultAsync(x => x.Hash == hash);
-
-        if (location is null)
-        {
-            throw new AppException(ErrorMessage.InvalidData);
-        }
+        var location = await _locationUtils.GetLoctaionByHash(hash);
 
         if (!await HasPermissionToLocationAction(PermissionActionEnum.Get, location))
         {

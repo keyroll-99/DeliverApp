@@ -14,7 +14,7 @@ public class Location : BaseHashModel
     public long CompanyId { get; set; }
     public Company Company { get; set; }
 
-    public virtual ICollection<Deliver> Pickup { get; set; } = new List<Deliver>();
-    public virtual ICollection<Deliver> Send { get; set; } = new List<Deliver>();
+    public virtual ICollection<Delivery> Pickup { get; set; } = new List<Delivery>();
+    public virtual ICollection<Delivery> Send { get; set; } = new List<Delivery>();
 }
     
