@@ -7,5 +7,5 @@ public class Car : BaseHashModel
     public long DriverId { get; set; }
     public User Driver { get; set; }
 
-    public virtual ICollection<Deliver> Delivers { get; set; } = new List<Deliver>();
+    public virtual ICollection<Delivery> Delivers { get; set; } = new List<Delivery>();
 }

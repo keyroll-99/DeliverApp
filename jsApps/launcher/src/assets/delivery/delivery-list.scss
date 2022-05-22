@@ -1,0 +1,6 @@
+.delivery-list {
+    height: 100vh;
+    @include mobile {
+        margin-top: 35px;
+    }
+}

@@ -23,13 +23,13 @@ namespace Tests.Service;
 public class LocationServiceTest
 {
     #region mock
-    LoggedUser _loggedUserMock = new()
+    private readonly LoggedUser _loggedUserMock = new()
     {
         Id = 1,
         Roles = new List<string> { "Admin" }
     };
 
-    private IQueryable<Location> _locationsMock = new List<Location>
+    private readonly IQueryable<Location> _locationsMock = new List<Location>
     {
         new Location
         {
@@ -57,6 +57,7 @@ public class LocationServiceTest
     private readonly IOptions<LoggedUser> _optionsMock;
     private readonly ICompanyUtils _companyUtilsMock;
     private readonly IRoleUtils _roleUtilsMock;
+    private readonly ILocationUtils _locationUtils;
 
     private readonly ILocationService _service;
 
@@ -72,7 +73,9 @@ public class LocationServiceTest
 
         _roleUtilsMock = Substitute.For<IRoleUtils>();
 
-        _service = new LocationService(_locationReposiotryMock, _optionsMock, _companyUtilsMock, _roleUtilsMock);
+        _locationUtils = Substitute.For<ILocationUtils>();
+
+        _service = new LocationService(_locationReposiotryMock, _optionsMock, _companyUtilsMock, _roleUtilsMock, _locationUtils);
     }
 
     [Fact]
@@ -211,8 +214,12 @@ public class LocationServiceTest
     public async Task GetLocationByHash_WhenUserDoesntHavePermission_ThenThrowException()
     {
         // arrange
+        _locationUtils.GetLoctaionByHash(Arg.Any<Guid>()).Returns(new Location { Id = 1 });
+
         _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(false);
+        
         var request = Guid.Parse("634f497f-e7b3-4a81-b50a-6d2b8dc54423");
+        
         _companyUtilsMock.GetUserCompany(Arg.Any<long>()).Returns(new Company { Id = 1 });
 
         // act
@@ -223,23 +230,14 @@ public class LocationServiceTest
     }
 
     [Fact]
-    public async Task GetLocationByHash_WhenRequestInvalid_ThenThrowException()
-    {
-        // arrange
-        var request = Guid.Parse("634f497f-e7b3-4a81-b50a-6d2b8dc54411");
-
-        // act
-        Func<Task> act = async () => await _service.GetLocationByHash(request);
-
-        // assert
-        await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidData);
-    }
-
-    [Fact]
     public async Task GetLocationByHash_WhenRequestIsValid_ThenReturnData()
     {
-        _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(true);
         var request = Guid.Parse("634f497f-e7b3-4a81-b50a-6d2b8dc54423");
+
+        _locationUtils.GetLoctaionByHash(Arg.Any<Guid>()).Returns(new Location { Id = 1, Hash = request, CompanyId = 1 });
+
+        _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(true);
+
         _companyUtilsMock.GetUserCompany(Arg.Any<long>()).Returns(new Company { Id = 1 });
 
         // act

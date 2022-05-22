@@ -36,6 +36,7 @@ const LoginPage = () => {
 
             if (response.isSuccess) {
                 setIsSuccess(true);
+                navigate(Path.home);
             } else {
                 setError(response.error);
             }

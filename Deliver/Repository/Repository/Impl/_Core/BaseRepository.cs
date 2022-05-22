@@ -36,7 +36,7 @@ public class BaseRepository<T> : IBaseRepository<T>
         return await AppDbContext.SaveChangesAsync() > 0;
     }
 
-    public IQueryable<T> GetAll()
+    public virtual IQueryable<T> GetAll()
     {
         return Entities;
     }

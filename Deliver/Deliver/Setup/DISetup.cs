@@ -23,6 +23,7 @@ public static class DISetup
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<ILocationReposiotry, LocationRepository>();
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
+        services.AddScoped<IDeliveryRepository, DeliveryRepository>();
         return services;
     }
 
@@ -33,6 +34,7 @@ public static class DISetup
         services.AddScoped<IAuthenticationService, AuthenticationService>();
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ILocationService, LocationService>();
+        services.AddScoped<IDeliveryService, DeliveryService>();
         return services;
     }
 
@@ -49,6 +51,7 @@ public static class DISetup
         services.AddScoped<IRoleUtils, RoleUtils>();
         services.AddScoped<ICompanyUtils, CompanyUtils>();
         services.AddScoped<IUserUtils, UserUtils>();
+        services.AddScoped<ILocationUtils, LocationUtils>();
         return services;
     }
 

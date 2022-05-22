@@ -19,102 +19,102 @@ public class CompanyServiceTest
 {
     #region mock
     private readonly IQueryable<Company> _companiesMock = new List<Company>
-{
-    new Company
     {
-        Id = 1,
-        Hash = Guid.NewGuid(),
-        Name = "name",
-        Users = new List<User>
+        new Company
         {
-            new User
+            Id = 1,
+            Hash = Guid.NewGuid(),
+            Name = "name",
+            Users = new List<User>
             {
-                Id = 1,
-                Email = "test1@",
-                Hash = Guid.NewGuid(),
-                Name = "name",
-                Surname = "surname",
-                CompanyId = 1,
-                UserRole = new List<UserRole>
+                new User
                 {
-                    new UserRole
+                    Id = 1,
+                    Email = "test1@",
+                    Hash = Guid.NewGuid(),
+                    Name = "name",
+                    Surname = "surname",
+                    CompanyId = 1,
+                    UserRole = new List<UserRole>
                     {
-                        Role = new Role
+                        new UserRole
                         {
-                            Name = "admin"
+                            Role = new Role
+                            {
+                                Name = "admin"
+                            }
+                        }
+                    }
+                },
+                new User
+                {
+                    Id = 2,
+                    Email = "test2@",
+                    Hash = Guid.NewGuid(),
+                    Name = "name2",
+                    Surname = "surname2",
+                    CompanyId = 1,
+                    UserRole = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = new Role
+                            {
+                                Name = "admin"
+                            }
                         }
                     }
                 }
-            },
-            new User
+            }
+        },
+        new Company
+        {
+            Id = 1,
+            Hash = Guid.NewGuid(),
+            Name = "name",
+            Users = new List<User>
             {
-                Id = 2,
-                Email = "test2@",
-                Hash = Guid.NewGuid(),
-                Name = "name2",
-                Surname = "surname2",
-                CompanyId = 1,
-                UserRole = new List<UserRole>
+                new User
                 {
-                    new UserRole
+                    Id = 3,
+                    Email = "test1@",
+                    Hash = Guid.NewGuid(),
+                    Name = "name",
+                    Surname = "surname",
+                    CompanyId= 2,
+                    UserRole = new List<UserRole>
                     {
-                        Role = new Role
+                        new UserRole
                         {
-                            Name = "admin"
+                            Role = new Role
+                            {
+                                Name = "admin"
+                            }
+                        }
+                    }
+                },
+                new User
+                {
+                    Id = 4,
+                    Email = "test2@",
+                    Hash = Guid.NewGuid(),
+                    Name = "name2",
+                    Surname = "surname2",
+                    CompanyId = 2,
+                    UserRole = new List<UserRole>
+                    {
+                        new UserRole
+                        {
+                            Role = new Role
+                            {
+                                Name = "admin"
+                            }
                         }
                     }
                 }
             }
         }
-    },
-    new Company
-    {
-        Id = 1,
-        Hash = Guid.NewGuid(),
-        Name = "name",
-        Users = new List<User>
-        {
-            new User
-            {
-                Id = 3,
-                Email = "test1@",
-                Hash = Guid.NewGuid(),
-                Name = "name",
-                Surname = "surname",
-                CompanyId= 2,
-                UserRole = new List<UserRole>
-                {
-                    new UserRole
-                    {
-                        Role = new Role
-                        {
-                            Name = "admin"
-                        }
-                    }
-                }
-            },
-            new User
-            {
-                Id = 4,
-                Email = "test2@",
-                Hash = Guid.NewGuid(),
-                Name = "name2",
-                Surname = "surname2",
-                CompanyId = 2,
-                UserRole = new List<UserRole>
-                {
-                    new UserRole
-                    {
-                        Role = new Role
-                        {
-                            Name = "admin"
-                        }
-                    }
-                }
-            }
-        }
-    }
-}.BuildMock();
+    }.BuildMock();
     #endregion
 
     private readonly ICompanyRepository _companyRepository;
