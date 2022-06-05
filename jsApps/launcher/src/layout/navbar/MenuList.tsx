@@ -1,13 +1,19 @@
+import {
+    Add,
+    AddLocationAlt,
+    LocalShipping,
+    LocationOn,
+    Person,
+    PersonAdd,
+    SupervisorAccount,
+    AdminPanelSettings,
+} from "@mui/icons-material";
 import { List } from "@mui/material";
+import { RequrieRoles } from "service/userService/Roles";
 import { UseStore } from "stores/Store";
-import AddWorkerButton from "./navbarElement/AddWorkerButton";
-import AccountButton from "./navbarElement/AccountButton";
-import WorkerButton from "./navbarElement/WorkerButton";
+import Path from "utils/route/Path";
 import LogoutButton from "./navbarElement/LogoutButton";
-import LocationListButton from "./navbarElement/LocationListButton";
-import LocationAddButton from "./navbarElement/LocationAddButton";
-import DeliverListButton from "./navbarElement/DeliveryListButton";
-import DeliveryCreateButton from "./navbarElement/DeliveryCreateButton";
+import NavButton from "./navbarElement/NavButton";
 
 const MenuList = () => {
     const { userStore } = UseStore();
@@ -15,13 +21,55 @@ const MenuList = () => {
     const roles = userStore.getUser!.roles;
     return (
         <List className="navbar-list">
-            <DeliverListButton roles={roles} />
-            <DeliveryCreateButton roles={roles} />
-            <LocationListButton roles={roles} />
-            <LocationAddButton roles={roles} />
-            <WorkerButton roles={roles} />
-            <AddWorkerButton roles={roles} />
-            <AccountButton />
+            <NavButton
+                text="Delivery list"
+                roles={roles}
+                targetLocation={Path.deliveryList}
+                icon={<LocalShipping />}
+                requireRole={RequrieRoles.Delivery.List}
+            />
+            <NavButton
+                text="Add delivery"
+                roles={roles}
+                targetLocation={Path.deliveryCreate}
+                icon={<Add />}
+                requireRole={RequrieRoles.Delivery.Create}
+            />
+            <NavButton
+                text="Locations"
+                roles={roles}
+                targetLocation={Path.locationList}
+                icon={<LocationOn />}
+                requireRole={RequrieRoles.Location.List}
+            />
+            <NavButton
+                text="Add location"
+                roles={roles}
+                targetLocation={Path.locationAdd}
+                icon={<AddLocationAlt />}
+                requireRole={RequrieRoles.Location.Create}
+            />
+            <NavButton
+                text="Workers"
+                roles={roles}
+                targetLocation={Path.workersList}
+                icon={<SupervisorAccount />}
+                requireRole={RequrieRoles.User.List}
+            />
+            <NavButton
+                text="Add worker"
+                roles={roles}
+                requireRole={RequrieRoles.User.Create}
+                targetLocation={Path.addWorker}
+                icon={<PersonAdd />}
+            />
+            <NavButton text="Account" roles={roles} targetLocation={Path.account} icon={<Person />} />
+            <NavButton
+                text="Admin Panel"
+                roles={roles}
+                targetLocation={Path.admin.createCompany}
+                icon={<AdminPanelSettings />}
+            />
             <LogoutButton />
         </List>
     );

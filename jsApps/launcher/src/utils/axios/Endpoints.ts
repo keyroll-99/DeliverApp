@@ -12,6 +12,9 @@ const Endpoints = {
     },
     Company: {
         Workers: "Api/Company/Workers",
+        Create: "Api/Company/Create",
+        List: "Api/Company/List",
+        AssingUserToCompany: "Api/Company/Assing",
     },
     Role: {
         GetAll: "Api/Role",

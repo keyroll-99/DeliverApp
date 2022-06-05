@@ -1,3 +1,5 @@
+import AdminPanel from "layout/admin/AdminPanel";
+import CreateCompany from "layout/admin/createCompany/CreateCompany";
 import CreateDelivery from "layout/delivery/create/CreateDelivery";
 import DeliveryList from "layout/delivery/list/DeliveryList";
 import EditDelivery from "layout/delivery/update/EditDelivery";
@@ -102,6 +104,14 @@ const Router = () => {
                 element={
                     <RequireAuth>
                         <EditDelivery />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.admin.createCompany}
+                element={
+                    <RequireAuth>
+                        <AdminPanel />
                     </RequireAuth>
                 }
             />

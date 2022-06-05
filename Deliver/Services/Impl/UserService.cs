@@ -8,7 +8,6 @@ using Models.Exceptions;
 using Models.Integration;
 using Models.Mapper;
 using Models.Request.User;
-using Models.Request.Utils;
 using Models.Request.Utils.Role;
 using Models.Response.User;
 using Repository.Repository.Interface;
@@ -63,7 +62,16 @@ public class UserService : IUserService
             throw new AppException(ErrorMessage.CompanyDoesntExists);
         }
 
-        var newUser = await AddUserAndSendMail(createUserRequest.AsUser(), company);
+        var user = createUserRequest.AsUser();
+
+        var password = GeneratePasssword();
+
+        var addUserTask = AddUser(user, company, password);
+        var sendEmailTask = SendWelcomeMail(user, password);
+
+        Task.WaitAll(addUserTask, sendEmailTask);
+
+        var newUser = addUserTask.Result;
 
         return new UserResponse
         {
@@ -216,28 +224,28 @@ public class UserService : IUserService
         });
 
         var isUserCompany = true;
-        if (action != PermissionActionEnum.Create) { 
+        if (action != PermissionActionEnum.Create)
+        {
             isUserCompany = await _companyUtils.IsUserCompany(targetCompany, _loggedUser.Id);
         }
 
         return isUserCompany && hasRole;
     }
 
-    private async Task<User> AddUserAndSendMail(User user, Company company)
-    {
-        var password = Convert.ToBase64String(RandomNumberGenerator.GetBytes(5)).Replace("=", "");
-        user.Hash = Guid.NewGuid();
-        user.Password = BCrypt.Net.BCrypt.HashPassword(password);
-        user.CompanyId = company.Id;
+    private string GeneratePasssword() =>
+         Convert.ToBase64String(RandomNumberGenerator.GetBytes(5)).Replace("=", "");
 
+    private async Task<User> AddUser(User user, Company company, string password)
+    {
+        user.Hash = Guid.NewGuid();
+        user.CompanyId = company.Id;
+        user.Password = BCrypt.Net.BCrypt.HashPassword(password);
         await _userRepository.AddAsync(user);
-        await SendWelcomeMail(user, password);
         return user;
     }
 
-    private async Task SendWelcomeMail(User user, string password)
-    {
-        await _mailService.SendWelcomeMessage(new WelcomeMessageModel
+    private Task SendWelcomeMail(User user, string password) =>
+        _mailService.SendWelcomeMessage(new WelcomeMessageModel
         {
             Email = user.Email,
             Name = user.Name,
@@ -245,5 +253,5 @@ public class UserService : IUserService
             Surname = user.Surname,
             Username = user.Username
         });
-    }
+
 }

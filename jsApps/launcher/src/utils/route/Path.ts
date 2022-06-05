@@ -11,6 +11,9 @@ const Path = {
     deliveryList: "/delivery/list",
     deliveryCreate: "/delivery/create",
     deliveryUpdate: "/delivery/:deliveryHash",
+    admin: {
+        createCompany: "/admin/createCompany",
+    },
 };
 
 export const GetPathWithParam = (url: string, value: string) => {

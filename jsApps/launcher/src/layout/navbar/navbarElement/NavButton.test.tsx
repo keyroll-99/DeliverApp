@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
 import HasRole from "service/userService/Roles";
-import DeliverListButton from "./DeliveryListButton";
+import NavButton from "./NavButton";
 
 jest.mock("@mui/material", () => ({
     ListItemButton: () => <div>ListItemMock</div>,
@@ -17,13 +17,15 @@ jest.mock("react-router-dom", () => ({
     useNavigate: jest.fn(),
 }));
 
-describe("DeliverListButton", () => {
+describe("NavButton", () => {
     test("should render item when user has valid role", () => {
         // arrange
         (HasRole as jest.MockedFunction<typeof HasRole>).mockReturnValue(true);
 
         // act
-        const { queryByText } = render(<DeliverListButton roles={["test1"]} />);
+        const { queryByText } = render(
+            <NavButton text="Text" targetLocation="location" roles={["test1"]} requireRole={["test1"]} />
+        );
 
         // assert
         expect(queryByText("ListItemMock")).toBeInTheDocument();
@@ -34,7 +36,9 @@ describe("DeliverListButton", () => {
         (HasRole as jest.MockedFunction<typeof HasRole>).mockReturnValue(false);
 
         // act
-        const { queryByText } = render(<DeliverListButton roles={["test1"]} />);
+        const { queryByText } = render(
+            <NavButton text="Text" targetLocation="location" roles={["test1"]} requireRole={["test2"]} />
+        );
 
         // assert
         expect(queryByText("ListItemMock")).not.toBeInTheDocument();
