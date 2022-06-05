@@ -22,9 +22,11 @@ namespace Deliver.Setup
             var users = appDbContext.Users;
             var roles = appDbContext.Roles;
             var userRoles = appDbContext.UserRoles;
+            var companies = appDbContext.Company;
 
             var adminRole = await roles.FirstOrDefaultAsync(x => x.Name == "Admin");
             var admin = await users.FirstOrDefaultAsync(x => x.Name == "Admin");
+            var company = await companies.FirstOrDefaultAsync(x => x.Name == "Admin company");
 
             if (admin is null)
             {
@@ -36,7 +38,8 @@ namespace Deliver.Setup
                     Hash = Guid.NewGuid(),
                     Username = "admin",
                     Surname = "admin",
-                    Password = BCrypt.Net.BCrypt.HashPassword("password")
+                    Password = BCrypt.Net.BCrypt.HashPassword("password"),
+                    CompanyId = company.Id,
                 };
                 users.Add(admin);
             }

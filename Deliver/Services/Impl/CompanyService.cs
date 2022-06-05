@@ -6,16 +6,32 @@ using Models.Response.Company;
 using Models.Response.User;
 using Repository.Repository.Interface;
 using Services.Interface;
+using Services.Interface.Utils;
 
 namespace Services.Impl;
 
 public class CompanyService : ICompanyService
 {
     private readonly ICompanyRepository _companyRepository;
+    private readonly IUserUtils _userUtils;
 
-    public CompanyService(ICompanyRepository companyRepository)
+    public CompanyService(ICompanyRepository companyRepository, IUserUtils userUtils)
     {
         _companyRepository = companyRepository;
+        _userUtils = userUtils;
+    }
+
+    public async Task AssingUserToCompany(AssingUserToCompanyRequest assingUserToCompanyRequest)
+    {
+        var user = await _userUtils.GetByHash(assingUserToCompanyRequest.UserHash);
+        var company = await _companyRepository.GetByHashAsync(assingUserToCompanyRequest.CompanyHash);
+
+        if (company is null)
+        {
+            throw new AppException(ErrorMessage.CompanyDoesntExists);
+        }
+        
+        await _userUtils.ChangeUserCompany(user, company);
     }
 
     public async Task<CompanyResponse> Create(CreateCompanyRequest request)
@@ -43,6 +59,18 @@ public class CompanyService : ICompanyService
             PhoneNumber = company.PhoneNumber
         };
     }
+
+    public Task<List<CompanyResponse>> GetAllCompany() =>
+        _companyRepository
+        .GetAll()
+        .Select(x => new CompanyResponse
+        {
+            Email = x.Email,
+            Hash = x.Hash,
+            Name = x.Name,
+            PhoneNumber = x.PhoneNumber
+        })
+        .ToListAsync();
 
     public async Task<List<UserResponse>> GetCompanyWorkers(long companyId)
     {

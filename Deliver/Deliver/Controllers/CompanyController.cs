@@ -43,5 +43,20 @@ namespace Deliver.Controllers
 
             return workers;
         }
+
+        [HttpGet("List")]
+        [Authorize(SystemRoles.Admin)]
+        public async Task<BaseRespons<List<CompanyResponse>>> GetList()
+        {
+            return await _companyService.GetAllCompany();
+        }
+
+        [HttpPut("Assing")]
+        [Authorize(SystemRoles.Admin)]
+        public async Task<BaseRespons> AssingUserToCompany(AssingUserToCompanyRequest assingUserToCompanyRequest)
+        {
+            await _companyService.AssingUserToCompany(assingUserToCompanyRequest);
+            return BaseRespons.Success();
+        }
     }
 }

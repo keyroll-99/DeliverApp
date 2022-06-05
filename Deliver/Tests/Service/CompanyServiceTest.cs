@@ -7,6 +7,7 @@ using Models.Response.Company;
 using NSubstitute;
 using Repository.Repository.Interface;
 using Services.Impl;
+using Services.Interface.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,6 +119,7 @@ public class CompanyServiceTest
     #endregion
 
     private readonly ICompanyRepository _companyRepository;
+    private readonly IUserUtils _userUtils;
     private readonly CompanyService _service;
 
     public CompanyServiceTest()
@@ -126,7 +128,9 @@ public class CompanyServiceTest
         _companyRepository.GetAll().Returns(_companiesMock);
         _companyRepository.AddAsync(Arg.Any<Company>()).Returns(true);
 
-        _service = new CompanyService(_companyRepository);
+        _userUtils = Substitute.For<IUserUtils>();
+
+        _service = new CompanyService(_companyRepository, _userUtils);
     }
 
     [Theory]
@@ -196,5 +200,33 @@ public class CompanyServiceTest
 
         // assert
         response.Count.Should().Be(2);
+    }
+
+    [Fact]
+    public async Task AssingUserToCompany_WhenCompanyDoesntExist_ThenThrowAppException()
+    {
+        // arrange
+        _userUtils.GetByHash(Arg.Any<Guid>()).Returns(new User { Id = 1 });
+        _companyRepository.GetByHashAsync(Arg.Any<Guid>()).Returns(null as Company);
+
+        // act
+        Func<Task> act = async () => await _service.AssingUserToCompany(new AssingUserToCompanyRequest { CompanyHash = Guid.NewGuid(), UserHash = Guid.NewGuid() });
+
+        // assert
+        await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.CompanyDoesntExists);
+    }
+
+    [Fact]
+    public async Task AssingUserToCompany_WhenCompanyExist_ThenThrowAppException()
+    {
+        // arrange
+        _userUtils.GetByHash(Arg.Any<Guid>()).Returns(new User { Id = 1 });
+        _companyRepository.GetByHashAsync(Arg.Any<Guid>()).Returns(new Company { Id = 1});
+
+        // act
+        await _service.AssingUserToCompany(new AssingUserToCompanyRequest { CompanyHash = Guid.NewGuid(), UserHash = Guid.NewGuid() });
+
+        // assert
+        await _userUtils.Received(1).ChangeUserCompany(Arg.Is<User>(x => x.Id == 1), Arg.Is<Company>(x => x.Id == 1));
     }
 }

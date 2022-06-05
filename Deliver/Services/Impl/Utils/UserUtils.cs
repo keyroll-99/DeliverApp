@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models.Db;
+using Models.Exceptions;
 using Repository.Repository.Interface;
 using Services.Interface.Utils;
 
@@ -12,6 +13,25 @@ public class UserUtils : IUserUtils
     public UserUtils(IUserRepository userRepository)
     {
         _userRepository = userRepository;
+    }
+
+    public async Task ChangeUserCompany(User user, Company company)
+    {
+        user.CompanyId = company.Id;
+        user.Company = company;
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task<User> GetByHash(Guid hash)
+    {
+        var user = await _userRepository.GetAll().FirstOrDefaultAsync(x => x.Hash == hash);
+      
+        if(user is null)
+        {
+            throw new AppException(ErrorMessage.UserDosentExists);
+        }
+
+        return user!;
     }
 
     public async Task<User?> GetById(long id) =>

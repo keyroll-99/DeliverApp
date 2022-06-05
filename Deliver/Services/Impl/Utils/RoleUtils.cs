@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Models.Db;
+using Models.Db.ConstValues;
 using Models.Request.Utils.Role;
 using Repository.Repository.Interface;
 using Services.Interface.Utils;
@@ -40,7 +41,7 @@ public class RoleUtils : IRoleUtils
     }
 
     public async Task<bool> HasPermission(HasPermissionRequest permissionRequest)
-    {
+    { 
         var rolesIds = await GetAllRolesIds(permissionRequest.Roles);
 
         var hasPermission =

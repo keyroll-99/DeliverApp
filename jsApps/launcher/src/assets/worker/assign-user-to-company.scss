@@ -1,0 +1,8 @@
+.assign-user-to-company {
+    @include card-layout;
+    @include form-layout;
+
+    &-select {
+        width: 200px;
+    }
+}
