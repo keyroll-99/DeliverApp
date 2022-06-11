@@ -132,7 +132,7 @@ public class LocationService : ILocationService
         var isSameCompany = true;
         if (location is not null)
         {
-            var userCompany = await _companyUtils.GetUserCompany(location.CompanyId);
+            var userCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
             isSameCompany = location.CompanyId == userCompany.Id;
         }
 

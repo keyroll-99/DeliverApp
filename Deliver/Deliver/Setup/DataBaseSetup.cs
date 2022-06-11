@@ -26,7 +26,7 @@ namespace Deliver.Setup
 
             var adminRole = await roles.FirstOrDefaultAsync(x => x.Name == "Admin");
             var admin = await users.FirstOrDefaultAsync(x => x.Name == "Admin");
-            var company = await companies.FirstOrDefaultAsync(x => x.Name == "Admin company");
+            var company = await companies.FirstOrDefaultAsync(x => x.Name == "admin-company");
 
             if (admin is null)
             {

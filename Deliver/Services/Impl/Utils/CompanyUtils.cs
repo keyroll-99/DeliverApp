@@ -23,7 +23,7 @@ public class CompanyUtils : ICompanyUtils
         var company = (await _companyRepository
             .GetAll()
             .Include(x => x.Users)
-            .FirstOrDefaultAsync(x => x.Users.Any(u => u.Id == userId))) ?? throw new AppException(ErrorMessage.UserDosentHaveCompany);
+            .FirstOrDefaultAsync(x => x.Users.Any(u => u.Id == userId)));
 
         if(company is null)
         {

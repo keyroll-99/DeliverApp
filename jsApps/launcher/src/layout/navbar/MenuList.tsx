@@ -67,6 +67,7 @@ const MenuList = () => {
             <NavButton
                 text="Admin Panel"
                 roles={roles}
+                requireRole={RequrieRoles.Admin}
                 targetLocation={Path.admin.createCompany}
                 icon={<AdminPanelSettings />}
             />

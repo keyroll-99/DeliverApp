@@ -4,10 +4,10 @@ import AuthResponse from "../service/userService/models/AuthResponse";
 import User from "../service/userService/models/User";
 
 class UserStore {
-    _user?: User;
-    _isLogged: boolean = false;
-    _isLoading: boolean = false;
-    _error?: string;
+    private _user?: User;
+    private _isLogged: boolean = false;
+    private _isLoading: boolean = false;
+    private _error?: string;
 
     constructor() {
         makeAutoObservable(this);
@@ -32,6 +32,11 @@ class UserStore {
     setUser(user: AuthResponse) {
         this._user = MapAuthResponseToUser(user);
         this._isLogged = true;
+    }
+
+    logout() {
+        this._user = undefined;
+        this._isLogged = false;
     }
 }
 

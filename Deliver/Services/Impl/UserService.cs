@@ -195,7 +195,7 @@ public class UserService : IUserService
             throw new AppException(ErrorMessage.UserDosentExists);
         }
 
-        if (!await VerifyPerrmisonToActionOnUser(user.Company.Hash, PermissionActionEnum.Get))
+        if (!await VerifyPerrmisonToActionOnUser(user.Company.Hash, PermissionActionEnum.Get) && _loggedUser.Id != user.Id)
         {
             throw new AppException(ErrorMessage.InvalidRole);
         }

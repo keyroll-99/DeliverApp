@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Login } from "service/userService/AuthenticationService";
 import LoginForm from "service/userService/models/LoginForm";
+import { UseStore } from "stores/Store";
 import Path from "utils/route/Path";
 import CreateClass from "utils/style/CreateClass";
 
@@ -23,12 +24,13 @@ const LoginPage = () => {
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
     const { isLoading, mutateAsync } = Login();
+    const { userStore } = UseStore();
 
     useEffect(() => {
-        if (isSuccess) {
-            navigate(Path.home);
+        if (isSuccess || userStore.getIsLogged) {
+            navigate(Path.account);
         }
-    }, [isSuccess, navigate]);
+    }, [isSuccess, navigate, userStore.getIsLogged]);
 
     const submitForm = async () => {
         if (isValidForm(loginForm)) {
@@ -36,7 +38,7 @@ const LoginPage = () => {
 
             if (response.isSuccess) {
                 setIsSuccess(true);
-                navigate(Path.home);
+                navigate(Path.account);
             } else {
                 setError(response.error);
             }
