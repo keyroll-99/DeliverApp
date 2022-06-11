@@ -27,7 +27,7 @@ public class CompanyUtils : ICompanyUtils
 
         if(company is null)
         {
-            throw new AppException(ErrorMessage.InvalidData);
+            throw new AppException(ErrorMessage.UserDosentHaveCompany);
         }
 
         return company;
