@@ -183,26 +183,6 @@ public class CompanyServiceTest
     }
 
     [Fact]
-    public async Task GetCompanyWorkers_WhenCompanyDoesntExists_ThrowException()
-    {
-        // act
-        Func<Task> act = async () => await _service.GetCompanyWorkers(4);
-
-        // assert
-        await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.CompanyDoesntExists);
-    }
-
-    [Fact]
-    public async Task GetCompanyWorkers_WhenCompanyExists_ThenReturnUsersFormCompany()
-    {
-        // act
-        var response = await _service.GetCompanyWorkers(1);
-
-        // assert
-        response.Count.Should().Be(2);
-    }
-
-    [Fact]
     public async Task AssingUserToCompany_WhenCompanyDoesntExist_ThenThrowAppException()
     {
         // arrange

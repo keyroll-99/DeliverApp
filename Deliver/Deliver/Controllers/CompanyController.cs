@@ -34,16 +34,6 @@ namespace Deliver.Controllers
             return await _companyService.Create(request);
         }
 
-        [HttpGet("Workers")]
-        [Authorize(SystemRoles.HR, SystemRoles.CompanyAdmin, SystemRoles.Admin, SystemRoles.CompanyOwner)]
-        public async Task<BaseRespons<List<UserResponse>>> GetWorkers()
-        {
-            var company = await _companyUtils.GetUserCompany(_loggedUser.Id);
-            var workers = await _companyService.GetCompanyWorkers(company.Id);
-
-            return workers;
-        }
-
         [HttpGet("List")]
         [Authorize(SystemRoles.Admin)]
         public async Task<BaseRespons<List<CompanyResponse>>> GetList()

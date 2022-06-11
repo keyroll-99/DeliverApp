@@ -136,7 +136,7 @@ const UpdateUserRequest = async (request: UpdateUserForm, jwt: string): Promise<
 export const UpdateUserAction = (): MutationProcessing<UpdateUserForm, BaseResponse<UserResponse>> => {
     const { userStore } = UseStore();
 
-    const { isLoading, data, mutate, mutateAsync } = useMutation("update user", (form: UpdateUserForm) =>
+    const { isLoading, data, mutateAsync } = useMutation("update user", (form: UpdateUserForm) =>
         UpdateUserRequest(form, userStore.getUser!.jwt)
     );
 
@@ -146,5 +146,62 @@ export const UpdateUserAction = (): MutationProcessing<UpdateUserForm, BaseRespo
         data: data,
         error: data?.error,
         isSuccess: data?.isSuccess,
+    };
+};
+
+const FetchWorkers = async (header: AxiosRequestHeaders): Promise<BaseResponse<UserResponse[]>> => {
+    const response = await axios
+        .get<BaseResponse<UserResponse[]>>(`${Config.serverUrl}${Endpoints.User.UserList}`, {
+            headers: header,
+        })
+        .then((resp) => resp.data)
+        .catch(
+            (err: AxiosError) =>
+                ({
+                    isSuccess: false,
+                    error: err.message,
+                } as BaseResponse<UserResponse[]>)
+        );
+    return response;
+};
+
+export const GetWorkers = (): FetchProcessing<UserResponse[]> => {
+    const { userStore } = UseStore();
+
+    const header = GetHeader(userStore.getUser!.jwt);
+    const { data, isLoading, refetch } = useQuery("fetch workers", () => FetchWorkers(header), { cacheTime: Infinity });
+
+    return {
+        isLoading: isLoading,
+        data: data?.data,
+        error: data?.error,
+        isSuccess: data?.isSuccess,
+        refresh: refetch,
+    };
+};
+
+const FireUserRequest = async (userHash: string, jwt: string): Promise<BaseResponse<null>> => {
+    const response = await axios
+        .put<null, AxiosResponse<BaseResponse<null>>>(
+            `${Config.serverUrl}${Endpoints.User.Fire(userHash)}`,
+            undefined,
+            { headers: GetHeader(jwt) }
+        )
+        .then((resp) => resp.data)
+        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<null>));
+
+    return response;
+};
+
+export const FireUserAction = (): MutationProcessing<string, BaseResponse<null>> => {
+    const { userStore } = UseStore();
+
+    const { isLoading, mutateAsync } = useMutation((hash: string) =>
+        FireUserRequest(hash, userStore.getUser?.jwt ?? "")
+    );
+
+    return {
+        isLoading: isLoading,
+        mutateAsync: mutateAsync,
     };
 };

@@ -8,7 +8,6 @@ namespace Services.Interface;
 public interface ICompanyService
 {
     Task<CompanyResponse> Create(CreateCompanyRequest request);
-    Task<List<UserResponse>> GetCompanyWorkers(long companyId);
     Task<List<CompanyResponse>> GetAllCompany();
     Task AssingUserToCompany(AssingUserToCompanyRequest assingUserToCompanyRequest);
 }

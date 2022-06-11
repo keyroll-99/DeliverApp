@@ -9,6 +9,7 @@ export interface FetchProcessing<TResponse> {
     error?: string;
     isSuccess?: boolean;
     data?: TResponse;
+    refresh?: () => void;
 }
 
 export interface MutationProcessing<TRequest, TResponse> extends FetchProcessing<TResponse> {

@@ -1,4 +1,5 @@
 ﻿using Models.Request.User;
+using Models.Response.User;
 
 namespace Models.Mapper;
 
@@ -21,5 +22,31 @@ public static class UserMapper
         user.Name = updateUser.Name;
         user.Surname = updateUser.Surname;
         return user;
+    }
+
+    public static UserResponse AsUserReponse(this Db.User user)
+    {
+        if(user.Company is null)
+        {
+            throw new ArgumentNullException($"missing {nameof(user.Company)}");
+        }
+
+        if(user.UserRole is null || !user.UserRole.Any())
+        {
+            throw new ArgumentNullException($"missing {nameof(user.UserRole)}");
+        }
+
+        return new()
+        {
+            CompanyHash = user.Company.Hash,
+            CompanyName = user.Company.Name,
+            Email = user.Email,
+            Hash = user.Hash,
+            Name = user.Name,
+            PhoneNumber = user.PhoneNumber,
+            Roles = user.UserRole.Select(x => x.Role.Name).ToList(),
+            Surname = user.Surname,
+            Username = user.Username
+        };
     }
 }
