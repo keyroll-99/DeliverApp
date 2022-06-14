@@ -158,9 +158,14 @@ public class UserService : IUserService
             throw new AppException(ErrorMessage.UserDosentExists);
         }
 
-        if (!await VerifyPerrmisonToActionOnUser(updateUser.Company.Hash, PermissionActionEnum.Update))
+        if (updateUser.Id != _loggedUser.Id && !await VerifyPerrmisonToActionOnUser(updateUser.Company.Hash, PermissionActionEnum.Update))
         {
             throw new AppException(ErrorMessage.InvalidRole);
+        }
+
+        if (updateUser.UserRole.Any(x => x.Role.Name == SystemRoles.Admin) && !_loggedUser.Roles.Any(x => x == SystemRoles.Admin))
+        {
+            throw new AppException(ErrorMessage.CannotModifyAdmin);
         }
 
         updateUser = updateUserRequest.UpdateUser(updateUser);

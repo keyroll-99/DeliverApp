@@ -18,4 +18,5 @@ public class ErrorMessage
     public const string InvalidPassword = "Invalid Password";
     public const string InvalidNewPassword = "The password does not meet the password policy requirements";
     public const string CannotModifyAdmin = "You can't modify admin";
+    public const string UserIsBlocker = "User is blocked";
 }

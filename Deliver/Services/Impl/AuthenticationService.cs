@@ -38,6 +38,11 @@ public class AuthenticationService : IAuthenticationService
             throw new AppException(ErrorMessage.InvalidLoginOrPassword);
         }
 
+        if (user.IsFired)
+        {
+            throw new AppException(ErrorMessage.UserIsBlocker);
+        }
+
         var jwtTokne = _authenticationUtils.GenerateJwtToken(user);
         var refreshToken = await _authenticationUtils.GenerateRefreshToken(user, ipAddress);
 

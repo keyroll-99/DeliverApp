@@ -1,5 +1,5 @@
 import { CircularProgress, Tooltip } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import { GetDeliveryList } from "service/deliveryService/DeliveryService";
 import { stringDeliveryStatus } from "service/deliveryService/models/DeliverStatus";
@@ -53,8 +53,12 @@ const DeliveryList = () => {
             <DataGrid
                 getRowId={(row) => row.hash}
                 columns={columns}
+                disableDensitySelector={true}
                 rows={data!}
                 onRowClick={(param) => navigation(GetPathWithParam(Path.deliveryUpdate, param.id as string))}
+                components={{
+                    Toolbar: GridToolbar,
+                }}
             />
         </div>
     );

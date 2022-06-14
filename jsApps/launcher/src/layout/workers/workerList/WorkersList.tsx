@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import User from "service/userService/models/User";
@@ -20,6 +20,7 @@ const columns: GridColDef[] = [
     {
         field: "actions",
         renderCell: (cell) => <FireAction userHash={(cell.row as User).hash} />,
+        filterable: false,
     },
 ];
 
@@ -45,7 +46,6 @@ const WorkersList = () => {
                     components={{
                         Toolbar: GridToolbar,
                     }}
-                    disableDensitySelector={true}
                 />
             ) : (
                 <CircularProgress />
