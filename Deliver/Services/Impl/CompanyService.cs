@@ -30,7 +30,7 @@ public class CompanyService : ICompanyService
         {
             throw new AppException(ErrorMessage.CompanyDoesntExists);
         }
-        
+
         await _userUtils.ChangeUserCompany(user, company);
     }
 
@@ -71,36 +71,4 @@ public class CompanyService : ICompanyService
             PhoneNumber = x.PhoneNumber
         })
         .ToListAsync();
-
-    public async Task<List<UserResponse>> GetCompanyWorkers(long companyId)
-    {
-        var company = await _companyRepository
-            .GetAll()
-            .Include(x => x.Users)
-            .ThenInclude(x => x.UserRole)
-            .ThenInclude(x => x.Role)
-            .FirstOrDefaultAsync(x => x.Id == companyId);
-
-        if (company is null)
-        {
-            throw new AppException(ErrorMessage.CompanyDoesntExists);
-        }
-
-        var users = company
-            .Users.
-            Select(x => new UserResponse
-            {
-                CompanyHash = company.Hash,
-                CompanyName = company.Name,
-                Email = x.Email,
-                Hash = x.Hash,
-                Name = x.Name,
-                Surname = x.Surname,
-                Username = x.Username,
-                PhoneNumber = x.PhoneNumber,
-                Roles = x.UserRole.Select(x => x.Role.Name).ToList()
-            }).ToList();
-
-        return users;
-    }
 }

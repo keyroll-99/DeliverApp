@@ -158,9 +158,14 @@ public class UserService : IUserService
             throw new AppException(ErrorMessage.UserDosentExists);
         }
 
-        if (!await VerifyPerrmisonToActionOnUser(updateUser.Company.Hash, PermissionActionEnum.Update))
+        if (updateUser.Id != _loggedUser.Id && !await VerifyPerrmisonToActionOnUser(updateUser.Company.Hash, PermissionActionEnum.Update))
         {
             throw new AppException(ErrorMessage.InvalidRole);
+        }
+
+        if (updateUser.UserRole.Any(x => x.Role.Name == SystemRoles.Admin) && !_loggedUser.Roles.Any(x => x == SystemRoles.Admin))
+        {
+            throw new AppException(ErrorMessage.CannotModifyAdmin);
         }
 
         updateUser = updateUserRequest.UpdateUser(updateUser);
@@ -214,6 +219,53 @@ public class UserService : IUserService
         };
     }
 
+    public async Task FireUser(Guid userHash)
+    {
+        var user = await _userRepository
+            .GetAll()
+            .Include(x => x.Company)
+            .Include(x => x.UserRole)
+            .ThenInclude(y => y.Role)
+            .FirstOrDefaultAsync(x => x.Hash == userHash);
+
+        if (user is null)
+        {
+            throw new AppException(ErrorMessage.UserDosentExists);
+        }
+
+        if(user.UserRole.Any(x => x.Role.Name == SystemRoles.Admin))
+        {
+            throw new AppException(ErrorMessage.CannotModifyAdmin);
+        }
+
+        if (!await VerifyPerrmisonToActionOnUser(user.Company.Hash, PermissionActionEnum.Update))
+        {
+            throw new AppException(ErrorMessage.InvalidRole);
+        }
+
+        user.IsFired = true;
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task<List<UserResponse>> GetUserList()
+    {
+        var loggedUserCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
+
+        if (! await VerifyPerrmisonToActionOnUser(loggedUserCompany.Hash, PermissionActionEnum.Get))
+        {
+            throw new AppException(ErrorMessage.InvalidRole);
+        }
+
+        return await _userRepository
+            .GetAll()
+            .Include(x => x.Company)
+            .Include(x => x.UserRole)
+            .ThenInclude(x => x.Role)
+            .Where(x => x.IsFired == false && x.CompanyId == loggedUserCompany.Id)
+            .Select(x => x.AsUserReponse())
+            .ToListAsync();
+    }
+
     private async Task<bool> VerifyPerrmisonToActionOnUser(Guid targetCompany, PermissionActionEnum action)
     {
         var hasRole = await _roleUtils.HasPermission(new HasPermissionRequest
@@ -253,5 +305,4 @@ public class UserService : IUserService
             Surname = user.Surname,
             Username = user.Username
         });
-
 }

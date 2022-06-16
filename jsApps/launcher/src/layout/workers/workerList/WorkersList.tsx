@@ -1,8 +1,10 @@
 import { CircularProgress } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
-import { GetWorkers } from "service/companyService/WorkersServices";
+import User from "service/userService/models/User";
+import { GetWorkers } from "service/userService/UserService";
 import Path, { GetPathWithParam } from "utils/route/Path";
+import FireAction from "./actions/FireAction";
 
 const columns: GridColDef[] = [
     { field: "username", headerName: "Username" },
@@ -14,6 +16,11 @@ const columns: GridColDef[] = [
         field: "phoneNumber",
         headerName: "Phone number",
         width: 125,
+    },
+    {
+        field: "actions",
+        renderCell: (cell) => <FireAction userHash={(cell.row as User).hash} />,
+        filterable: false,
     },
 ];
 
@@ -39,7 +46,6 @@ const WorkersList = () => {
                     components={{
                         Toolbar: GridToolbar,
                     }}
-                    disableDensitySelector={true}
                 />
             ) : (
                 <CircularProgress />

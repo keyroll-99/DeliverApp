@@ -1,6 +1,6 @@
 import { render } from "@testing-library/react";
-import { GetWorkers } from "service/companyService/WorkersServices";
 import UserResponse from "service/userService/models/UserResponse";
+import { FireUserAction, GetWorkers } from "service/userService/UserService";
 import WorkersList from "./WorkersList";
 
 const mockUserResponse: UserResponse = {
@@ -22,53 +22,68 @@ jest.mock("@mui/material", () => ({
     CircularProgress: () => <div>loader</div>,
 }));
 
-jest.mock("service/companyService/WorkersServices", () => ({
+jest.mock("service/userService/UserService", () => ({
     GetWorkers: jest.fn(),
+    FireUserAction: jest.fn(),
 }));
 
 jest.mock("react-router-dom", () => ({
     useNavigate: jest.fn(),
 }));
 
-test("should render dataGrid when fetch data with success", () => {
-    // arrange
-    (GetWorkers as jest.MockedFunction<typeof GetWorkers>).mockReturnValue({
-        isLoading: false,
-        data: [mockUserResponse],
-        isSuccess: true,
+jest.mock("@mui/lab", () => ({
+    LoadingButton: () => <>loading buttons</>,
+}));
+
+describe("Workers list", () => {
+    beforeEach(() => {
+        (GetWorkers as jest.MockedFunction<typeof GetWorkers>).mockReturnValue({
+            isLoading: false,
+            data: [mockUserResponse],
+            isSuccess: true,
+        });
+
+        (FireUserAction as jest.MockedFunction<typeof FireUserAction>).mockReturnValue({
+            isLoading: false,
+            mutateAsync: jest.fn(),
+        });
     });
 
-    // act
-    const { queryByText } = render(<WorkersList />);
+    test("should render dataGrid when fetch data with success", () => {
+        // act
+        const { queryByText } = render(<WorkersList />);
 
-    // assert
-    expect(queryByText("dataGrid")).toBeInTheDocument();
-});
-
-test("should render loader when fetching data ", () => {
-    // arrange
-    (GetWorkers as jest.MockedFunction<typeof GetWorkers>).mockReturnValue({
-        isLoading: true,
-        isSuccess: true,
+        // assert
+        expect(queryByText("dataGrid")).toBeInTheDocument();
     });
 
-    // act
-    const { queryByText } = render(<WorkersList />);
+    test("should render loader when fetching data ", () => {
+        // arragne
+        (GetWorkers as jest.MockedFunction<typeof GetWorkers>).mockReturnValue({
+            isLoading: true,
+            data: [mockUserResponse],
+            isSuccess: true,
+        });
 
-    // assert
-    expect(queryByText("loader")).toBeInTheDocument();
-});
+        // act
+        const { queryByText } = render(<WorkersList />);
 
-test("should render error when  error occurred while fetch", () => {
-    // arrange
-    (GetWorkers as jest.MockedFunction<typeof GetWorkers>).mockReturnValue({
-        isLoading: false,
-        isSuccess: false,
+        // assert
+        expect(queryByText("loader")).toBeInTheDocument();
     });
 
-    // act
-    const { queryByText } = render(<WorkersList />);
+    test("should render error when  error occurred while fetch", () => {
+        // arrange
+        (GetWorkers as jest.MockedFunction<typeof GetWorkers>).mockReturnValue({
+            isLoading: false,
+            data: [mockUserResponse],
+            isSuccess: false,
+        });
 
-    // assert
-    expect(queryByText("something went wrong")).toBeInTheDocument();
+        // act
+        const { queryByText } = render(<WorkersList />);
+
+        // assert
+        expect(queryByText("something went wrong")).toBeInTheDocument();
+    });
 });

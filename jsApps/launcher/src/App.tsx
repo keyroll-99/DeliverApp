@@ -10,7 +10,11 @@ const App = () => {
         return <CircularProgress />;
     }
 
-    return <Router />;
+    return (
+        <>
+            <Router />
+        </>
+    );
 };
 
 export default observer(App);

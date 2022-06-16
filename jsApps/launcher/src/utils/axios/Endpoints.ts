@@ -9,9 +9,10 @@ const Endpoints = {
         GetUser: (hash: string) => `Api/User/${hash}`,
         ChagnePassword: "Api/User/ChangePassword",
         UpdateUser: "Api/User/Update",
+        UserList: "Api/User/List",
+        Fire: (hash: string) => `Api/User/Fire/${hash}`,
     },
     Company: {
-        Workers: "Api/Company/Workers",
         Create: "Api/Company/Create",
         List: "Api/Company/List",
         AssingUserToCompany: "Api/Company/Assing",

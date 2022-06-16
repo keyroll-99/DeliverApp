@@ -34,7 +34,18 @@ namespace Tests.Service
                 Username = "test",
                 Password = BCrypt.Net.BCrypt.HashPassword("test"),
                 Name = "TestName",
-                Surname = "TestSurname"
+                Surname = "TestSurname",
+                Hash = Guid.NewGuid(),
+                UserRole = new List<UserRole>
+                {
+                    new UserRole
+                    {
+                        Role = new Role
+                        {
+                            Name = SystemRoles.Admin
+                        }
+                    }
+                }
             },
             new User
             {
@@ -46,7 +57,18 @@ namespace Tests.Service
                 Company = new Company
                 {
                     Hash = Guid.Parse("63165844-94a4-4769-bcef-bcb0692d9d06")
+                },
+                UserRole = new List<UserRole>
+                {
+                    new UserRole
+                    {
+                        Role = new Role
+                        {
+                            Name = SystemRoles.HR
+                        }
+                    }
                 }
+
             }
         }.BuildMock();
 
@@ -378,6 +400,52 @@ namespace Tests.Service
 
             // assert
             await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidRole);
+        }
+
+        [Fact]
+        public async Task FireUser_WhenUserDoenstExists_ThenThrowError()
+        {
+            // act
+            Func<Task> act = async () => await _service.FireUser(Guid.Parse("63165844-94a4-4769-bcef-bcb0692d9d26"));
+
+            // assert
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.UserDosentExists);
+        }
+
+        [Fact]
+        public async Task FireUser_WhenUserIsAdmin_ThenThrowError()
+        {
+            // act
+            Func<Task> act = async () => await _service.FireUser(_userDataMock.First().Hash);
+
+            // assert
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.CannotModifyAdmin);
+        }
+
+        [Fact]
+        public async Task FireUser_WhenUserDoesntHavePermission_ThenThrowError()
+        {
+            // arranre
+            _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(false);
+
+            // act
+            Func<Task> act = async () => await _service.FireUser(Guid.Parse("b07b6398-47c7-4e0d-8d5b-27a199ae63a5"));
+
+            // assert
+            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidRole);
+        }
+
+        [Fact]
+        public async Task FireUser_WhenRequestIsValid_ThenUpdateFireFlagOnUser()
+        {
+            // arranre
+            _roleUtilsMock.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(true);
+
+            // act
+            await _service.FireUser(Guid.Parse("b07b6398-47c7-4e0d-8d5b-27a199ae63a5"));
+
+            // assert
+            await _userRepositoryMock.Received(1).UpdateAsync(Arg.Is<User>(x => x.IsFired == true));
         }
     }
 }
