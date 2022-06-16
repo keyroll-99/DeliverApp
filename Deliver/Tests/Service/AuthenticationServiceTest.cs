@@ -34,6 +34,17 @@ public class AuthenticationServiceTest
             {
                 Hash = Guid.NewGuid()
             }
+        },
+        new User
+        {
+            Id = 2,
+            Username = "fired",
+            Password = BCrypt.Net.BCrypt.HashPassword("test"),
+            IsFired = true,
+            Company = new Company
+            {
+                Hash = Guid.NewGuid(),
+            }
         }
     }.BuildMock();
 
@@ -110,6 +121,23 @@ public class AuthenticationServiceTest
 
         // assert
         await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidLoginOrPassword);
+    }
+
+    [Fact]
+    public async Task Login_WhenUserIsFired_ThenThrowError()
+    {
+        // arrange
+        var request = new LoginRequest
+        {
+            Password = "test",
+            Username = "fired"
+        };
+
+        // act
+        Func<Task> act = async () => await _service.Login(request, "test");
+
+        // assert
+        await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.UserIsBlocker);
     }
 
     [Fact]
