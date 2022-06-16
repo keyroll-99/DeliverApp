@@ -1,14 +1,18 @@
 import { LoadingButton } from "@mui/lab";
 import TextFieldInput from "components/inputs/TextFieldInput";
 import Snackbar from "components/snackbar/Snackbar";
-import { useState } from "react";
+import { FC, useState } from "react";
 import { CreateCompanyAction } from "service/companyService/CompanyServices";
 import { GetDefaultCreateCompanyForm } from "service/companyService/models/CreateCompanyFormt";
 import CreateClass from "utils/style/CreateClass";
 
 const baseClass = "create-company";
 
-const CreateCompany = () => {
+interface CreateCompanyProps {
+    refreshCompaniesList: () => void;
+}
+
+const CreateCompany: FC<CreateCompanyProps> = ({ refreshCompaniesList }) => {
     const [form, setForm] = useState(GetDefaultCreateCompanyForm());
     const [error, setError] = useState<string | null>(null);
     const [showSnackbar, setShowSnackbar] = useState(false);
@@ -24,6 +28,7 @@ const CreateCompany = () => {
         }
 
         setShowSnackbar(true);
+        refreshCompaniesList();
     };
 
     return (

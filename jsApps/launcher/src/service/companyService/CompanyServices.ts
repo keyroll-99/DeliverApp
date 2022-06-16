@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "react-query";
+import { HandleApiError } from "service/_core/HandleApiError";
 import { BaseResponse, FetchProcessing, MutationProcessing } from "service/_core/Models";
 import { UseStore } from "stores/Store";
 import Endpoints from "utils/axios/Endpoints";
@@ -17,7 +18,7 @@ const CreateCompanyRequest = async (model: CreateCompanyForm, jwt: string): Prom
             { headers: GetHeader(jwt) }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Company>));
+        .catch((error: AxiosError) => HandleApiError<Company>(error));
 
     return response;
 };
@@ -40,7 +41,7 @@ const GetCompaniesRequest = async (jwt: string): Promise<BaseResponse<Company[]>
         headers: GetHeader(jwt),
     })
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Company[]>));
+        .catch((error: AxiosError) => HandleApiError<Company[]>(error));
 
     return response;
 };
@@ -48,33 +49,33 @@ const GetCompaniesRequest = async (jwt: string): Promise<BaseResponse<Company[]>
 export const GetCompaniesAction = (): FetchProcessing<Company[]> => {
     const { userStore } = UseStore();
 
-    const { isLoading, data } = useQuery("GetCompanyAction", () => GetCompaniesRequest(userStore.getUser?.jwt ?? ""));
+    const { isLoading, data, refetch } = useQuery("GetCompanyAction", () =>
+        GetCompaniesRequest(userStore.getUser?.jwt ?? "")
+    );
 
     return {
         isLoading: isLoading,
         data: data?.data,
         error: data?.error,
         isSuccess: data?.isSuccess,
+        refresh: refetch,
     };
 };
 
-const AssignUserToCompanyRequest = async (
-    model: AssignUserToCompanyForm,
-    jwt: string
-): Promise<BaseResponse<undefined>> => {
+const AssignUserToCompanyRequest = async (model: AssignUserToCompanyForm, jwt: string): Promise<BaseResponse<null>> => {
     const response = axios
-        .put<AssignUserToCompanyForm, AxiosResponse<BaseResponse<undefined>>>(
+        .put<AssignUserToCompanyForm, AxiosResponse<BaseResponse<null>>>(
             `${Config.serverUrl}${Endpoints.Company.AssingUserToCompany}`,
             model,
             { headers: GetHeader(jwt) }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<undefined>));
+        .catch((error: AxiosError) => HandleApiError(error));
 
     return response;
 };
 
-export const AssignUserToCompanyAction = (): MutationProcessing<AssignUserToCompanyForm, BaseResponse<undefined>> => {
+export const AssignUserToCompanyAction = (): MutationProcessing<AssignUserToCompanyForm, BaseResponse<null>> => {
     const { userStore } = UseStore();
 
     const { isLoading, mutateAsync } = useMutation("AssingUserToCompanyAction", (model: AssignUserToCompanyForm) =>

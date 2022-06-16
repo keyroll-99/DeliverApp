@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "react-query";
+import { HandleApiError } from "service/_core/HandleApiError";
 import { BaseResponse, FetchProcessing, MutationProcessing } from "service/_core/Models";
 import { UseStore } from "stores/Store";
 import Endpoints from "utils/axios/Endpoints";
@@ -21,13 +22,7 @@ const CreateLocationRequest = async (model: CreateLocationForm, jwt: string): Pr
             }
         )
         .then((resp) => resp.data)
-        .catch(
-            (error: AxiosError) =>
-                ({
-                    isSuccess: false,
-                    error: error.message,
-                } as BaseResponse<Location>)
-        );
+        .catch((error: AxiosError) => HandleApiError<Location>(error));
 
     return response;
 };
@@ -52,7 +47,7 @@ const GetLocationListRequest = async (jwt: string): Promise<BaseResponse<Locatio
             headers: header,
         })
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Location[]>));
+        .catch((error: AxiosError) => HandleApiError<Location[]>(error));
 
     return resposne;
 };
@@ -80,7 +75,7 @@ const UpdateLocationRequest = async (model: UpdateLocationForm, jwt: string): Pr
             }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Location>));
+        .catch((error: AxiosError) => HandleApiError<Location>(error));
 
     return response;
 };
@@ -104,7 +99,7 @@ const GetLocationByHashRequest = async (hash: string, jwt: string): Promise<Base
             headers: GetHeader(jwt),
         })
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Location>));
+        .catch((error: AxiosError) => HandleApiError<Location>(error));
 
     return response;
 };

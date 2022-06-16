@@ -29,7 +29,7 @@ public class LogService : ILogService
         }
         else if(logMessage.HasInfomation)
         {
-            logMessage.Message = "missing message";
+            logMessage.Message = " ";
             await Log(logMessage, LogTypesEnum.Exception);
         }
 

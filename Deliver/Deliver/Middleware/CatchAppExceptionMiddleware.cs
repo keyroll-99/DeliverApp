@@ -10,12 +10,10 @@ namespace Deliver.Middleware
     public class CatchAppExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        //private readonly ILogService _logger;
 
         public CatchAppExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
-            //_logger = logService;
         }
 
         public async Task Invoke(HttpContext context, IHostEnvironment environment, ILogService logger)
@@ -36,6 +34,7 @@ namespace Deliver.Middleware
             catch (AppException ex)
             {
                 context.Response.StatusCode = 400;
+
                 await context.Response
                     .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail(ex.Message), jsonSerializerSettings));
             }

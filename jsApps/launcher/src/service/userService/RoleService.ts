@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from "axios";
 import { useQuery } from "react-query";
+import { HandleApiError } from "service/_core/HandleApiError";
 import { BaseResponse, FetchProcessing } from "service/_core/Models";
 import { UseStore } from "stores/Store";
 import Endpoints from "utils/axios/Endpoints";
@@ -13,13 +14,7 @@ const FetchRole = async (header: AxiosRequestHeaders): Promise<BaseResponse<Role
             headers: header,
         })
         .then((resp) => resp.data)
-        .catch(
-            (error: AxiosError) =>
-                ({
-                    isSuccess: false,
-                    error: error.message,
-                } as BaseResponse<RoleResponse[]>)
-        );
+        .catch((error: AxiosError) => HandleApiError<RoleResponse[]>(error));
 
     return response;
 };

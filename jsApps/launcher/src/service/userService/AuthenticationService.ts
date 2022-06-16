@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "react-query";
 import { useNavigate } from "react-router-dom";
+import { HandleApiError } from "service/_core/HandleApiError";
 import GetHeader from "utils/axios/GetHeader";
 import Path from "utils/route/Path";
 import { UseStore } from "../../stores/Store";
@@ -20,12 +21,7 @@ export const LoginRequest = async (form: LoginForm): Promise<BaseResponse<AuthRe
             }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => {
-            return {
-                isSuccess: false,
-                error: error.message,
-            } as BaseResponse<AuthResponse>;
-        });
+        .catch((error: AxiosError) => HandleApiError<AuthResponse>(error));
     return response;
 };
 
@@ -39,12 +35,7 @@ const RefreshTokenRequest = async (): Promise<BaseResponse<AuthResponse>> => {
             }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => {
-            return {
-                isSuccess: false,
-                error: error.message,
-            } as BaseResponse<AuthResponse>;
-        });
+        .catch((error: AxiosError) => HandleApiError<AuthResponse>(error));
     return response;
 };
 
@@ -78,7 +69,7 @@ export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse
     const { userStore } = UseStore();
     const navigation = useNavigate();
 
-    const { isLoading, data, mutate, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
+    const { isLoading, data, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
         onSuccess: (result) => {
             if (result?.isSuccess) {
                 userStore.setUser(result!.data!);
@@ -105,7 +96,7 @@ const LogoutRequest = async (jwt: string): Promise<BaseResponse<null>> => {
             { headers: GetHeader(jwt) }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ error: error.message, isSuccess: false } as BaseResponse<null>));
+        .catch((error: AxiosError) => HandleApiError(error));
 
     return reponse;
 };
@@ -113,7 +104,7 @@ const LogoutRequest = async (jwt: string): Promise<BaseResponse<null>> => {
 export const Logout = (): MutationProcessing<undefined, BaseResponse<null>> => {
     const { userStore } = UseStore();
 
-    const { isLoading, data, mutate, mutateAsync } = useMutation("logout", () => LogoutRequest(userStore.getUser!.jwt));
+    const { isLoading, data, mutateAsync } = useMutation("logout", () => LogoutRequest(userStore.getUser!.jwt));
 
     return {
         isLoading: isLoading,

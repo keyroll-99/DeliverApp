@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "react-query";
+import { HandleApiError } from "service/_core/HandleApiError";
 import { BaseResponse, FetchProcessing, MutationProcessing } from "service/_core/Models";
 import { UseStore } from "stores/Store";
 import Endpoints from "utils/axios/Endpoints";
@@ -16,7 +17,7 @@ const GetDeliveryListRequest = async (jwt: string): Promise<BaseResponse<Deliver
             headers: GetHeader(jwt),
         })
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Delivery[]>));
+        .catch((error: AxiosError) => HandleApiError<Delivery[]>(error));
 
     return response;
 };
@@ -42,7 +43,7 @@ const CreateDeliveryRequest = async (model: CreateDeliveryFrom, jwt: string): Pr
             { headers: GetHeader(jwt) }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Delivery>));
+        .catch((error: AxiosError) => HandleApiError<Delivery>(error));
 
     return response;
 };
@@ -73,7 +74,7 @@ const ChangeDeliveryStatusRequest = async (
             }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Delivery>));
+        .catch((error: AxiosError) => HandleApiError<Delivery>(error));
 
     return response;
 };
@@ -101,7 +102,7 @@ const UpdateDeliveryRequest = async (model: UpdateDeliveryFrom, jwt: string): Pr
             { headers: GetHeader(jwt) }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Delivery>));
+        .catch((error: AxiosError) => HandleApiError<Delivery>(error));
 
     return response;
 };
@@ -125,7 +126,7 @@ const GetDeliveryByHashRequest = async (hash: string, jwt: string): Promise<Base
             headers: GetHeader(jwt),
         })
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<Delivery>));
+        .catch((error: AxiosError) => HandleApiError<Delivery>(error));
 
     return response;
 };
