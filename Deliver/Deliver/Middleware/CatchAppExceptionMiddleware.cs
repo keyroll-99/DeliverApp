@@ -1,20 +1,24 @@
 ﻿using Models.Exceptions;
+using Models.Logger;
 using Models.Response._Core;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Services.Interface;
 
 namespace Deliver.Middleware
 {
     public class CatchAppExceptionMiddleware
     {
         private readonly RequestDelegate _next;
+        //private readonly ILogService _logger;
 
         public CatchAppExceptionMiddleware(RequestDelegate next)
         {
             _next = next;
+            //_logger = logService;
         }
 
-        public async Task Invoke(HttpContext context, IHostEnvironment environment)
+        public async Task Invoke(HttpContext context, IHostEnvironment environment, ILogService logger)
         {
             var jsonSerializerSettings = new JsonSerializerSettings
             {
@@ -31,13 +35,21 @@ namespace Deliver.Middleware
             }
             catch (AppException ex)
             {
-                context.Response.StatusCode = 200;
+                context.Response.StatusCode = 400;
                 await context.Response
                     .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail(ex.Message), jsonSerializerSettings));
             }
             catch (Exception ex)
             {
-                context.Response.StatusCode = 200;
+                var logMessage = new LogMessage
+                {
+                    Message = ex.Message,
+                    InnerException = ex.InnerException?.Message,
+                    StackTrace = ex.StackTrace,
+                };
+
+                await logger.LogError(logMessage);
+                context.Response.StatusCode = 500;
                 if (environment.IsProduction())
                 {
                     await context.Response

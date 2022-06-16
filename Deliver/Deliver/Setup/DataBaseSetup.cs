@@ -28,6 +28,16 @@ namespace Deliver.Setup
             var admin = await users.FirstOrDefaultAsync(x => x.Name == "Admin");
             var company = await companies.FirstOrDefaultAsync(x => x.Name == "admin-company");
 
+            if(company is null)
+            {
+                company = new Company
+                {
+                    Name = "admin-company"
+                };
+
+                companies.Add(company);
+            }
+
             if (admin is null)
             {
                 admin = new User

@@ -1,0 +1,2 @@
+ALTER TABLE Logs 
+	ADD CONSTRAINT "FK_logs_LogType" FOREIGN KEY (LogType) REFERENCES LogTypesEnum(id);
