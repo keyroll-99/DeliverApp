@@ -15,7 +15,7 @@ describe("CreateCompany", () => {
         });
 
         // act
-        const component = render(<CreateCompany />);
+        const component = render(<CreateCompany refreshCompaniesList={jest.fn()} />);
 
         // assert
         expect(component).toMatchSnapshot();

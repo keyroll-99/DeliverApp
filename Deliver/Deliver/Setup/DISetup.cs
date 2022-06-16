@@ -24,6 +24,7 @@ public static class DISetup
         services.AddScoped<ILocationReposiotry, LocationRepository>();
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
+        services.AddScoped<ILogRepository, LogRepository>();
         return services;
     }
 
@@ -52,6 +53,7 @@ public static class DISetup
         services.AddScoped<ICompanyUtils, CompanyUtils>();
         services.AddScoped<IUserUtils, UserUtils>();
         services.AddScoped<ILocationUtils, LocationUtils>();
+        services.AddScoped<ILogService, LogService>();
         return services;
     }
 

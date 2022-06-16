@@ -49,8 +49,8 @@ const LoginPage = () => {
 
     return (
         <Container fixed className={baseClass} sx={{ display: "flex" }}>
-            <h1>Deliver system</h1>
             <span className={CreateClass(baseClass, "form")}>
+                <h1>Deliver system</h1>
                 <TextFieldInput
                     baseClass={baseClass}
                     label="Login"

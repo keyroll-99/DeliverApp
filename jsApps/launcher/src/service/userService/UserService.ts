@@ -1,5 +1,6 @@
 import axios, { AxiosError, AxiosRequestHeaders, AxiosResponse } from "axios";
 import { useMutation, useQuery } from "react-query";
+import { HandleApiError } from "service/_core/HandleApiError";
 import { UseStore } from "stores/Store";
 import Endpoints from "utils/axios/Endpoints";
 import GetHeader from "utils/axios/GetHeader";
@@ -21,13 +22,7 @@ const CreateUserRequest = async (
             { headers: header }
         )
         .then((resp) => resp.data)
-        .catch(
-            (error: AxiosError) =>
-                ({
-                    isSuccess: false,
-                    error: error.message,
-                } as BaseResponse<UserResponse>)
-        );
+        .catch((error: AxiosError) => HandleApiError<UserResponse>(error));
     return response;
 };
 
@@ -35,14 +30,11 @@ export const CreateUser = (): MutationProcessing<CreateUserForm, BaseResponse<Us
     const { userStore } = UseStore();
     const header = GetHeader(userStore.getUser!.jwt);
 
-    const { isLoading, mutate, mutateAsync, data } = useMutation(
-        (form: CreateUserForm) => CreateUserRequest(form, header),
-        {
-            onMutate: (form) => {
-                form.companyHash = userStore.getUser!.companyHash;
-            },
-        }
-    );
+    const { isLoading, mutateAsync, data } = useMutation((form: CreateUserForm) => CreateUserRequest(form, header), {
+        onMutate: (form) => {
+            form.companyHash = userStore.getUser!.companyHash;
+        },
+    });
 
     return {
         isLoading: isLoading,
@@ -61,7 +53,7 @@ const GetUserRequest = async (hash: string, jwt: string): Promise<BaseResponse<U
             headers: header,
         })
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<UserResponse>));
+        .catch((error: AxiosError) => HandleApiError<UserResponse>(error));
 
     return response;
 };
@@ -95,7 +87,7 @@ const ChangePasswordRequest = async (request: ChangePasswordForm, jwt: string): 
             { headers: header }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<null>));
+        .catch((error: AxiosError) => HandleApiError(error));
 
     return response;
 };
@@ -103,7 +95,7 @@ const ChangePasswordRequest = async (request: ChangePasswordForm, jwt: string): 
 export const ChangePasswordAction = (): MutationProcessing<ChangePasswordForm, BaseResponse<null>> => {
     const { userStore } = UseStore();
 
-    const { isLoading, data, mutate, mutateAsync } = useMutation((form: ChangePasswordForm) =>
+    const { isLoading, data, mutateAsync } = useMutation((form: ChangePasswordForm) =>
         ChangePasswordRequest(form, userStore.getUser!.jwt)
     );
 
@@ -128,7 +120,7 @@ const UpdateUserRequest = async (request: UpdateUserForm, jwt: string): Promise<
             }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<UserResponse>));
+        .catch((error: AxiosError) => HandleApiError<UserResponse>(error));
 
     return response;
 };
@@ -155,13 +147,7 @@ const FetchWorkers = async (header: AxiosRequestHeaders): Promise<BaseResponse<U
             headers: header,
         })
         .then((resp) => resp.data)
-        .catch(
-            (err: AxiosError) =>
-                ({
-                    isSuccess: false,
-                    error: err.message,
-                } as BaseResponse<UserResponse[]>)
-        );
+        .catch((error: AxiosError) => HandleApiError<UserResponse[]>(error));
     return response;
 };
 
@@ -188,7 +174,7 @@ const FireUserRequest = async (userHash: string, jwt: string): Promise<BaseRespo
             { headers: GetHeader(jwt) }
         )
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => ({ isSuccess: false, error: error.message } as BaseResponse<null>));
+        .catch((error: AxiosError) => HandleApiError(error));
 
     return response;
 };

@@ -1,5 +1,5 @@
 import { act, fireEvent, render } from "@testing-library/react";
-import { AssignUserToCompanyAction, GetCompaniesAction } from "service/companyService/CompanyServices";
+import { AssignUserToCompanyAction } from "service/companyService/CompanyServices";
 import AssignUserToCompany from "./AssignUserToCompany";
 
 jest.mock("service/companyService/CompanyServices", () => ({
@@ -12,18 +12,15 @@ describe("AssignUserToCompany", () => {
     test("should render form", () => {
         const mockMutation = jest.fn().mockReturnValue({ isSuccess: true });
 
-        (GetCompaniesAction as jest.MockedFunction<typeof GetCompaniesAction>).mockReturnValue({
-            isLoading: false,
-            data: [{ hash: "hash", name: "name", email: "em", phoneNumber: "phone" }],
-        });
-
         (AssignUserToCompanyAction as jest.MockedFunction<typeof AssignUserToCompanyAction>).mockReturnValue({
             isLoading: false,
             mutateAsync: mockMutation,
         });
 
         // act
-        const component = render(<AssignUserToCompany />);
+        const component = render(
+            <AssignUserToCompany companies={[{ hash: "hash", name: "name", email: "em", phoneNumber: "phone" }]} />
+        );
 
         // assert
         expect(component).toMatchSnapshot();
@@ -31,12 +28,6 @@ describe("AssignUserToCompany", () => {
 
     test("shoudl call mutation after button click", async () => {
         const mockMutation = jest.fn().mockReturnValue({ isSuccess: true });
-
-        (GetCompaniesAction as jest.MockedFunction<typeof GetCompaniesAction>).mockReturnValue({
-            isLoading: false,
-            data: [{ hash: "hash", name: "name", email: "em", phoneNumber: "phone" }],
-        });
-
         (AssignUserToCompanyAction as jest.MockedFunction<typeof AssignUserToCompanyAction>).mockReturnValue({
             isLoading: false,
             mutateAsync: mockMutation,
@@ -44,7 +35,9 @@ describe("AssignUserToCompany", () => {
 
         // act
         await act(async () => {
-            const component = render(<AssignUserToCompany />);
+            const component = render(
+                <AssignUserToCompany companies={[{ hash: "hash", name: "name", email: "em", phoneNumber: "phone" }]} />
+            );
 
             const button = await component.findByText("Assign");
 

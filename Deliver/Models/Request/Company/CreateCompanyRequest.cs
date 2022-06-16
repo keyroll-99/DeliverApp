@@ -7,7 +7,7 @@ public class CreateCompanyRequest
     public string PhoneNumber { get; set; }
 
     public bool IsValid =>
-        Name is not null
-        && Email is not null
-        && PhoneNumber is not null;
+        !string.IsNullOrWhiteSpace(Name)
+        && !string.IsNullOrWhiteSpace(Email)
+        && !string.IsNullOrWhiteSpace(PhoneNumber);
 }
