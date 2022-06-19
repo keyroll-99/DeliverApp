@@ -21,25 +21,25 @@ namespace Deliver.Controllers
         }
 
         [HttpGet("List")]
-        public async Task<BaseRespons<List<LocationResponse>>> GetAll()
+        public async Task<List<LocationResponse>> GetAll()
         {
             return await _locationService.GetLocations();
         }
 
         [HttpPost]
-        public async Task<BaseRespons<LocationResponse>> Add(CreateLocationRequest createLocationRequest)
+        public async Task<LocationResponse> Add(CreateLocationRequest createLocationRequest)
         {
             return await _locationService.CreateLocation(createLocationRequest);
         }   
         
         [HttpGet("{hash}")]
-        public async Task<BaseRespons<LocationResponse>> GetLocation(Guid hash)
+        public async Task<LocationResponse> GetLocation(Guid hash)
         {
             return await _locationService.GetLocationByHash(hash);
         }
 
         [HttpPut]
-        public async Task<BaseRespons<LocationResponse>> UpdateLocation(UpdateLocationRequest updateLocationRequest)
+        public async Task<LocationResponse> UpdateLocation(UpdateLocationRequest updateLocationRequest)
         {
             return await _locationService.UpdateLocation(updateLocationRequest);
         }

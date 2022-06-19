@@ -19,11 +19,6 @@
                 Error = null,
                 IsSuccess = true
             };
-
-        public static BaseRespons<T> Success<T>()
-        {
-            throw new NotImplementedException();
-        }
     }
 
     public class BaseRespons<T> : BaseRespons

@@ -21,6 +21,7 @@ describe("CompanyPanel", () => {
 
         (AssignUserToCompanyAction as jest.MockedFunction<typeof AssignUserToCompanyAction>).mockReturnValue({
             isLoading: false,
+            mutateAsync: jest.fn(),
         });
     });
 

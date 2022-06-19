@@ -21,7 +21,7 @@ public class AuthenticationController : ControllerBase
 
     [HttpPost("Login")]
     [AllowAnonymous]
-    public async Task<BaseRespons<AuthResponse>> Login(LoginRequest loginRequest)
+    public async Task<AuthResponse> Login(LoginRequest loginRequest)
     {
         var ipAddress = getIpAddress() ?? "unknown";
         var response = await _authenticateService.Login(loginRequest, ipAddress);
@@ -31,7 +31,7 @@ public class AuthenticationController : ControllerBase
 
     [HttpPost("Refresh")]
     [AllowAnonymous]
-    public async Task<BaseRespons<AuthResponse>> RefreshToken()
+    public async Task<AuthResponse> RefreshToken()
     {
         var token = Request.Cookies[_refrehTokenCookieName];
         var ipAddress = getIpAddress() ?? "unknown";
