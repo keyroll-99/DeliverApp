@@ -284,7 +284,7 @@ public class UserService : IUserService
         return isUserCompany && hasRole;
     }
 
-    private string GeneratePasssword() =>
+    private static string GeneratePasssword() =>
          Convert.ToBase64String(RandomNumberGenerator.GetBytes(5)).Replace("=", "");
 
     private async Task<User> AddUser(User user, Company company, string password)

@@ -5,10 +5,6 @@ using NSubstitute;
 using Repository.Repository.Interface;
 using Services.Impl;
 using Services.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -18,7 +14,7 @@ public class LogServiceTest
 {
     private readonly ILogRepository _logRepositoryMock;
 
-    private ILogService _service;
+    private readonly ILogService _service;
 
     public LogServiceTest()
     {
@@ -63,7 +59,7 @@ public class LogServiceTest
         // assert
         await _logRepositoryMock
             .Received(1)
-            .AddAsync(Arg.Is<Log>(x => 
+            .AddAsync(Arg.Is<Log>(x =>
                 x.Message == "missing log message"
                 && x.LogType == ((int)LogTypesEnum.Exception))
         );

@@ -17,26 +17,22 @@ namespace Deliver.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
-        private readonly ICompanyUtils _companyUtils;
-        private readonly LoggedUser _loggedUser;
 
-        public CompanyController(ICompanyService companyService, IOptions<LoggedUser> loggedUser, ICompanyUtils companyUtils)
+        public CompanyController(ICompanyService companyService)
         {
             _companyService = companyService;
-            _loggedUser = loggedUser.Value;
-            _companyUtils = companyUtils;
         }
 
         [HttpPost("Create")]
         [Authorize(SystemRoles.Admin)]
-        public async Task<BaseRespons<CompanyResponse>> Create(CreateCompanyRequest request)
+        public async Task<CompanyResponse> Create(CreateCompanyRequest request)
         {
             return await _companyService.Create(request);
         }
 
         [HttpGet("List")]
         [Authorize(SystemRoles.Admin)]
-        public async Task<BaseRespons<List<CompanyResponse>>> GetList()
+        public async Task<List<CompanyResponse>> GetList()
         {
             return await _companyService.GetAllCompany();
         }

@@ -22,14 +22,14 @@ namespace Deliver.Controllers
         
         [HttpGet("List")]
         [Authorize(SystemRoles.HR, SystemRoles.CompanyAdmin, SystemRoles.Admin, SystemRoles.CompanyOwner)]
-        public async Task<BaseRespons<List<UserResponse>>> GetList()
+        public async Task<List<UserResponse>> GetList()
         {
             return await _userService.GetUserList();
         }
 
         [HttpPost("Create")]
         [Authorize(SystemRoles.Admin, SystemRoles.CompanyAdmin, SystemRoles.HR, SystemRoles.CompanyOwner)]
-        public async Task<BaseRespons<UserResponse>> Create(CreateUserRequest createRequest)
+        public async Task<UserResponse> Create(CreateUserRequest createRequest)
         {
             var response = await _userService.CreateUser(createRequest);
             await _userService.AddRoleToUser(response.Hash, createRequest.RoleIds);
@@ -52,13 +52,13 @@ namespace Deliver.Controllers
         }
 
         [HttpPut("Update")]
-        public async Task<BaseRespons<UserResponse>> Update(UpdateUserRequest updateUserRequest)
+        public async Task<UserResponse> Update(UpdateUserRequest updateUserRequest)
         {
             return await _userService.UpdateUser(updateUserRequest);
         }
 
         [HttpGet("{userHash}")]
-        public async Task<BaseRespons<UserResponse>> GetUser(Guid userHash)
+        public async Task<UserResponse> GetUser(Guid userHash)
         {
             return await _userService.GetUser(userHash);
         }

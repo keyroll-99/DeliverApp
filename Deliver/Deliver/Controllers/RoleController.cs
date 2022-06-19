@@ -17,7 +17,7 @@ namespace Deliver.Controllers
         }
 
         [HttpGet]
-        public async Task<BaseRespons<List<RoleResponse>>> GetRoles()
+        public async Task<List<RoleResponse>> GetRoles()
         {
             return await _roleService.GetAllAvailable();
         }

@@ -22,28 +22,28 @@ namespace Deliver.Controllers
 
         [HttpPost]
         [Authorize(SystemRoles.Admin, SystemRoles.CompanyAdmin, SystemRoles.CompanyOwner, SystemRoles.Dispatcher)]
-        public async Task<BaseRespons<DeliverResponse>> CreateDelivery(CreateDeliveryRequest request)
+        public async Task<DeliverResponse> CreateDelivery(CreateDeliveryRequest request)
         {
             return await _deliverService.CreateDelivery(request);
         }
 
         [HttpGet("List")]
         [Authorize(SystemRoles.Admin, SystemRoles.CompanyAdmin, SystemRoles.CompanyOwner, SystemRoles.Dispatcher, SystemRoles.Driver)]
-        public async Task<BaseRespons<List<DeliverResponse>>> GetAll()
+        public async Task<List<DeliverResponse>> GetAll()
         {
             return await _deliverService.GetAllDeliveries();
         }
 
         [HttpGet("{hash}")]
         [Authorize(SystemRoles.Admin, SystemRoles.CompanyAdmin, SystemRoles.CompanyOwner, SystemRoles.Dispatcher, SystemRoles.Driver)]
-        public async Task<BaseRespons<DeliverResponse>> GetByHash(Guid hash)
+        public async Task<DeliverResponse> GetByHash(Guid hash)
         {
             return await _deliverService.GetDeliveryByHash(hash);
         }
 
         [HttpPut("Status")]
         [Authorize(SystemRoles.Admin, SystemRoles.CompanyAdmin, SystemRoles.CompanyOwner, SystemRoles.Dispatcher)]
-        public async Task<BaseRespons<DeliverResponse>> ChangeStatus(ChangeDeliveryStatusRequest changeDeliverStatusRequest)
+        public async Task<DeliverResponse> ChangeStatus(ChangeDeliveryStatusRequest changeDeliverStatusRequest)
         {
             if(!Enum.IsDefined(typeof(DeliveryStatusEnum), changeDeliverStatusRequest.NewStatus))
             {
@@ -54,7 +54,7 @@ namespace Deliver.Controllers
 
         [HttpPut]
         [Authorize(SystemRoles.Admin, SystemRoles.CompanyAdmin, SystemRoles.CompanyOwner, SystemRoles.Dispatcher)]
-        public async Task<BaseRespons<DeliverResponse>> UpdateDelivery(UpdateDeliveryRequest updateDeliveryRequest)
+        public async Task<DeliverResponse> UpdateDelivery(UpdateDeliveryRequest updateDeliveryRequest)
         {
             return await _deliverService.UpdateDelivery(updateDeliveryRequest);
         }

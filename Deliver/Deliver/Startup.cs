@@ -1,4 +1,5 @@
 ﻿using Deliver.Middleware;
+using Deliver.Settings;
 using Deliver.Setup;
 using System.Text.Json;
 
@@ -60,8 +61,10 @@ namespace Deliver
                  .AllowAnyMethod()
                  .AllowAnyHeader()
                  .AllowCredentials());
-            
+
             app.UseMiddleware<CatchAppExceptionMiddleware>();
+
+            app.UseMiddleware<CastToBaseResponseMiddleware>();
 
             app.UseMiddleware<JwtMiddleware>();
 
