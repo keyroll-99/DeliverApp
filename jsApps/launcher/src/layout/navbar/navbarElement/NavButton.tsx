@@ -1,19 +1,19 @@
 import { ListItemButton } from "@mui/material";
+import { observer } from "mobx-react";
 import { useNavigate } from "react-router-dom";
-import HasRole from "service/userService/Roles";
+import { HasPermission, HasPermissionTo } from "service/userService/Roles";
 
 interface props {
     text: string;
-    roles: string[];
-    requireRole?: string[];
+    requirePermission?: HasPermissionTo;
     targetLocation: string;
     icon?: React.ReactNode;
 }
 
-const NavButton = ({ text, roles, requireRole, targetLocation, icon }: props) => {
+const NavButton = ({ text, requirePermission, targetLocation, icon }: props) => {
     const navigation = useNavigate();
 
-    if (requireRole && !HasRole(roles, requireRole)) {
+    if (requirePermission && !HasPermission(requirePermission)) {
         return null;
     }
 
@@ -25,4 +25,4 @@ const NavButton = ({ text, roles, requireRole, targetLocation, icon }: props) =>
     );
 };
 
-export default NavButton;
+export default observer(NavButton);

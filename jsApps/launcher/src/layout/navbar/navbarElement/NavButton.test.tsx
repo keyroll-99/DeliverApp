@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import HasRole from "service/userService/Roles";
+import { HasRole } from "service/userService/Roles";
 import NavButton from "./NavButton";
 
 jest.mock("@mui/material", () => ({
@@ -23,9 +23,7 @@ describe("NavButton", () => {
         (HasRole as jest.MockedFunction<typeof HasRole>).mockReturnValue(true);
 
         // act
-        const { queryByText } = render(
-            <NavButton text="Text" targetLocation="location" roles={["test1"]} requireRole={["test1"]} />
-        );
+        const { queryByText } = render(<NavButton text="Text" targetLocation="location" />);
 
         // assert
         expect(queryByText("ListItemMock")).toBeInTheDocument();
@@ -36,9 +34,7 @@ describe("NavButton", () => {
         (HasRole as jest.MockedFunction<typeof HasRole>).mockReturnValue(false);
 
         // act
-        const { queryByText } = render(
-            <NavButton text="Text" targetLocation="location" roles={["test1"]} requireRole={["test2"]} />
-        );
+        const { queryByText } = render(<NavButton text="Text" targetLocation="location" />);
 
         // assert
         expect(queryByText("ListItemMock")).not.toBeInTheDocument();

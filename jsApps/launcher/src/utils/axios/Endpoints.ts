@@ -3,6 +3,7 @@ const Endpoints = {
         Login: "Api/Authentication/Login",
         Refresh: "Api/Authentication/Refresh",
         Logout: "Api/Authentication/Logout",
+        Permission: "Api/Authentication/Permission",
     },
     User: {
         Create: "Api/User/Create",

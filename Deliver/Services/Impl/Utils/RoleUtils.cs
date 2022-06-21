@@ -2,6 +2,7 @@
 using Models.Db;
 using Models.Db.ConstValues;
 using Models.Request.Utils.Role;
+using Models.Response.Authentication;
 using Repository.Repository.Interface;
 using Services.Interface.Utils;
 
@@ -41,7 +42,7 @@ public class RoleUtils : IRoleUtils
     }
 
     public async Task<bool> HasPermission(HasPermissionRequest permissionRequest)
-    { 
+    {
         var rolesIds = await GetAllRolesIds(permissionRequest.Roles);
 
         var hasPermission =
@@ -55,11 +56,45 @@ public class RoleUtils : IRoleUtils
         return hasPermission;
     }
 
-    private static bool HasPermission(List<string> roles, string permission)
-        => roles.Contains(permission);
+    public async Task<PermissionResponse> GetUserPermission(long userId)
+    {
+        var userRoles = await _roleRepository
+            .GetAll()
+            .Include(x => x.UserRoles)
+            .Where(x => x.UserRoles.Any(y => y.UserId == userId))
+            .ToListAsync();
+
+        var result = new PermissionResponse
+        {
+            Company = new List<PermissionActionEnum>(),
+            Deliver = new List<PermissionActionEnum>(),
+            Location = new List<PermissionActionEnum>(),
+            User = new List<PermissionActionEnum>(),
+        };
+
+        if (userRoles?.Any() == true)
+        {
+            foreach (var role in userRoles)
+            {
+                result.Company = (await GetAvailableAction(role.Id, PermissionToEnum.Company)).Concat(result.Company).Distinct().ToList();
+                result.Location = (await GetAvailableAction(role.Id, PermissionToEnum.Location)).Concat(result.Location).Distinct().ToList();
+                result.User = (await GetAvailableAction(role.Id, PermissionToEnum.User)).Concat(result.User).Distinct().ToList();
+                result.Deliver = (await GetAvailableAction(role.Id, PermissionToEnum.Deliver)).Concat(result.Deliver).Distinct().ToList();
+            }
+        }
+
+        return result;
+    }
 
     private async Task<List<long>> GetAllRolesIds(List<string> roles)
         => await _roleRepository.GetAll().Where(x => roles.Contains(x.Name)).Select(x => x.Id).ToListAsync();
 
-
+    private async Task<List<PermissionActionEnum>> GetAvailableAction(long roleId, PermissionToEnum permissionTo)
+    {
+        return await _rolePermissionRepository
+            .GetAll()
+            .Where(x => x.PermissionTo == permissionTo && x.RoleId == roleId)
+            .Select(x => x.PermissionAction)
+            .ToListAsync();
+    }
 }
