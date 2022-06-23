@@ -61,6 +61,7 @@ public class AuthenticationServiceTest
     private readonly IAuthenticationUtils _jwtUtilsMock;
     private readonly IAuthenticationService _service;
     private readonly IOptions<LoggedUser> _options;
+    private readonly IRoleUtils _roleUtilsMock;
 
     public AuthenticationServiceTest()
     {
@@ -72,7 +73,9 @@ public class AuthenticationServiceTest
         _options = Substitute.For<IOptions<LoggedUser>>();
         _options.Value.Returns(_loggedUser);
 
-        _service = new AuthenticationService(_jwtUtilsMock, _userRepositoryMock, _options);
+        _roleUtilsMock = Substitute.For<IRoleUtils>();
+
+        _service = new AuthenticationService(_jwtUtilsMock, _userRepositoryMock, _options, _roleUtilsMock);
     }
 
     [Fact]

@@ -1,4 +1,4 @@
-export type PermissionTo = "user" | "location" | "company" | "delivery";
+export type PermissionTo = "user" | "location" | "company" | "deliver";
 
 export enum PermisionToActionEnum {
     create = 1,
@@ -12,5 +12,5 @@ export interface Permission {
     user: PermisionToActionEnum[];
     location: PermisionToActionEnum[];
     company: PermisionToActionEnum[];
-    delivery: PermisionToActionEnum[];
+    deliver: PermisionToActionEnum[];
 }

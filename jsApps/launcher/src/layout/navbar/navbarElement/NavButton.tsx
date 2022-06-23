@@ -1,7 +1,8 @@
 import { ListItemButton } from "@mui/material";
 import { observer } from "mobx-react";
 import { useNavigate } from "react-router-dom";
-import { HasPermission, HasPermissionTo } from "service/userService/Roles";
+import HasPermissionTo from "service/userService/models/HasPermissionTo";
+import { HasPermission } from "service/userService/Roles";
 
 interface props {
     text: string;
