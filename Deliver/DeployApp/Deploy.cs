@@ -7,7 +7,7 @@ public static class Deploy
     public static void RunSqlScript(string connectionString)
     {
         var currentPath = Directory.GetCurrentDirectory().Split(Path.DirectorySeparatorChar);
-        var scriptPath = String.Join(
+        var scriptPath = string.Join(
             Path.DirectorySeparatorChar,
             currentPath.Take(currentPath.Length - 1)
         ) + $"{Path.DirectorySeparatorChar}DeployApp";

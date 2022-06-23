@@ -1,10 +1,12 @@
 import { makeAutoObservable } from "mobx";
+import { Permission } from "service/userService/models/Permissions";
 import { MapAuthResponseToUser } from "../service/userService/Mapper";
 import AuthResponse from "../service/userService/models/AuthResponse";
 import User from "../service/userService/models/User";
 
 class UserStore {
     private _user?: User;
+    private _permissions?: Permission;
     private _isLogged: boolean = false;
     private _isLoading: boolean = false;
     private _error?: string;
@@ -29,14 +31,23 @@ class UserStore {
         return this._error;
     }
 
+    get getPermissions() {
+        return this._permissions;
+    }
+
     setUser(user: AuthResponse) {
         this._user = MapAuthResponseToUser(user);
         this._isLogged = true;
     }
 
+    setPermissions(permissions?: Permission) {
+        this._permissions = permissions;
+    }
+
     logout() {
         this._user = undefined;
         this._isLogged = false;
+        this._permissions = undefined;
     }
 }
 

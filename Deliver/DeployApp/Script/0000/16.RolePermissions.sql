@@ -3,6 +3,6 @@
 	CreateTime DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	UpdateTime DATETIME,
 	RoleId BIGINT FOREIGN KEY REFERENCES Roles("Id"),
-	PermissionToId BIGINT FOREIGN KEY REFERENCES PermissionToEnum("Id"),
-	PermissionActionId BIGINT FOREIGN KEY REFERENCES PermissionActionEnum("Id")
+	PermissionToId INT FOREIGN KEY REFERENCES PermissionToEnum("Id"),
+	PermissionActionId INT FOREIGN KEY REFERENCES PermissionActionEnum("Id")
 );

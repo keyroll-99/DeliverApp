@@ -6,4 +6,5 @@ public enum PermissionActionEnum
     Update = 2,
     Get = 3,
     Delete = 4,
+    Assing = 5
 }

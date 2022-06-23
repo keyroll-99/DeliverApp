@@ -10,18 +10,16 @@ import Config from "../../utils/_core/Config";
 import { BaseResponse, FetchProcessing, MutationProcessing } from "../_core/Models";
 import AuthResponse from "./models/AuthResponse";
 import LoginForm from "./models/LoginForm";
+import { Permission } from "./models/Permissions";
 
-export const LoginRequest = async (form: LoginForm): Promise<BaseResponse<AuthResponse>> => {
+const GetPermissionRequest = async (jwt: string): Promise<BaseResponse<Permission>> => {
     const response = await axios
-        .post<LoginForm, AxiosResponse<BaseResponse<AuthResponse>>>(
-            `${Config.serverUrl}${Endpoints.Authentication.Login}`,
-            form,
-            {
-                withCredentials: true,
-            }
-        )
+        .get(`${Config.serverUrl}${Endpoints.Authentication.Permission}`, {
+            headers: GetHeader(jwt),
+        })
         .then((resp) => resp.data)
-        .catch((error: AxiosError) => HandleApiError<AuthResponse>(error));
+        .catch((error: AxiosError) => HandleApiError<BaseResponse<Permission>>(error));
+
     return response;
 };
 
@@ -46,16 +44,18 @@ export const RefreshToken = (): FetchProcessing<AuthResponse> => {
         onError: () => {
             userStore.logout();
         },
-        onSuccess: (response) => {
+        onSuccess: async (response) => {
             if (!response.isSuccess) {
                 userStore.logout();
+            } else {
+                userStore.setUser(response.data!);
+                const permissionsReponse = await GetPermissionRequest(response.data?.jwt ?? "");
+                if (permissionsReponse.isSuccess) {
+                    userStore.setPermissions(permissionsReponse.data);
+                }
             }
         },
     });
-
-    if (!isLoading && data?.isSuccess) {
-        userStore.setUser(data!.data!);
-    }
 
     return {
         isLoading: isLoading,
@@ -65,17 +65,38 @@ export const RefreshToken = (): FetchProcessing<AuthResponse> => {
     };
 };
 
+export const LoginRequest = async (form: LoginForm): Promise<BaseResponse<AuthResponse>> => {
+    const response = await axios
+        .post<LoginForm, AxiosResponse<BaseResponse<AuthResponse>>>(
+            `${Config.serverUrl}${Endpoints.Authentication.Login}`,
+            form,
+            {
+                withCredentials: true,
+            }
+        )
+        .then((resp) => resp.data)
+        .catch((error: AxiosError) => HandleApiError<AuthResponse>(error));
+    return response;
+};
+
 export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse>> => {
     const { userStore } = UseStore();
     const navigation = useNavigate();
 
     const { isLoading, data, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
-        onSuccess: (result) => {
+        onSuccess: async (result) => {
             if (result?.isSuccess) {
                 userStore.setUser(result!.data!);
+                const permissionsReponse = await GetPermissionRequest(result.data?.jwt ?? "");
+                if (permissionsReponse.isSuccess) {
+                    userStore.setPermissions(permissionsReponse.data);
+                }
             } else {
                 navigation(Path.login);
             }
+        },
+        onError: () => {
+            navigation(Path.login);
         },
     });
 

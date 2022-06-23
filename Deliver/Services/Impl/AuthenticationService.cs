@@ -15,13 +15,22 @@ public class AuthenticationService : IAuthenticationService
     private readonly IAuthenticationUtils _authenticationUtils;
     private readonly IUserRepository _userRepository;
     private readonly LoggedUser _loggedUser;
+    private readonly IRoleUtils _roleUtils;
 
-    public AuthenticationService(IAuthenticationUtils authenticationUtils, IUserRepository userRepository, IOptions<LoggedUser> loggedUser)
+    public AuthenticationService(
+        IAuthenticationUtils authenticationUtils,
+        IUserRepository userRepository,
+        IOptions<LoggedUser> loggedUser,
+        IRoleUtils roleUtils)
     {
         _authenticationUtils = authenticationUtils;
         _userRepository = userRepository;
         _loggedUser = loggedUser.Value;
+        _roleUtils = roleUtils;
     }
+
+    public Task<PermissionResponse> GetLoggedUserPermission()
+        => _roleUtils.GetUserPermission(_loggedUser.Id);
 
     public async Task<AuthResponse> Login(LoginRequest loginRequest, string ipAddress)
     {
