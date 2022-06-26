@@ -25,6 +25,7 @@ public static class DISetup
         services.AddScoped<IRolePermissionRepository, RolePermissionRepository>();
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
         services.AddScoped<ILogRepository, LogRepository>();
+        services.AddScoped<IPasswordRecoveryRepository, PasswordRecoveryRepository>();
         return services;
     }
 

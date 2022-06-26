@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Models;
+using Models.Db;
 using Models.Exceptions;
 using Models.Request.Authentication;
 using Models.Response.Authentication;
@@ -16,17 +17,20 @@ public class AuthenticationService : IAuthenticationService
     private readonly IUserRepository _userRepository;
     private readonly LoggedUser _loggedUser;
     private readonly IRoleUtils _roleUtils;
+    private readonly IPasswordRecoveryRepository _passwordRecoveryRepository;
 
     public AuthenticationService(
         IAuthenticationUtils authenticationUtils,
         IUserRepository userRepository,
         IOptions<LoggedUser> loggedUser,
-        IRoleUtils roleUtils)
+        IRoleUtils roleUtils,
+        IPasswordRecoveryRepository passwordRecoveryRepository)
     {
         _authenticationUtils = authenticationUtils;
         _userRepository = userRepository;
         _loggedUser = loggedUser.Value;
         _roleUtils = roleUtils;
+        _passwordRecoveryRepository = passwordRecoveryRepository;
     }
 
     public Task<PermissionResponse> GetLoggedUserPermission()
@@ -117,5 +121,35 @@ public class AuthenticationService : IAuthenticationService
             ExpireDate = DateTime.Now.AddMinutes(15),
             Roles = user.UserRole.Select(x => x.Role.Name).ToList()
         };
+    }
+
+    public async Task<string> CreateRecoveryLink(PasswordRecoveryRequest recoveryPasswordRequest)
+    {
+        if(recoveryPasswordRequest is null || !recoveryPasswordRequest.isValid)
+        {
+            throw new AppException(ErrorMessage.InvalidData);
+        }
+
+        var user = await _userRepository
+            .GetAll()
+            .FirstOrDefaultAsync(x => x.Username == recoveryPasswordRequest.Username && x.Email == recoveryPasswordRequest.Email);
+
+        if (user is null)
+        {
+            throw new AppException(ErrorMessage.UserDosentExists);
+        }
+
+        var recoveryLink = Guid.NewGuid();
+
+        var passwordRecoveryModel = new PasswordRecovery
+        {
+            Hash = recoveryLink,
+            User = user,
+            UserId = user.Id,
+        };
+        
+        await _passwordRecoveryRepository.AddAsync(passwordRecoveryModel);
+
+        return recoveryLink.ToString();
     }
 }

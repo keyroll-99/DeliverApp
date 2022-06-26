@@ -19,6 +19,7 @@ public class AppDbContext : DbContext
     public DbSet<RefreshToken> RefreshTokens { get; set; }
     public DbSet<RolePermission> RolePermissions { get; set; }
     public DbSet<Log> Logs { get; set; }
+    public DbSet<PasswordRecovery> PasswordRecovery { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -89,6 +90,13 @@ public class AppDbContext : DbContext
             .Entity<RefreshToken>()
             .HasOne(x => x.User)
             .WithMany(x => x.RefreshTokens)
+            .HasForeignKey(x => x.UserId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder
+            .Entity<PasswordRecovery>()
+            .HasOne(x => x.User)
+            .WithMany(y => y.PasswordRecoveries)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.NoAction);
     }

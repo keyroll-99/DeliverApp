@@ -9,4 +9,5 @@ public interface IAuthenticationService
     Task<AuthResponse> RefreshToken(string? token, string ipAddress);
     Task Logout(string ipAddress);
     Task<PermissionResponse> GetLoggedUserPermission();
+    Task<string> CreateRecoveryLink(PasswordRecoveryRequest recoveryPasswordRequest);
 }
