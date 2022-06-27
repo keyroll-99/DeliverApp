@@ -53,14 +53,7 @@ public class AuthenticationController : ControllerBase
     public async Task<PermissionResponse> GetPermissions()
         => await _authenticateService.GetLoggedUserPermission();
 
-    [HttpPost("Password-recovery/init")]
-    [AllowAnonymous]
-    public async Task<BaseRespons> PasswordRecoveryInit(PasswordRecoveryRequest request)
-    {
-        var recoveryLink = await _authenticateService.CreateRecoveryLink(request);
-        // TODO: send recovery link on mail
-        return BaseRespons.Success();
-    }
+
 
     private void setTokenCookie(string token)
     {

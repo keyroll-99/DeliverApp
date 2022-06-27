@@ -24,7 +24,7 @@ namespace Deliver.Setup
             var userRoles = appDbContext.UserRoles;
             var companies = appDbContext.Company;
 
-            var adminRole = await roles.FirstOrDefaultAsync(x => x.Name == "Admin");
+            var adminRole = await roles.FirstAsync(x => x.Name == "Admin");
             var admin = await users.FirstOrDefaultAsync(x => x.Name == "Admin");
             var company = await companies.FirstOrDefaultAsync(x => x.Name == "admin-company");
 

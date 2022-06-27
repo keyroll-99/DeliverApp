@@ -7,6 +7,7 @@ using Models.Db.ConstValues;
 using Models.Exceptions;
 using Models.Integration;
 using Models.Mapper;
+using Models.Request.Account;
 using Models.Request.User;
 using Models.Request.Utils.Role;
 using Models.Response.User;
@@ -24,6 +25,7 @@ public class UserService : IUserService
     private readonly LoggedUser _loggedUser;
     private readonly IRoleUtils _roleUtils;
     private readonly IMailService _mailService;
+
 
     public UserService(
         IUserRepository userRepository,
@@ -113,29 +115,6 @@ public class UserService : IUserService
         user.Company = company;
         user.CompanyId = company.Id;
 
-        await _userRepository.UpdateAsync(user);
-    }
-
-    public async Task UpdatePassword(ChangePasswordRequest updatePasswordRequest)
-    {
-        if (updatePasswordRequest is null || !updatePasswordRequest.IsValid)
-        {
-            throw new AppException(ErrorMessage.InvalidNewPassword);
-        }
-        var user = await _userRepository.GetByIdAsync(_loggedUser.Id);
-        if (user is null)
-        {
-            throw new AppException(ErrorMessage.CommonMessage);
-        }
-
-        var isValidPassword = BCrypt.Net.BCrypt.Verify(updatePasswordRequest.OldPassword, user.Password);
-
-        if (!isValidPassword)
-        {
-            throw new AppException(ErrorMessage.InvalidPassword);
-        }
-
-        user.Password = BCrypt.Net.BCrypt.HashPassword(updatePasswordRequest.Password);
         await _userRepository.UpdateAsync(user);
     }
 

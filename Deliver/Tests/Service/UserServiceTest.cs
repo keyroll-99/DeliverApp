@@ -327,57 +327,6 @@ namespace Tests.Service
             ));
         }
 
-        [Theory]
-        [InlineData(null)]
-        [InlineData("l")]
-        public async Task UpdatePassword_WhenInvalidPassowrdLenght_ThenThrowException(string newPassword)
-        {
-            // act
-            Func<Task> act = async () => await _service.UpdatePassword(new ChangePasswordRequest { Password = newPassword, OldPassword = "old-password" });
-
-            // assert
-            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidNewPassword);
-        }
-
-        [Fact]
-        public async Task UpdatePassword_WhenUserIsNull_ThorwException()
-        {
-            // arrange
-            _userRepositoryMock.GetByIdAsync(Arg.Any<long>()).Returns(null as User);
-
-            // act
-            Func<Task> act = async () => await _service.UpdatePassword(new ChangePasswordRequest { Password = "password", OldPassword = "old-password" });
-
-            // assert
-            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.CommonMessage);
-        }
-
-        [Fact]
-        public async Task UpdatePassword_WhenOldPasswordIsIncorrect_ThenThrowException()
-        {
-            // arrange
-            _userRepositoryMock.GetByIdAsync(Arg.Any<long>()).Returns(new User { Password = BCrypt.Net.BCrypt.HashPassword("old-password") });
-
-            // act
-            Func<Task> act = async () => await _service.UpdatePassword(new ChangePasswordRequest { Password = "password", OldPassword = "super-old-password" });
-
-            // assert
-            await act.Should().ThrowAsync<AppException>().WithMessage(ErrorMessage.InvalidPassword);
-        }
-
-        [Fact]
-        public async Task UpdatePassword_WhenRequestIsValid_ThenUdpateUser()
-        {
-            // arrange
-            _userRepositoryMock.GetByIdAsync(Arg.Any<long>()).Returns(new User { Password = BCrypt.Net.BCrypt.HashPassword("old-password") });
-
-            // act
-            await _service.UpdatePassword(new ChangePasswordRequest { Password = "password", OldPassword = "old-password" });
-
-            // assert
-            await _userRepositoryMock.Received(1).UpdateAsync(Arg.Is<User>(x => x.Password != null));
-        }
-
         [Fact]
         public async Task GetUser_WhenUserDoesntExist_ThenThrowError()
         {

@@ -1,6 +1,7 @@
 ﻿using Deliver.CustomAttribute;
 using Microsoft.AspNetCore.Mvc;
 using Models.Db.ConstValues;
+using Models.Request.Account;
 using Models.Request.User;
 using Models.Response._Core;
 using Models.Response.User;
@@ -34,13 +35,6 @@ namespace Deliver.Controllers
             var response = await _userService.CreateUser(createRequest);
             await _userService.AddRoleToUser(response.Hash, createRequest.RoleIds);
             return response;
-        }
-
-        [HttpPut("ChangePassword")]
-        public async Task<BaseRespons> UpdatePassword(ChangePasswordRequest updatePasswordRequest)
-        {
-            await _userService.UpdatePassword(updatePasswordRequest);
-            return BaseRespons.Success();
         }
 
         [HttpPut("Fire/{userHash}")]

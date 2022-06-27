@@ -1,4 +1,4 @@
-﻿namespace Models.Request.User;
+﻿namespace Models.Request.Account;
 
 public class ChangePasswordRequest
 {

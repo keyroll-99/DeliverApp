@@ -37,6 +37,7 @@ public static class DISetup
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IDeliveryService, DeliveryService>();
+        services.AddScoped<IAccountService, AccountService>();
         return services;
     }
 
