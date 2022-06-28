@@ -1,7 +1,7 @@
 import { makeAutoObservable } from "mobx";
 import { Permission } from "service/userService/models/Permissions";
 import { MapAuthResponseToUser } from "../service/userService/Mapper";
-import AuthResponse from "../service/userService/models/AuthResponse";
+import AuthResponse from "../service/userService/models/AuthModels/AuthResponse";
 import User from "../service/userService/models/User";
 
 class UserStore {

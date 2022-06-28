@@ -1,5 +1,5 @@
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import UserResponse from "service/userService/models/UserResponse";
+import UserResponse from "service/userService/models/UserModels/UserResponse";
 import { UpdateUserAction } from "service/userService/UserService";
 import { BaseResponse } from "service/_core/Models";
 import UpdateUser from "./UpdateUser";

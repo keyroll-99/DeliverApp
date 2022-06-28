@@ -17,12 +17,26 @@ namespace Deliver.Controllers
             _accountService = accountService;
         }
 
-        [HttpPost("Password-recovery/init")]
+        [HttpPost("Password-recovery/Init")]
         [AllowAnonymous]
-        public async Task<BaseRespons> PasswordRecoveryInit(PasswordRecoveryRequest request)
+        public async Task<BaseRespons> PasswordRecoveryInit(PasswordRecoveryInitRequest request)
         {
-            await _accountService.RecoveryPassword(request);
+            await _accountService.InitRecoveryPassword(request);
             return BaseRespons.Success();
+        }
+
+        [HttpPost("Password-recovery/Change")]
+        public async Task<BaseRespons> PasswordRecoveryChange(PasswordRecoverySetNewPasswordRequest request)
+        {
+            await _accountService.SetNewPassword(request);
+            return BaseRespons.Success();
+        }
+
+        [HttpGet("Password-recovery/Valid/{recoveryKey}")]
+        [AllowAnonymous]
+        public async Task<bool> IsValidRecoveryKey(string recoveryKey)
+        {
+            return await _accountService.IsValidRecoveryKey(recoveryKey);
         }
 
         [HttpPut("ChangePassword")]

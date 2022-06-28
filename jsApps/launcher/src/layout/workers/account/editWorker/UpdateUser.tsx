@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import TextFieldInput from "components/inputs/TextFieldInput";
 import Snackbar from "components/snackbar/Snackbar";
 import { useState } from "react";
-import UpdateUserForm from "service/userService/models/UpdateUserForm";
+import UpdateUserForm from "service/userService/models/UserModels/UpdateUserForm";
 import CreateClass from "utils/style/CreateClass";
 import { UpdateUserAction } from "service/userService/UserService";
 

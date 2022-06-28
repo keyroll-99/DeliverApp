@@ -8,8 +8,8 @@ import { UseStore } from "../../stores/Store";
 import Endpoints from "../../utils/axios/Endpoints";
 import Config from "../../utils/_core/Config";
 import { BaseResponse, FetchProcessing, MutationProcessing } from "../_core/Models";
-import AuthResponse from "./models/AuthResponse";
-import LoginForm from "./models/LoginForm";
+import AuthResponse from "./models/AuthModels/AuthResponse";
+import LoginForm from "./models/AuthModels/LoginForm";
 import { Permission } from "./models/Permissions";
 
 const GetPermissionRequest = async (jwt: string): Promise<BaseResponse<Permission>> => {

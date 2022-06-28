@@ -17,6 +17,7 @@ public class AccountService : IAccountService
     private readonly IPasswordRecoveryRepository _passwordRecoveryRepository;
     private readonly IMailService _mailService;
     private readonly LoggedUser _loggedUser;
+    private const int _howLongRecoveryKeyIsValidInMinutes = 30;
 
     public AccountService(
         IUserRepository userRepository,
@@ -53,7 +54,7 @@ public class AccountService : IAccountService
         await _userRepository.UpdateAsync(user);
     }
 
-    public async Task RecoveryPassword(PasswordRecoveryRequest passwordRecoveryRequest)
+    public async Task InitRecoveryPassword(PasswordRecoveryInitRequest passwordRecoveryRequest)
     {
         var passwordRecoveryModel = await GeneratePasswordRecoveryModel(passwordRecoveryRequest);
         var addTask = _passwordRecoveryRepository.AddAsync(passwordRecoveryModel);
@@ -62,7 +63,34 @@ public class AccountService : IAccountService
         Task.WaitAll(addTask, sendMailTask);
     }
 
-    private async Task<PasswordRecovery> GeneratePasswordRecoveryModel(PasswordRecoveryRequest passwordRecoveryRequest)
+    public async Task SetNewPassword(PasswordRecoverySetNewPasswordRequest newPasswordRecoverySetNewPasswordRequest)
+    {
+        if(newPasswordRecoverySetNewPasswordRequest is null || !newPasswordRecoverySetNewPasswordRequest.IsValid)
+        {
+            throw new AppException(ErrorMessage.InvalidData);
+        }
+
+        var user = await _userRepository
+            .GetAll()
+            .Include(x => x.PasswordRecoveries)
+            .FirstOrDefaultAsync(x => x.PasswordRecoveries.Any(x => x.Hash.ToString() == newPasswordRecoverySetNewPasswordRequest.RecoveryKey && x.CreateTime > DateTime.Now.AddMinutes(-howLongRecoveryKeyIsValidInMinutes)));
+
+        if(user is null)
+        {
+            throw new AppException(ErrorMessage.TokenExpiredOrInvalidPasswordRecoveryLink);
+        }
+
+        user.Password = BCrypt.Net.BCrypt.HashPassword(newPasswordRecoverySetNewPasswordRequest.NewPassword);
+
+        await _userRepository.UpdateAsync(user);
+    }
+
+    public async Task<bool> IsValidRecoveryKey(string recoveryKey)
+    {
+        return await _passwordRecoveryRepository.GetAll().AnyAsync(x => x.Hash.ToString() == recoveryKey && x.CreateTime > DateTime.Now.AddMinutes(-howLongRecoveryKeyIsValidInMinutes));
+    }
+
+    private async Task<PasswordRecovery> GeneratePasswordRecoveryModel(PasswordRecoveryInitRequest passwordRecoveryRequest)
     {
         if (passwordRecoveryRequest is null || !passwordRecoveryRequest.IsValid)
         {
@@ -87,5 +115,4 @@ public class AccountService : IAccountService
             UserId = user.Id,
         };
     }
-
 }

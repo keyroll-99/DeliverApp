@@ -6,6 +6,7 @@ import EditDelivery from "layout/delivery/update/EditDelivery";
 import CreateLocation from "layout/location/createLocation/CreateLocation";
 import EditLocation from "layout/location/editLocation/EditLocation";
 import LocationList from "layout/location/list/LocationList";
+import PasswordRecovery from "layout/passwordRecovery/PasswordRecovery";
 import EditWorker from "layout/workers/account/editWorker/EditWorker";
 import Account from "layout/workers/account/profile/Account";
 import { Route, Routes } from "react-router-dom";
@@ -116,6 +117,7 @@ const Router = () => {
                 }
             />
             <Route path={Path.login} element={<Login />} />
+            <Route path={Path.passwordRecovery} element={<PasswordRecovery />} />
         </Routes>
     );
 };

@@ -1,12 +1,12 @@
 import { fireEvent, render, waitFor } from "@testing-library/react";
 import ChangePassword from "./ChangePassword";
-import { ChangePasswordAction } from "service/userService/UserService";
+import { ChangePasswordAction } from "service/userService/AccountService";
 import { BaseResponse } from "service/_core/Models";
-import UserResponse from "service/userService/models/UserResponse";
+import UserResponse from "service/userService/models/UserModels/UserResponse";
 
 const mockMutateAsync = jest.fn();
 
-jest.mock("service/userService/UserService", () => ({
+jest.mock("service/userService/models/AccountModels/ChangePasswordForm", () => ({
     ChangePasswordAction: jest.fn(),
 }));
 

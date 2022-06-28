@@ -1,6 +1,6 @@
 ﻿namespace Models.Request.Account;
 
-public class PasswordRecoveryRequest
+public class PasswordRecoveryInitRequest
 {
     public string Username { get; set; }
     public string Email { get; set; }

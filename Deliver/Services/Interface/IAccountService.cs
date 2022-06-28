@@ -5,5 +5,7 @@ namespace Services.Interface;
 public interface IAccountService
 {
     Task UpdatePassword(ChangePasswordRequest updatePasswordRequest);
-    Task RecoveryPassword(PasswordRecoveryRequest recoveryPasswordRequest);
+    Task SetNewPassword(PasswordRecoverySetNewPasswordRequest newPasswordRecoverySetNewPasswordRequest);
+    Task InitRecoveryPassword(PasswordRecoveryInitRequest recoveryPasswordRequest);
+    Task<bool> IsValidRecoveryKey(string recoveryKey);
 }
