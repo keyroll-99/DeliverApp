@@ -39,9 +39,6 @@ export const CreateUser = (): MutationProcessing<CreateUserForm, BaseResponse<Us
     return {
         isLoading: isLoading,
         mutateAsync: mutateAsync,
-        data: data,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
     };
 };
 
@@ -104,9 +101,6 @@ export const UpdateUserAction = (): MutationProcessing<UpdateUserForm, BaseRespo
     return {
         isLoading: isLoading,
         mutateAsync: mutateAsync,
-        data: data,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
     };
 };
 

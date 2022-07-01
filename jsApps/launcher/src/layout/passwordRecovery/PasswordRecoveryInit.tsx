@@ -1,29 +1,28 @@
-import { AccountCircle } from "@mui/icons-material";
-import LockIcon from "@mui/icons-material/Lock";
 import { LoadingButton } from "@mui/lab";
 import { Box, Button, Container } from "@mui/material";
 import TextFieldInput from "components/inputs/TextFieldInput";
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Login } from "service/userService/AuthenticationService";
-import LoginForm from "service/userService/models/AuthModels/LoginForm";
+import { InitPasswordRecoveryAction } from "service/userService/AccountService";
+import InitPasswordRecoveryForm from "service/userService/models/AccountModels/InitPasswordRecoveryForm";
 import { UseStore } from "stores/Store";
 import Path from "utils/route/Path";
 import CreateClass from "utils/style/CreateClass";
+import EmailIcon from "@mui/icons-material/Email";
+import PersonIcon from "@mui/icons-material/Person";
 
-const baseClass = "login";
+const baseClass = "password-recovery-init";
 
-const isValidForm = (form: LoginForm): boolean => {
-    return form.username !== "" && form.password !== "";
-};
-
-const LoginPage = () => {
-    const [loginForm, setLoginForm] = useState<LoginForm>({ username: "", password: "" });
+const PasswordRecoveryInit = () => {
+    const [initPasswordRecoveryForm, setInitPasswordRecoveryForm] = useState<InitPasswordRecoveryForm>({
+        email: "",
+        username: "",
+    });
     const [isSuccess, setIsSuccess] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const navigate = useNavigate();
-    const { isLoading, mutateAsync } = Login();
+    const { isLoading, mutateAsync } = InitPasswordRecoveryAction();
     const { userStore } = UseStore();
 
     useEffect(() => {
@@ -33,17 +32,13 @@ const LoginPage = () => {
     }, [isSuccess, navigate, userStore.getIsLogged]);
 
     const submitForm = async () => {
-        if (isValidForm(loginForm)) {
-            const response = await mutateAsync(loginForm);
+        const response = await mutateAsync(initPasswordRecoveryForm);
 
-            if (response.isSuccess) {
-                setIsSuccess(true);
-                navigate(Path.account);
-            } else {
-                setError(response.error);
-            }
+        if (response.isSuccess) {
+            setIsSuccess(true);
+            navigate(Path.account);
         } else {
-            setError("please fill in all fields");
+            setError(response.error);
         }
     };
 
@@ -53,31 +48,35 @@ const LoginPage = () => {
                 <h1>Deliver system</h1>
                 <TextFieldInput
                     baseClass={baseClass}
-                    label="Login"
-                    onChange={(e) => setLoginForm({ ...loginForm, username: e.target.value })}
+                    label="Email"
+                    onChange={(e) =>
+                        setInitPasswordRecoveryForm({ ...initPasswordRecoveryForm, email: e.target.value })
+                    }
+                    icon={<EmailIcon />}
                     error={error}
-                    icon={<AccountCircle />}
-                    value={loginForm.username}
+                    value={initPasswordRecoveryForm.email}
                     type="text"
                 />
                 <TextFieldInput
                     baseClass={baseClass}
-                    label="Password"
-                    onChange={(e) => setLoginForm({ ...loginForm, password: e.target.value })}
+                    label="Username"
+                    onChange={(e) =>
+                        setInitPasswordRecoveryForm({ ...initPasswordRecoveryForm, username: e.target.value })
+                    }
                     error={error}
-                    type="password"
-                    value={loginForm.password}
-                    icon={<LockIcon />}
+                    type="text"
+                    icon={<PersonIcon />}
+                    value={initPasswordRecoveryForm.username}
                 />
                 <Box className={CreateClass(baseClass, "box")} sx={{ display: "flex", alignItems: "flex-end" }}>
                     <LoadingButton onClick={submitForm} loading={isLoading}>
-                        Login
+                        Recovery
                     </LoadingButton>
-                    <Button onClick={() => navigate(Path.passwordRecoveryInit)}>Password recovery</Button>
+                    <Button onClick={() => navigate(Path.login)}>Login</Button>
                 </Box>
             </span>
         </Container>
     );
 };
 
-export default observer(LoginPage);
+export default observer(PasswordRecoveryInit);

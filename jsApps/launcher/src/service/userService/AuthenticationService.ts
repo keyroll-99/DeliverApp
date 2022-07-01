@@ -102,9 +102,6 @@ export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse
 
     return {
         isLoading: isLoading,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
-        data: data,
         mutateAsync: mutateAsync,
     };
 };
@@ -129,9 +126,6 @@ export const Logout = (): MutationProcessing<undefined, BaseResponse<null>> => {
 
     return {
         isLoading: isLoading,
-        data: data,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
         mutateAsync: mutateAsync,
     };
 };

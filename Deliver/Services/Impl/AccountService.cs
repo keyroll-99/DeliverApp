@@ -73,7 +73,7 @@ public class AccountService : IAccountService
         var user = await _userRepository
             .GetAll()
             .Include(x => x.PasswordRecoveries)
-            .FirstOrDefaultAsync(x => x.PasswordRecoveries.Any(x => x.Hash.ToString() == newPasswordRecoverySetNewPasswordRequest.RecoveryKey && x.CreateTime > DateTime.Now.AddMinutes(-howLongRecoveryKeyIsValidInMinutes)));
+            .FirstOrDefaultAsync(x => x.PasswordRecoveries.Any(x => x.Hash.ToString() == newPasswordRecoverySetNewPasswordRequest.RecoveryKey && x.CreateTime > DateTime.Now.AddMinutes(-_howLongRecoveryKeyIsValidInMinutes)));
 
         if(user is null)
         {
@@ -87,7 +87,7 @@ public class AccountService : IAccountService
 
     public async Task<bool> IsValidRecoveryKey(string recoveryKey)
     {
-        return await _passwordRecoveryRepository.GetAll().AnyAsync(x => x.Hash.ToString() == recoveryKey && x.CreateTime > DateTime.Now.AddMinutes(-howLongRecoveryKeyIsValidInMinutes));
+        return await _passwordRecoveryRepository.GetAll().AnyAsync(x => x.Hash.ToString() == recoveryKey && x.CreateTime > DateTime.Now.AddMinutes(-_howLongRecoveryKeyIsValidInMinutes));
     }
 
     private async Task<PasswordRecovery> GeneratePasswordRecoveryModel(PasswordRecoveryInitRequest passwordRecoveryRequest)

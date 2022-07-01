@@ -1,6 +1,7 @@
 const Path = {
     home: "/",
     login: "/login",
+    passwordRecoveryInit: "/password-recovery",
     workersList: "/workers",
     addWorker: "/workers/add",
     account: "/account",

@@ -40,7 +40,6 @@ describe("UpdateUser", () => {
 
     test("should show success snackbar after success update", async () => {
         (UpdateUserAction as jest.MockedFunction<typeof UpdateUserAction>).mockReturnValue({
-            data: { isSuccess: true, error: "" },
             isLoading: false,
             mutateAsync: mockMute.mockReturnValue({ isSuccess: true, error: "" } as BaseResponse<UserResponse>),
         });
@@ -80,7 +79,6 @@ describe("UpdateUser", () => {
 
     test("should show error snackbar after faild update", async () => {
         (UpdateUserAction as jest.MockedFunction<typeof UpdateUserAction>).mockReturnValue({
-            data: { isSuccess: true, error: "" },
             isLoading: false,
             mutateAsync: mockMute.mockReturnValue({
                 isSuccess: false,

@@ -14,7 +14,6 @@ describe("Change password", () => {
     beforeEach(() => {
         (ChangePasswordAction as jest.MockedFunction<typeof ChangePasswordAction>).mockReturnValue({
             isLoading: false,
-            isSuccess: true,
             mutateAsync: mockMutateAsync,
         });
     });
