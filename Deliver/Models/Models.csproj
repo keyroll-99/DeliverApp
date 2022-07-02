@@ -6,11 +6,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Request\_Core\**" />
+    <EmbeddedResource Remove="Request\_Core\**" />
+    <None Remove="Request\_Core\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Request\_Core\" />
+    <Folder Include="Request\Car\" />
   </ItemGroup>
 
 </Project>
