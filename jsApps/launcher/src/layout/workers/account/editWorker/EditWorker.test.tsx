@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import { Router, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import User from "service/userService/models/User";
 import { GetUser } from "service/userService/UserService";
 import { UseStore } from "stores/Store";
@@ -25,6 +25,9 @@ jest.mock("service/userService/UserService", () => ({
     GetUser: jest.fn(),
     UpdateAction: jest.fn(),
     UpdateUserAction: jest.fn(),
+}));
+
+jest.mock("service/userService/AccountService", () => ({
     ChangePasswordAction: jest.fn(),
 }));
 

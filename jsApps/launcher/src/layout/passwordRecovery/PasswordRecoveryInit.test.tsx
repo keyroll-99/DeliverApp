@@ -4,7 +4,6 @@ import PasswordRecoveryInit from "./PasswordRecoveryInit";
 
 const mockMutationProcessing = {
     isLoading: false,
-    mutate: jest.fn(),
     mutateAsync: jest.fn(),
 } as MutationProcessing<null, null>;
 
@@ -23,8 +22,8 @@ jest.mock("@mui/lab", () => ({
     LoadingButton: () => <div>loading button</div>,
 }));
 
-jest.mock("../../service/userService/AuthenticationService", () => ({
-    Login: () => jest.fn().mockRejectedValue(mockMutationProcessing),
+jest.mock("service/userService/AccountService", () => ({
+    InitPasswordRecoveryAction: () => jest.fn().mockRejectedValue(mockMutationProcessing),
 }));
 
 test("should render login page is not loading", () => {

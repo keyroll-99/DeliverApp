@@ -1,9 +1,8 @@
-import { CircularProgress, Container } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
+import { CircularProgress } from "@mui/material";
+import { useParams } from "react-router-dom";
 import { IsValidRecoveryKeyAction } from "service/userService/AccountService";
 import InvalidRecoveryKey from "./InvalidRecoveryKey";
-import PasswordRecoveryFormComponent from "./PasswordRecoveryForm";
-import PasswordRecoveryForm from "./PasswordRecoveryForm";
+import PasswordRecoveryFormComponent from "./PasswordRecoveryFormComponent";
 
 export type urlParam = {
     recoveryKey: string;
@@ -18,7 +17,7 @@ const PasswordRecovery = () => {
     if (isValidKey.isLoading) {
         return <CircularProgress />;
     }
-    console.log(isValidKey);
+
     return (
         <div className={baseClass}>
             {isValidKey.data ? (

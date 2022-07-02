@@ -6,7 +6,7 @@ import UserResponse from "service/userService/models/UserModels/UserResponse";
 
 const mockMutateAsync = jest.fn();
 
-jest.mock("service/userService/models/AccountModels/ChangePasswordForm", () => ({
+jest.mock("service/userService/AccountService", () => ({
     ChangePasswordAction: jest.fn(),
 }));
 
