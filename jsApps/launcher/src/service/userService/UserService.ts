@@ -6,10 +6,9 @@ import Endpoints from "utils/axios/Endpoints";
 import GetHeader from "utils/axios/GetHeader";
 import Config from "utils/_core/Config";
 import { BaseResponse, FetchProcessing, MutationProcessing } from "../_core/Models";
-import ChangePasswordForm from "./models/ChangePasswordForm";
-import CreateUserForm from "./models/CreateUserForm";
-import UpdateUserForm from "./models/UpdateUserForm";
-import UserResponse from "./models/UserResponse";
+import CreateUserForm from "./models/UserModels/CreateUserForm";
+import UpdateUserForm from "./models/UserModels/UpdateUserForm";
+import UserResponse from "./models/UserModels/UserResponse";
 
 const CreateUserRequest = async (
     form: CreateUserForm,
@@ -30,7 +29,7 @@ export const CreateUser = (): MutationProcessing<CreateUserForm, BaseResponse<Us
     const { userStore } = UseStore();
     const header = GetHeader(userStore.getUser!.jwt);
 
-    const { isLoading, mutateAsync, data } = useMutation((form: CreateUserForm) => CreateUserRequest(form, header), {
+    const { isLoading, mutateAsync } = useMutation((form: CreateUserForm) => CreateUserRequest(form, header), {
         onMutate: (form) => {
             form.companyHash = userStore.getUser!.companyHash;
         },
@@ -39,9 +38,6 @@ export const CreateUser = (): MutationProcessing<CreateUserForm, BaseResponse<Us
     return {
         isLoading: isLoading,
         mutateAsync: mutateAsync,
-        data: data,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
     };
 };
 
@@ -77,37 +73,6 @@ export const GetUser = (
     };
 };
 
-const ChangePasswordRequest = async (request: ChangePasswordForm, jwt: string): Promise<BaseResponse<null>> => {
-    const header = GetHeader(jwt);
-
-    const response = await axios
-        .put<ChangePasswordForm, AxiosResponse<BaseResponse<null>>>(
-            `${Config.serverUrl}${Endpoints.User.ChagnePassword}`,
-            request,
-            { headers: header }
-        )
-        .then((resp) => resp.data)
-        .catch((error: AxiosError) => HandleApiError(error));
-
-    return response;
-};
-
-export const ChangePasswordAction = (): MutationProcessing<ChangePasswordForm, BaseResponse<null>> => {
-    const { userStore } = UseStore();
-
-    const { isLoading, data, mutateAsync } = useMutation((form: ChangePasswordForm) =>
-        ChangePasswordRequest(form, userStore.getUser!.jwt)
-    );
-
-    return {
-        isLoading: isLoading,
-        mutateAsync: mutateAsync,
-        data: data,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
-    };
-};
-
 const UpdateUserRequest = async (request: UpdateUserForm, jwt: string): Promise<BaseResponse<UserResponse>> => {
     const header = GetHeader(jwt);
 
@@ -128,16 +93,13 @@ const UpdateUserRequest = async (request: UpdateUserForm, jwt: string): Promise<
 export const UpdateUserAction = (): MutationProcessing<UpdateUserForm, BaseResponse<UserResponse>> => {
     const { userStore } = UseStore();
 
-    const { isLoading, data, mutateAsync } = useMutation("update user", (form: UpdateUserForm) =>
+    const { isLoading, mutateAsync } = useMutation("update user", (form: UpdateUserForm) =>
         UpdateUserRequest(form, userStore.getUser!.jwt)
     );
 
     return {
         isLoading: isLoading,
         mutateAsync: mutateAsync,
-        data: data,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
     };
 };
 

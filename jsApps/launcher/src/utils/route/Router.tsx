@@ -6,9 +6,12 @@ import EditDelivery from "layout/delivery/update/EditDelivery";
 import CreateLocation from "layout/location/createLocation/CreateLocation";
 import EditLocation from "layout/location/editLocation/EditLocation";
 import LocationList from "layout/location/list/LocationList";
+import PasswordRecovery from "layout/passwordRecovery/PasswordRecovery";
+import PasswordRecoveryInit from "layout/passwordRecovery/PasswordRecoveryInit";
 import EditWorker from "layout/workers/account/editWorker/EditWorker";
 import Account from "layout/workers/account/profile/Account";
 import { Route, Routes } from "react-router-dom";
+import { InitPasswordRecoveryAction } from "service/userService/AccountService";
 import Login from "../../layout/login/LoginPage";
 import Menu from "../../layout/menu/Menu";
 import AddWorker from "../../layout/workers/addWorker/AddWorker";
@@ -116,6 +119,8 @@ const Router = () => {
                 }
             />
             <Route path={Path.login} element={<Login />} />
+            <Route path={Path.passwordRecovery} element={<PasswordRecovery />} />
+            <Route path={Path.passwordRecoveryInit} element={<PasswordRecoveryInit />} />
         </Routes>
     );
 };

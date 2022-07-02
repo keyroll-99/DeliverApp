@@ -12,6 +12,7 @@ export interface FetchProcessing<TResponse> {
     refresh?: () => void;
 }
 
-export interface MutationProcessing<TRequest, TResponse> extends FetchProcessing<TResponse> {
+export interface MutationProcessing<TRequest, TResponse> {
+    isLoading: boolean;
     mutateAsync: (data: TRequest) => Promise<TResponse>;
 }

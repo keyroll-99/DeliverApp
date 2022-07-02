@@ -1,5 +1,5 @@
 import { render } from "@testing-library/react";
-import UserResponse from "service/userService/models/UserResponse";
+import UserResponse from "service/userService/models/UserModels/UserResponse";
 import { FireUserAction, GetWorkers } from "service/userService/UserService";
 import WorkersList from "./WorkersList";
 

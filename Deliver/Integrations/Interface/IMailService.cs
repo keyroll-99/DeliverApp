@@ -5,4 +5,5 @@ namespace Integrations.Interface;
 public interface IMailService
 {
     Task<bool> SendWelcomeMessage(WelcomeMessageModel welcomeMessageModel);
+    Task SendPasswordRecoveryMessage(PasswordRecoveryMessageModel passwordRecoveryMessageModel);
 }

@@ -1,4 +1,5 @@
 ﻿using Models.Request.Authentication;
+using Models.Request.User;
 using Models.Response.Authentication;
 
 namespace Services.Interface;

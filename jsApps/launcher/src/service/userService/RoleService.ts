@@ -6,7 +6,7 @@ import { UseStore } from "stores/Store";
 import Endpoints from "utils/axios/Endpoints";
 import GetHeader from "utils/axios/GetHeader";
 import Config from "utils/_core/Config";
-import RoleResponse from "./models/RoleResponse";
+import RoleResponse from "./models/AuthModels/RoleResponse";
 
 const FetchRole = async (header: AxiosRequestHeaders): Promise<BaseResponse<RoleResponse[]>> => {
     const response = await axios

@@ -1,4 +1,4 @@
-import AuthResponse from "./models/AuthResponse";
+import AuthResponse from "./models/AuthModels/AuthResponse";
 import User from "./models/User";
 
 export const MapAuthResponseToUser = (response: AuthResponse): User => {

@@ -5,10 +5,15 @@ const Endpoints = {
         Logout: "Api/Authentication/Logout",
         Permission: "Api/Authentication/Permission",
     },
+    Account: {
+        ChagnePassword: "Api/Account/ChangePassword",
+        PasswordRecoveryInit: "Api/Account/Password-recovery/Init",
+        PasswordRecoverySetNewPassword: "Api/Account/Password-recovery/Change",
+        PasswordRecoveryIsValidRecoveryKey: (key: string) => `Api/Account/Password-recovery/Valid/${key}`,
+    },
     User: {
         Create: "Api/User/Create",
         GetUser: (hash: string) => `Api/User/${hash}`,
-        ChagnePassword: "Api/User/ChangePassword",
         UpdateUser: "Api/User/Update",
         UserList: "Api/User/List",
         Fire: (hash: string) => `Api/User/Fire/${hash}`,

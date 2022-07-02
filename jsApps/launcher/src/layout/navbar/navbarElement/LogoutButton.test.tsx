@@ -17,7 +17,6 @@ describe("Logout button", () => {
         (Logout as jest.MockedFunction<typeof Logout>).mockReturnValue({
             mutateAsync: mockMutateLogout,
             isLoading: false,
-            isSuccess: true,
         });
     });
 

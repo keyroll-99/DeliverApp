@@ -8,8 +8,8 @@ import { UseStore } from "../../stores/Store";
 import Endpoints from "../../utils/axios/Endpoints";
 import Config from "../../utils/_core/Config";
 import { BaseResponse, FetchProcessing, MutationProcessing } from "../_core/Models";
-import AuthResponse from "./models/AuthResponse";
-import LoginForm from "./models/LoginForm";
+import AuthResponse from "./models/AuthModels/AuthResponse";
+import LoginForm from "./models/AuthModels/LoginForm";
 import { Permission } from "./models/Permissions";
 
 const GetPermissionRequest = async (jwt: string): Promise<BaseResponse<Permission>> => {
@@ -102,9 +102,6 @@ export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse
 
     return {
         isLoading: isLoading,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
-        data: data,
         mutateAsync: mutateAsync,
     };
 };
@@ -129,9 +126,6 @@ export const Logout = (): MutationProcessing<undefined, BaseResponse<null>> => {
 
     return {
         isLoading: isLoading,
-        data: data,
-        error: data?.error,
-        isSuccess: data?.isSuccess,
         mutateAsync: mutateAsync,
     };
 };

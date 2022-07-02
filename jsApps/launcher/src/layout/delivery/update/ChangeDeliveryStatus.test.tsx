@@ -44,7 +44,6 @@ describe("ChangeDeliveryStatus", () => {
         const mutate = jest.fn().mockReturnValue({ isSuccess: true } as BaseResponse<Delivery>);
         (ChangeDeliveryStatusAction as jest.MockedFunction<typeof ChangeDeliveryStatusAction>).mockReturnValue({
             isLoading: false,
-            isSuccess: true,
             mutateAsync: mutate,
         });
 

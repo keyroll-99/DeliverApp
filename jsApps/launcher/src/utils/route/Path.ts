@@ -1,6 +1,7 @@
 const Path = {
     home: "/",
     login: "/login",
+    passwordRecoveryInit: "/password-recovery",
     workersList: "/workers",
     addWorker: "/workers/add",
     account: "/account",
@@ -11,6 +12,7 @@ const Path = {
     deliveryList: "/delivery/list",
     deliveryCreate: "/delivery/create",
     deliveryUpdate: "/delivery/:deliveryHash",
+    passwordRecovery: "/password-recovery/:recoveryKey",
     admin: {
         createCompany: "/admin/createCompany",
     },

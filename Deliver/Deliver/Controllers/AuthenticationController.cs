@@ -53,6 +53,8 @@ public class AuthenticationController : ControllerBase
     public async Task<PermissionResponse> GetPermissions()
         => await _authenticateService.GetLoggedUserPermission();
 
+
+
     private void setTokenCookie(string token)
     {
         var cookieOption = new CookieOptions

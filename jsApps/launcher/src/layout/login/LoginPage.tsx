@@ -1,13 +1,13 @@
 import { AccountCircle } from "@mui/icons-material";
 import LockIcon from "@mui/icons-material/Lock";
 import { LoadingButton } from "@mui/lab";
-import { Box, Container } from "@mui/material";
+import { Box, Button, Container } from "@mui/material";
 import TextFieldInput from "components/inputs/TextFieldInput";
 import { observer } from "mobx-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Login } from "service/userService/AuthenticationService";
-import LoginForm from "service/userService/models/LoginForm";
+import LoginForm from "service/userService/models/AuthModels/LoginForm";
 import { UseStore } from "stores/Store";
 import Path from "utils/route/Path";
 import CreateClass from "utils/style/CreateClass";
@@ -73,6 +73,7 @@ const LoginPage = () => {
                     <LoadingButton onClick={submitForm} loading={isLoading}>
                         Login
                     </LoadingButton>
+                    <Button onClick={() => navigate(Path.passwordRecoveryInit)}>Password recovery</Button>
                 </Box>
             </span>
         </Container>

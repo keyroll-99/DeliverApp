@@ -2,8 +2,8 @@ import { Button } from "@mui/material";
 import TextFieldInput from "components/inputs/TextFieldInput";
 import Snackbar from "components/snackbar/Snackbar";
 import { useState } from "react";
-import ChangePasswordForm from "service/userService/models/ChangePasswordForm";
-import { ChangePasswordAction } from "service/userService/UserService";
+import { ChangePasswordAction } from "service/userService/AccountService";
+import ChangePasswordForm from "service/userService/models/AccountModels/ChangePasswordForm";
 import CreateClass from "utils/style/CreateClass";
 
 const baseClass = "change-password";

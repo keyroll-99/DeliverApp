@@ -17,4 +17,5 @@ public class User : BaseHashModel
 
     public virtual ICollection<UserRole> UserRole { get; set; } = new List<UserRole>();
     public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
+    public virtual ICollection<PasswordRecovery> PasswordRecoveries { get; set; } = new List<PasswordRecovery>();
 }
