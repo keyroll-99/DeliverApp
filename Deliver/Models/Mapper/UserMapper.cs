@@ -24,6 +24,19 @@ public static class UserMapper
         return user;
     }
 
+    public static BaseUserResponse AsBaseUserResponse(this Db.User user)
+    {
+        return new BaseUserResponse
+        {
+            Email = user.Email,
+            Hash = user.Hash,
+            Name = user.Name,
+            PhoneNumber = user.PhoneNumber,
+            Surname = user.Surname,
+            Username = user.Username,
+        };
+    }
+
     public static UserResponse AsUserReponse(this Db.User user)
     {
         if(user.Company is null)
