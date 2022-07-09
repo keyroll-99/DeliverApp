@@ -28,6 +28,15 @@ public static class CarMapper
             Vin = car.Vin,
         };
     }
+
+    public static Car UpdateCar(this Car car, UpdateCarRequest updateCar)
+    {
+        car.Brand = updateCar.Brand;
+        car.Model = updateCar.Model;
+        car.RegistrationNumber = updateCar.RegistrationNumber;
+        car.Vin = updateCar.Vin;
+        return car;
+    }
 }
 
 

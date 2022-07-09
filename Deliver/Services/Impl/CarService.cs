@@ -20,23 +20,44 @@ public class CarService : ICarService
     private readonly IRoleUtils _roleUtils;
     private readonly LoggedUser _loggedUser;
     private readonly ICompanyUtils _companyUtils;
+    private readonly IUserUtils _userUtils;
+    private readonly IDeliveryUtils _deliveryUtils;
 
-    public CarService(ICarRepository carRepository, IRoleUtils roleUtils, IOptions<LoggedUser> loggedUser, ICompanyUtils companyUtils)
+    public CarService(
+        ICarRepository carRepository,
+        IRoleUtils roleUtils,
+        IOptions<LoggedUser> loggedUser,
+        ICompanyUtils companyUtils,
+        IUserUtils userUtils,
+        IDeliveryUtils deliveryUtils
+        )
     {
         _carRepository = carRepository;
         _roleUtils = roleUtils;
         _loggedUser = loggedUser.Value;
         _companyUtils = companyUtils;
+        _deliveryUtils = deliveryUtils;
+        _userUtils = userUtils;
     }
 
-    public Task AssignCarToDeliver(AssignCarToDeliveryRequest request)
+    public async Task AssignCarToDeliver(AssignCarToDeliveryRequest request)
     {
-        throw new NotImplementedException();
+        var delivery = await _deliveryUtils.GetByHash(request.DeliveryHash);
+        var car = await _carRepository.GetByHashWithPromiseAsync(request.CarHash);
+
+        car.Delivers.Add(delivery);
+        await _carRepository.UpdateAsync(car);
     }
 
-    public Task AssignUserToCar(AssignUserToCarRequest request)
+    public async Task AssignUserToCar(AssignUserToCarRequest request)
     {
-        throw new NotImplementedException();
+        var car = await _carRepository.GetByHashWithPromiseAsync(request.CarHash);
+        var user = await _userUtils.GetByHash(request.UserHash);
+
+        car.Driver = user;
+        car.DriverId = user.Id;
+
+        await _carRepository.UpdateAsync(car);
     }
 
     public async Task CreateCar(CreateCarRequest request)
@@ -66,12 +87,7 @@ public class CarService : ICarService
 
     public async Task<CarResponse> GetCar(Guid hash)
     {
-        var car = await _carRepository.GetAll().FirstOrDefaultAsync(x => x.Hash == hash);
-
-        if(car is null)
-        {
-            throw new AppException(ErrorMessage.InvalidData);
-        }
+        var car = await _carRepository.GetByHashWithPromiseAsync(hash);
 
         if (!await HasPermissionToCarAction(PermissionActionEnum.Get, car))
         {
@@ -81,9 +97,18 @@ public class CarService : ICarService
         return car.AsResponse();
     }
 
-    public Task UpdateCar(UpdateCarRequest request)
+    public async Task UpdateCar(UpdateCarRequest request)
     {
-        throw new NotImplementedException();
+        var car = await _carRepository.GetByHashWithPromiseAsync(request.Hash);
+
+        if (!await HasPermissionToCarAction(PermissionActionEnum.Update, car))
+        {
+            throw new AppException(ErrorMessage.InvalidRole);
+        }
+
+        car = car.UpdateCar(request);
+
+        await _carRepository.UpdateAsync(car);
     }
 
     private async Task<bool> HasPermissionToCarAction(PermissionActionEnum action, Car? car = null)

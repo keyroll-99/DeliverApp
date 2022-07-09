@@ -2,6 +2,7 @@
 
 public class UpdateCarRequest
 {
+    public Guid Hash { get; set; } 
     public string RegistrationNumber { get; set; }
     public string Brand { get; set; }
     public string Model { get; set; }

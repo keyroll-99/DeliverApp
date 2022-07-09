@@ -58,6 +58,7 @@ public static class DISetup
         services.AddScoped<IUserUtils, UserUtils>();
         services.AddScoped<ILocationUtils, LocationUtils>();
         services.AddScoped<ILogService, LogService>();
+        services.AddScoped<IDeliveryUtils, DeliveryUtils>();
         return services;
     }
 
