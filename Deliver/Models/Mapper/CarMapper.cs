@@ -6,21 +6,22 @@ namespace Models.Mapper;
 
 public static class CarMapper
 {
-    public static Car CreateCar(this CreateCarRequest request)
+    public static Car CreateCar(this CreateCarRequest request, long companyId)
         => new()
         {
             Brand = request.Brand,
             Model = request.Model,
             Vin = request.Vin,
             RegistrationNumber = request.RegistrationNumber,
-            Hash = Guid.NewGuid()
+            Hash = Guid.NewGuid(),
+            CompanyId = companyId
         };
 
     public static CarResponse AsResponse (this Car car)
     {
         return new CarResponse
         {
-            Driver = car.Driver.AsBaseUserResponse(),
+            Driver = car.Driver?.AsBaseUserResponse(),
             Hash = car.Hash,
             RegistrationNumber = car.RegistrationNumber,
             Brand = car.Brand,

@@ -83,7 +83,7 @@ export const Login = (): MutationProcessing<LoginForm, BaseResponse<AuthResponse
     const { userStore } = UseStore();
     const navigation = useNavigate();
 
-    const { isLoading, data, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
+    const { isLoading, mutateAsync } = useMutation((request: LoginForm) => LoginRequest(request), {
         onSuccess: async (result) => {
             if (result?.isSuccess) {
                 userStore.setUser(result!.data!);
@@ -122,7 +122,7 @@ const LogoutRequest = async (jwt: string): Promise<BaseResponse<null>> => {
 export const Logout = (): MutationProcessing<undefined, BaseResponse<null>> => {
     const { userStore } = UseStore();
 
-    const { isLoading, data, mutateAsync } = useMutation("logout", () => LogoutRequest(userStore.getUser!.jwt));
+    const { isLoading, mutateAsync } = useMutation("logout", () => LogoutRequest(userStore.getUser!.jwt));
 
     return {
         isLoading: isLoading,

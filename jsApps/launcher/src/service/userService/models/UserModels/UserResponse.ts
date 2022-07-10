@@ -1,11 +1,7 @@
-export default interface UserResponse {
-    hash: string;
-    username: string;
-    name: string;
-    surname: string;
+import BaseUserResponse from "./BaseUserResponse";
+
+export default interface UserResponse extends BaseUserResponse {
     roles: string[];
     companyName: string;
     companyHash: string;
-    phoneNumber?: string;
-    email: string;
 }

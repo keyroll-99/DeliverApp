@@ -71,8 +71,9 @@ public class CarService : ICarService
         {
             throw new AppException(ErrorMessage.InvalidRole);
         }
+        var userCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
 
-        await _carRepository.AddAsync(request.CreateCar());
+        await _carRepository.AddAsync(request.CreateCar(userCompany.Id));
     }
 
     public async Task<List<CarResponse>> GetAllCars()
@@ -125,7 +126,7 @@ public class CarService : ICarService
         {
             var userCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
 
-            isSameCompany = car.Driver.CompanyId == userCompany.Id;
+            isSameCompany = car.CompanyId == userCompany.Id;
         }
 
         return hasPermission && isSameCompany;

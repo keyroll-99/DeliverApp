@@ -39,5 +39,13 @@ const Endpoints = {
         ChangeStatus: "Api/Delivery/Status",
         Update: "Api/Delivery",
     },
+    Car: {
+        Create: "Api/Car/Create",
+        Update: "Api/Car/Update",
+        AssingUserToCar: "Api/Car/AssingUserToCar",
+        AssingCarToDelivery: "Api/Car/AssingCarToDelivery",
+        GetByHash: (hash: string) => `Api/Car/${hash}`,
+        GetAll: "Api/Car",
+    },
 };
 export default Endpoints;
