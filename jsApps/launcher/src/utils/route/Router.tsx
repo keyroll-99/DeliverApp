@@ -1,4 +1,6 @@
 import AdminPanel from "layout/admin/AdminPanel";
+import CreateCar from "layout/car/create/CreateCar";
+import CarsList from "layout/car/list/CarsList";
 import CreateDelivery from "layout/delivery/create/CreateDelivery";
 import DeliveryList from "layout/delivery/list/DeliveryList";
 import EditDelivery from "layout/delivery/update/EditDelivery";
@@ -113,6 +115,22 @@ const Router = () => {
                 element={
                     <RequireAuth>
                         <AdminPanel />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.car.create}
+                element={
+                    <RequireAuth>
+                        <CreateCar />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.car.list}
+                element={
+                    <RequireAuth>
+                        <CarsList />
                     </RequireAuth>
                 }
             />

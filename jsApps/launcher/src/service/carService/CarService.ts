@@ -1,13 +1,14 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { useMutation } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { HandleApiError } from "service/_core/HandleApiError";
-import { BaseResponse, MutationProcessing } from "service/_core/Models";
+import { BaseResponse, FetchProcessing, MutationProcessing } from "service/_core/Models";
 import { UseStore } from "stores/Store";
 import Endpoints from "utils/axios/Endpoints";
 import GetHeader from "utils/axios/GetHeader";
 import Config from "utils/_core/Config";
 import AssignCarToDeliveryForm from "./models/AssignCarToDeliveryForm";
 import AssingUserToCarForm from "./models/AssingUserToCarForm";
+import Car from "./models/Car";
 import CreateCarForm from "./models/CreateCarForm";
 import UpdateCarForm from "./models/UpdateCarForm";
 
@@ -108,5 +109,57 @@ export const AssingCarToDeliveryAction = (): MutationProcessing<AssignCarToDeliv
     return {
         isLoading: isLoading,
         mutateAsync: mutateAsync,
+    };
+};
+
+const GetCarByHashRequest = async (hash: string, jwt: string): Promise<BaseResponse<Car>> => {
+    const response = await axios
+        .get<BaseResponse<Car>>(`${Config.serverUrl}${Endpoints.Car.GetByHash(hash)}`, {
+            headers: GetHeader(jwt),
+        })
+        .then((resp) => resp.data)
+        .catch((error: AxiosError) => HandleApiError<Car>(error));
+
+    return response;
+};
+
+export const GetCarByHashAction = (hash: string): FetchProcessing<Car> => {
+    const { userStore } = UseStore();
+
+    const { isLoading, data, refetch } = useQuery(["fetch car", hash], () =>
+        GetCarByHashRequest(hash, userStore.getUser?.jwt ?? "")
+    );
+
+    return {
+        isLoading: isLoading,
+        data: data?.data,
+        error: data?.error,
+        isSuccess: data?.isSuccess,
+        refresh: refetch,
+    };
+};
+
+const GetCarsListRequest = async (jwt: string): Promise<BaseResponse<Car[]>> => {
+    const response = await axios
+        .get<BaseResponse<Car[]>>(`${Config.serverUrl}${Endpoints.Car.GetAll}`, { headers: GetHeader(jwt) })
+        .then((resp) => resp.data)
+        .catch((error: AxiosError) => HandleApiError<Car[]>(error));
+
+    return response;
+};
+
+export const GetCarsListAction = (): FetchProcessing<Car[]> => {
+    const { userStore } = UseStore();
+
+    const { data, isLoading, refetch } = useQuery("fetch all cars", () =>
+        GetCarsListRequest(userStore?.getUser?.jwt ?? "")
+    );
+
+    return {
+        isLoading: isLoading,
+        data: data?.data,
+        error: data?.error,
+        isSuccess: data?.isSuccess,
+        refresh: refetch,
     };
 };

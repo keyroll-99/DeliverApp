@@ -7,6 +7,7 @@ import {
     Person,
     PersonAdd,
     SupervisorAccount,
+    DirectionsCar,
 } from "@mui/icons-material";
 import { List } from "@mui/material";
 import { PermisionToActionEnum } from "service/userService/models/Permissions";
@@ -54,6 +55,18 @@ const MenuList = () => {
                 icon={<PersonAdd />}
             />
             <NavButton text="Account" targetLocation={Path.account} icon={<Person />} />
+            <NavButton
+                text="Add car"
+                targetLocation={Path.car.create}
+                icon={<Add />}
+                requirePermission={{ permissionAction: PermisionToActionEnum.create, permissionTo: "car" }}
+            />
+            <NavButton
+                text="Cars"
+                targetLocation={Path.car.list}
+                icon={<DirectionsCar />}
+                requirePermission={{ permissionAction: PermisionToActionEnum.get, permissionTo: "car" }}
+            />
             <NavButton
                 text="Admin Panel"
                 requirePermission={{ permissionAction: PermisionToActionEnum.create, permissionTo: "company" }}

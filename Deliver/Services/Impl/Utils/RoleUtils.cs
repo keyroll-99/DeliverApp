@@ -70,6 +70,7 @@ public class RoleUtils : IRoleUtils
             Deliver = new List<PermissionActionEnum>(),
             Location = new List<PermissionActionEnum>(),
             User = new List<PermissionActionEnum>(),
+            Car = new List<PermissionActionEnum>(),
         };
 
         if (userRoles?.Any() == true)
@@ -80,6 +81,7 @@ public class RoleUtils : IRoleUtils
                 result.Location = (await GetAvailableAction(role.Id, PermissionToEnum.Location)).Concat(result.Location).Distinct().ToList();
                 result.User = (await GetAvailableAction(role.Id, PermissionToEnum.User)).Concat(result.User).Distinct().ToList();
                 result.Deliver = (await GetAvailableAction(role.Id, PermissionToEnum.Deliver)).Concat(result.Deliver).Distinct().ToList();
+                result.Car = (await GetAvailableAction(role.Id, PermissionToEnum.Car)).Concat(result.Car).Distinct().ToList();
             }
         }
 

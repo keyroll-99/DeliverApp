@@ -4,3 +4,5 @@ export default interface CreateCarForm {
     model: string;
     vin: string;
 }
+
+export const GetDefaultCreateCarForm = (): CreateCarForm => ({ brand: "", model: "", registrationNumber: "", vin: "" });
