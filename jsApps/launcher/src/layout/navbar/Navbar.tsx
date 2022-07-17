@@ -20,4 +20,5 @@ const Navbar = () => {
 
     return <>{isMobile ? <MobileNavbar /> : <DesktopNavbar />}</>;
 };
+
 export default Navbar;

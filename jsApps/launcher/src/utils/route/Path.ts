@@ -16,6 +16,11 @@ const Path = {
     admin: {
         createCompany: "/admin/createCompany",
     },
+    car: {
+        create: "/car/add",
+        list: "/car/list",
+        edit: "/car/:carHash",
+    },
 };
 
 export const GetPathWithParam = (url: string, value: string) => {

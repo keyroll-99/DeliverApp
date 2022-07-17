@@ -24,7 +24,7 @@ namespace Deliver.Middleware
             }
             catch (AppException ex)
             {
-                context.Response.StatusCode = 400;
+                context.Response.StatusCode = ex.StatusCode ?? StatusCodes.Status400BadRequest;
 
                 await context.Response
                     .WriteAsync(JsonConvert.SerializeObject(BaseRespons.Fail(ex.Message), JsonSettings.GetJsonSerializerSettings()));

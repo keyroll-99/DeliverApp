@@ -17,6 +17,7 @@ public static class DeliveryMapper
             Status = deliver.Status,
             From = deliver.From.AsLocationResponse(),
             To = deliver.To.AsLocationResponse(),
+            Car = deliver.Car?.AsResponse(),
         };
 
     public static Delivery CreateDelivery(this CreateDeliveryRequest createDeliveryRequest)

@@ -17,6 +17,7 @@ const Endpoints = {
         UpdateUser: "Api/User/Update",
         UserList: "Api/User/List",
         Fire: (hash: string) => `Api/User/Fire/${hash}`,
+        GetDrivers: `Api/User/Drivers`,
     },
     Company: {
         Create: "Api/Company/Create",
@@ -38,6 +39,14 @@ const Endpoints = {
         Create: "Api/Delivery",
         ChangeStatus: "Api/Delivery/Status",
         Update: "Api/Delivery",
+    },
+    Car: {
+        Create: "Api/Car/Create",
+        Update: "Api/Car/Update",
+        AssingUserToCar: "Api/Car/AssingUserToCar",
+        AssingCarToDelivery: "Api/Car/AssingCarToDelivery",
+        GetByHash: (hash: string) => `Api/Car/${hash}`,
+        GetAll: "Api/Car",
     },
 };
 export default Endpoints;

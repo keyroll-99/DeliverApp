@@ -59,6 +59,13 @@ public class AppDbContext : DbContext
             .OnDelete(DeleteBehavior.NoAction);
 
         modelBuilder
+            .Entity<Car>()
+            .HasOne(x => x.Company)
+            .WithMany(x => x.Cars)
+            .HasForeignKey(x => x.CompanyId)
+            .OnDelete(DeleteBehavior.NoAction);
+
+        modelBuilder
             .Entity<Delivery>()
             .HasOne(x => x.To)
             .WithMany(x => x.Pickup)

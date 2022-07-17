@@ -28,14 +28,15 @@ namespace Deliver.Setup
             var admin = await users.FirstOrDefaultAsync(x => x.Name == "Admin");
             var company = await companies.FirstOrDefaultAsync(x => x.Name == "admin-company");
 
-            if(company is null)
+            if (company is null)
             {
                 company = new Company
                 {
-                    Name = "admin-company"
+                    Name = "admin-company",
+                    Hash = Guid.NewGuid(),
                 };
 
-                companies.Add(company);
+                await companies.AddAsync(company);
             }
 
             if (admin is null)
@@ -55,7 +56,7 @@ namespace Deliver.Setup
             }
 
             await appDbContext.SaveChangesAsync();
-            
+
             var userRole = await userRoles.FirstOrDefaultAsync(x => x.RoleId == adminRole.Id && x.UserId == admin.Id);
             if (userRole is null)
             {

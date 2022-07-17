@@ -62,7 +62,7 @@ public class DeliveryServiceTest
                     }
                 },
                 CompanyId = 2,
-            }
+            },
         },
         new Delivery {
             Name = "test-3",

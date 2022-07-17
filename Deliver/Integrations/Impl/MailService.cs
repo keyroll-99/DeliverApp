@@ -72,7 +72,7 @@ public class MailService : IMailService
             await _smtpClient.SendMailAsync(message);
 
         }
-        catch (Exception)
+        catch (Exception e)
         {
             return false;
         }

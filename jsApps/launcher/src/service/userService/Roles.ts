@@ -6,7 +6,7 @@ export const HasPermission = (permisionTo: HasPermissionTo): boolean => {
     const { userStore } = UseStore();
 
     const permission: PermisionToActionEnum[] = userStore.getPermissions
-        ? userStore.getPermissions[permisionTo.permissionTo]
+        ? userStore.getPermissions[permisionTo.permissionTo] ?? []
         : [];
 
     return permission.findIndex((x) => x === permisionTo.permissionAction) !== -1;

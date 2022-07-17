@@ -34,7 +34,7 @@ const EditLocation = () => {
         if (isSuccess) {
             setForm({ ...form, ...data! });
         }
-    }, [isLoading, isSuccess, setForm, data]);
+    }, [isLoading]);
 
     if (isLoading) {
         return <CircularProgress />;

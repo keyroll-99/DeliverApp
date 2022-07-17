@@ -1,4 +1,5 @@
-﻿using Models.Db;
+﻿using Microsoft.EntityFrameworkCore;
+using Models.Db;
 using Repository.Repository.Impl._Core;
 using Repository.Repository.Interface;
 using System;
@@ -13,6 +14,11 @@ namespace Repository.Repository.Impl
     {
         public CarRepository(AppDbContext context) : base(context)
         {
+        }
+
+        public override IQueryable<Car> GetAll()
+        {
+            return base.GetAll().Include(x => x.Driver);
         }
     }
 }

@@ -28,6 +28,13 @@ namespace Deliver.Controllers
             return await _userService.GetUserList();
         }
 
+        [HttpGet("Drivers")]
+        [Authorize(SystemRoles.HR, SystemRoles.CompanyAdmin, SystemRoles.Admin, SystemRoles.CompanyOwner)]
+        public async Task<List<UserResponse>> GetFilterList()
+        {
+            return await _userService.GetUsersWithRole(SystemRoles.Driver);
+        }
+
         [HttpPost("Create")]
         [Authorize(SystemRoles.Admin, SystemRoles.CompanyAdmin, SystemRoles.HR, SystemRoles.CompanyOwner)]
         public async Task<UserResponse> Create(CreateUserRequest createRequest)

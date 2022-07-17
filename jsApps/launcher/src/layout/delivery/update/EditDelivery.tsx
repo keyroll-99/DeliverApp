@@ -1,6 +1,7 @@
 import { CircularProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { GetDeliveryByHash } from "service/deliveryService/DeliveryService";
+import AssignCarToDelivery from "./AssignCarToDelivery";
 import ChangeDeliveryStatus from "./ChangeDeliveryStatus";
 import UpdateDelivery from "./UpdateDelivery";
 
@@ -21,10 +22,11 @@ const EditDelivery = () => {
     }
 
     return (
-        <>
-            <UpdateDelivery delivery={data!} />
+        <div className="update-deliver-container">
             <ChangeDeliveryStatus delivery={data!} />
-        </>
+            <AssignCarToDelivery deliveryHash={data!.hash} carHash={data?.car?.hash} />
+            <UpdateDelivery delivery={data!} />
+        </div>
     );
 };
 

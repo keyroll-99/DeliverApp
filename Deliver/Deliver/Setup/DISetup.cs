@@ -26,6 +26,7 @@ public static class DISetup
         services.AddScoped<IDeliveryRepository, DeliveryRepository>();
         services.AddScoped<ILogRepository, LogRepository>();
         services.AddScoped<IPasswordRecoveryRepository, PasswordRecoveryRepository>();
+        services.AddScoped<ICarRepository, CarRepository>();
         return services;
     }
 
@@ -38,6 +39,7 @@ public static class DISetup
         services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IDeliveryService, DeliveryService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<ICarService, CarService>();
         return services;
     }
 
@@ -56,6 +58,7 @@ public static class DISetup
         services.AddScoped<IUserUtils, UserUtils>();
         services.AddScoped<ILocationUtils, LocationUtils>();
         services.AddScoped<ILogService, LogService>();
+        services.AddScoped<IDeliveryUtils, DeliveryUtils>();
         return services;
     }
 

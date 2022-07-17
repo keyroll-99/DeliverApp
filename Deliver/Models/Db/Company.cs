@@ -8,4 +8,5 @@ public class Company : BaseHashModel
 
     public virtual ICollection<User> Users { get; set; } = new List<User>();
     public virtual ICollection<Location> Locations { get; set; } = new List<Location>();
+    public virtual ICollection<Car> Cars { get; set; } = new List<Car>();
 }

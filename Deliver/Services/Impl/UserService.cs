@@ -245,6 +245,26 @@ public class UserService : IUserService
             .ToListAsync();
     }
 
+    public async Task<List<UserResponse>> GetUsersWithRole(string role)
+    {
+        var loggedUserCompany = await _companyUtils.GetUserCompany(_loggedUser.Id);
+
+        if (!await VerifyPerrmisonToActionOnUser(loggedUserCompany.Hash, PermissionActionEnum.Get))
+        {
+            throw new AppException(ErrorMessage.InvalidRole);
+        }
+
+        return await _userRepository
+            .GetAll()
+            .Include(x => x.Company)
+            .Include(x => x.UserRole)
+            .ThenInclude(x => x.Role)
+            .Where(x => x.IsFired == false && x.CompanyId == loggedUserCompany.Id)
+            .Where(x => x.UserRole.Any(y => y.Role.Name == role))
+            .Select(x => x.AsUserReponse())
+            .ToListAsync();
+    }
+
     private async Task<bool> VerifyPerrmisonToActionOnUser(Guid targetCompany, PermissionActionEnum action)
     {
         var hasRole = await _roleUtils.HasPermission(new HasPermissionRequest
@@ -284,4 +304,5 @@ public class UserService : IUserService
             Surname = user.Surname,
             Username = user.Username
         });
+
 }

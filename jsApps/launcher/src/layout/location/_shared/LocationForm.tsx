@@ -1,8 +1,6 @@
 import { Button } from "@mui/material";
 import TextFieldInput from "components/inputs/TextFieldInput";
-import Snackbar from "components/snackbar/Snackbar";
 import CreateLocationForm from "service/location/models/CreateLocationForm";
-import UpdateLocationForm from "service/location/models/UpdateLocationForm";
 import CreateClass from "utils/style/CreateClass";
 
 interface props {

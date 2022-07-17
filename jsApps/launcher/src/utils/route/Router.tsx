@@ -1,5 +1,7 @@
 import AdminPanel from "layout/admin/AdminPanel";
-import CreateCompany from "layout/admin/createCompany/CreateCompany";
+import CreateCar from "layout/car/create/CreateCar";
+import EditCar from "layout/car/edit/EditCar";
+import CarsList from "layout/car/list/CarsList";
 import CreateDelivery from "layout/delivery/create/CreateDelivery";
 import DeliveryList from "layout/delivery/list/DeliveryList";
 import EditDelivery from "layout/delivery/update/EditDelivery";
@@ -11,7 +13,6 @@ import PasswordRecoveryInit from "layout/passwordRecovery/PasswordRecoveryInit";
 import EditWorker from "layout/workers/account/editWorker/EditWorker";
 import Account from "layout/workers/account/profile/Account";
 import { Route, Routes } from "react-router-dom";
-import { InitPasswordRecoveryAction } from "service/userService/AccountService";
 import Login from "../../layout/login/LoginPage";
 import Menu from "../../layout/menu/Menu";
 import AddWorker from "../../layout/workers/addWorker/AddWorker";
@@ -115,6 +116,30 @@ const Router = () => {
                 element={
                     <RequireAuth>
                         <AdminPanel />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.car.create}
+                element={
+                    <RequireAuth>
+                        <CreateCar />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.car.list}
+                element={
+                    <RequireAuth>
+                        <CarsList />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.car.edit}
+                element={
+                    <RequireAuth>
+                        <EditCar />
                     </RequireAuth>
                 }
             />

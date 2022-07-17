@@ -153,3 +153,27 @@ export const FireUserAction = (): MutationProcessing<string, BaseResponse<null>>
         mutateAsync: mutateAsync,
     };
 };
+
+const GetDriverRequest = async (jwt: string): Promise<BaseResponse<UserResponse[]>> => {
+    const response = await axios
+        .get<BaseResponse<UserResponse[]>>(`${Config.serverUrl}${Endpoints.User.GetDrivers}`, {
+            headers: GetHeader(jwt),
+        })
+        .then((resp) => resp.data)
+        .catch((error: AxiosError) => HandleApiError<UserResponse[]>(error));
+
+    return response;
+};
+
+export const GetDriverAction = (): FetchProcessing<UserResponse[]> => {
+    const { userStore } = UseStore();
+
+    const { isLoading, data } = useQuery("fetch drivers", () => GetDriverRequest(userStore?.getUser?.jwt ?? ""));
+
+    return {
+        isLoading: isLoading,
+        data: data?.data,
+        error: data?.error,
+        isSuccess: data?.isSuccess,
+    };
+};

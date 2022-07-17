@@ -30,7 +30,7 @@ public class CastToBaseResponseMiddleware
 
             var responseBody = JsonConvert.DeserializeObject<object>(new StreamReader(memStream).ReadToEnd());
 
-            if (responseBody is not null && responseBody is not BaseRespons && context.Response.StatusCode == 200)
+            if (responseBody is not BaseRespons && context.Response.StatusCode == 200)
             {
                 memStream.Position = 0;
                 var response = BaseRespons<object>.Success(responseBody);

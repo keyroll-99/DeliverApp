@@ -28,7 +28,7 @@ const ChangePasswordRequest = async (request: ChangePasswordForm, jwt: string): 
 export const ChangePasswordAction = (): MutationProcessing<ChangePasswordForm, BaseResponse<null>> => {
     const { userStore } = UseStore();
 
-    const { isLoading, data, mutateAsync } = useMutation((form: ChangePasswordForm) =>
+    const { isLoading, mutateAsync } = useMutation((form: ChangePasswordForm) =>
         ChangePasswordRequest(form, userStore.getUser!.jwt)
     );
 

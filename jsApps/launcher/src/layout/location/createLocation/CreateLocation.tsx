@@ -17,6 +17,7 @@ const CreateLocation = () => {
         const response = await mutateAsync(form);
         if (response.isSuccess) {
             setForm(GetDefaultCreateLocationForm());
+            setError(null);
         } else {
             setError(response.error);
         }

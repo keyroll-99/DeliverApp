@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc.Filters;
 using Models.Db;
+using Models.Exceptions;
 
 namespace Deliver.CustomAttribute;
 
@@ -35,7 +35,7 @@ public class AuthorizeAttribute : Attribute, IAuthorizationFilter
 
         if (user is null || !haveValidRole.GetValueOrDefault(false))
         {
-            context.Result = new JsonResult(new { message = "Unauthorized" }) { StatusCode = StatusCodes.Status401Unauthorized };
+            throw new AppException(ErrorMessage.Unauthorized, StatusCodes.Status401Unauthorized);
         }
     }
 }
