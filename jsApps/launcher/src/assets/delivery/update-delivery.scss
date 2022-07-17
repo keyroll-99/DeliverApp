@@ -1,6 +1,7 @@
 .update-delivery {
     @include card-layout;
     @include form-layout;
+    width: 45%;
 
     &-box > * {
         width: 100%;

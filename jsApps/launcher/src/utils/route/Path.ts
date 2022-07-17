@@ -19,6 +19,7 @@ const Path = {
     car: {
         create: "/car/add",
         list: "/car/list",
+        edit: "/car/:carHash",
     },
 };
 

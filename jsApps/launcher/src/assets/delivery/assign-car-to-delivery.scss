@@ -1,0 +1,24 @@
+.assign-car-to-delivery {
+    @include card-layout;
+    @include form-layout;
+    width: 45%;
+
+    &-select {
+        display: flex;
+
+        width: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        label {
+            color: black;
+        }
+
+        #select-car {
+            width: 150px;
+            color: black;
+        }
+    }
+}

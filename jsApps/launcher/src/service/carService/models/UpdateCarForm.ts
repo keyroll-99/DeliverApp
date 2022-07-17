@@ -8,7 +8,7 @@ export default interface UpdateCarForm {
     vin: string;
 }
 
-export const GetUpdateCarForm = (car: Car): UpdateCarForm => ({
+export const GetDefaultUpdateCarForm = (car: Car): UpdateCarForm => ({
     brand: car.brand,
     hash: car.hash,
     model: car.model,

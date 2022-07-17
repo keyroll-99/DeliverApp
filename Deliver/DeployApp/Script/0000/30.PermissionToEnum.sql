@@ -3,6 +3,6 @@
 INSERT INTO "PermissionToEnum"
 	("Id", "Name")
 VALUES
-	(5, 'Deliver');
+	(5, 'Car');
 
 SET IDENTITY_INSERT "PermissionToEnum" OFF

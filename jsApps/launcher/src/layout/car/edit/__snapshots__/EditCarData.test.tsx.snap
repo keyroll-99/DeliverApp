@@ -1,0 +1,332 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditCarData should match to snapshot 1`] = `
+Object {
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <div
+        class="car-edit_data"
+      >
+        <h1
+          class="car-edit_data-header"
+        >
+          Update the car
+        </h1>
+        <div
+          class="car-edit_data-fields"
+        >
+          <div
+            class="car-edit_data-box MuiBox-root css-1nylpq2"
+          >
+            <div
+              class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            >
+              <label
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="true"
+                for="mui-1"
+                id="mui-1-label"
+              >
+                Brand
+              </label>
+              <div
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-1"
+                  type="text"
+                  value="b"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="car-edit_data-box MuiBox-root css-1nylpq2"
+          >
+            <div
+              class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            >
+              <label
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="true"
+                for="mui-2"
+                id="mui-2-label"
+              >
+                Model
+              </label>
+              <div
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-2"
+                  type="text"
+                  value="m"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="car-edit_data-box MuiBox-root css-1nylpq2"
+          >
+            <div
+              class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            >
+              <label
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="true"
+                for="mui-3"
+                id="mui-3-label"
+              >
+                Registration number
+              </label>
+              <div
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-3"
+                  type="text"
+                  value="tn"
+                />
+              </div>
+            </div>
+          </div>
+          <div
+            class="car-edit_data-box MuiBox-root css-1nylpq2"
+          >
+            <div
+              class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+            >
+              <label
+                class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+                data-shrink="true"
+                for="mui-4"
+                id="mui-4-label"
+              >
+                VIN
+              </label>
+              <div
+                class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+              >
+                <input
+                  aria-invalid="false"
+                  class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                  id="mui-4"
+                  type="text"
+                  value="v"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button
+            class="MuiLoadingButton-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root car-edit_data-submit css-4or2ge-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+            id="mui-5"
+            tabindex="0"
+            type="button"
+          >
+            submit
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+      </div>
+    </div>
+  </body>,
+  "container": <div>
+    <div
+      class="car-edit_data"
+    >
+      <h1
+        class="car-edit_data-header"
+      >
+        Update the car
+      </h1>
+      <div
+        class="car-edit_data-fields"
+      >
+        <div
+          class="car-edit_data-box MuiBox-root css-1nylpq2"
+        >
+          <div
+            class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="true"
+              for="mui-1"
+              id="mui-1-label"
+            >
+              Brand
+            </label>
+            <div
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+            >
+              <input
+                aria-invalid="false"
+                class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                id="mui-1"
+                type="text"
+                value="b"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="car-edit_data-box MuiBox-root css-1nylpq2"
+        >
+          <div
+            class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="true"
+              for="mui-2"
+              id="mui-2-label"
+            >
+              Model
+            </label>
+            <div
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+            >
+              <input
+                aria-invalid="false"
+                class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                id="mui-2"
+                type="text"
+                value="m"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="car-edit_data-box MuiBox-root css-1nylpq2"
+        >
+          <div
+            class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="true"
+              for="mui-3"
+              id="mui-3-label"
+            >
+              Registration number
+            </label>
+            <div
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+            >
+              <input
+                aria-invalid="false"
+                class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                id="mui-3"
+                type="text"
+                value="tn"
+              />
+            </div>
+          </div>
+        </div>
+        <div
+          class="car-edit_data-box MuiBox-root css-1nylpq2"
+        >
+          <div
+            class="MuiFormControl-root MuiTextField-root css-1u3bzj6-MuiFormControl-root-MuiTextField-root"
+          >
+            <label
+              class="MuiInputLabel-root MuiInputLabel-formControl MuiInputLabel-animated MuiInputLabel-shrink MuiInputLabel-standard MuiFormLabel-root MuiFormLabel-colorPrimary MuiFormLabel-filled css-1c2i806-MuiFormLabel-root-MuiInputLabel-root"
+              data-shrink="true"
+              for="mui-4"
+              id="mui-4-label"
+            >
+              VIN
+            </label>
+            <div
+              class="MuiInput-root MuiInput-underline MuiInputBase-root MuiInputBase-colorPrimary MuiInputBase-formControl css-1ptx2yq-MuiInputBase-root-MuiInput-root"
+            >
+              <input
+                aria-invalid="false"
+                class="MuiInput-input MuiInputBase-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                id="mui-4"
+                type="text"
+                value="v"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <button
+          class="MuiLoadingButton-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeLarge MuiButton-textSizeLarge MuiButtonBase-root car-edit_data-submit css-4or2ge-MuiButtonBase-root-MuiButton-root-MuiLoadingButton-root"
+          id="mui-5"
+          tabindex="0"
+          type="button"
+        >
+          submit
+          <span
+            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+          />
+        </button>
+      </div>
+    </div>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;

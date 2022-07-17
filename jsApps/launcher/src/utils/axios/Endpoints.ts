@@ -17,6 +17,7 @@ const Endpoints = {
         UpdateUser: "Api/User/Update",
         UserList: "Api/User/List",
         Fire: (hash: string) => `Api/User/Fire/${hash}`,
+        GetDrivers: `Api/User/Drivers`,
     },
     Company: {
         Create: "Api/Company/Create",

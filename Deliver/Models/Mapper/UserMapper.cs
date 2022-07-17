@@ -39,12 +39,12 @@ public static class UserMapper
 
     public static UserResponse AsUserReponse(this Db.User user)
     {
-        if(user.Company is null)
+        if (user.Company is null)
         {
             throw new ArgumentNullException($"missing {nameof(user.Company)}");
         }
 
-        if(user.UserRole is null || !user.UserRole.Any())
+        if (user.UserRole is null)
         {
             throw new ArgumentNullException($"missing {nameof(user.UserRole)}");
         }

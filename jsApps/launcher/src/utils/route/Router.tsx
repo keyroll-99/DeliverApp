@@ -1,5 +1,6 @@
 import AdminPanel from "layout/admin/AdminPanel";
 import CreateCar from "layout/car/create/CreateCar";
+import EditCar from "layout/car/edit/EditCar";
 import CarsList from "layout/car/list/CarsList";
 import CreateDelivery from "layout/delivery/create/CreateDelivery";
 import DeliveryList from "layout/delivery/list/DeliveryList";
@@ -131,6 +132,14 @@ const Router = () => {
                 element={
                     <RequireAuth>
                         <CarsList />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path={Path.car.edit}
+                element={
+                    <RequireAuth>
+                        <EditCar />
                     </RequireAuth>
                 }
             />

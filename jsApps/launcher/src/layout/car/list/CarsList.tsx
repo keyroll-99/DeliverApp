@@ -2,6 +2,7 @@ import { CircularProgress } from "@mui/material";
 import { DataGrid, GridColDef, GridToolbar } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom";
 import { GetCarsListAction } from "service/carService/CarService";
+import Path, { GetPathWithParam } from "utils/route/Path";
 
 const columns: GridColDef[] = [
     {
@@ -53,6 +54,7 @@ const CarsList = () => {
                         Toolbar: GridToolbar,
                     }}
                     disableDensitySelector={true}
+                    onCellClick={(cell) => navigation(GetPathWithParam(Path.car.edit, cell.id as string))}
                 />
             ) : (
                 <CircularProgress />

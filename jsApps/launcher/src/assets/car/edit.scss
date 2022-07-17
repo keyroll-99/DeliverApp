@@ -1,0 +1,27 @@
+&-edit {
+    &_data {
+        @include card-layout;
+        @include form-layout;
+    }
+
+    &_assign-car-to-driver {
+        @include card-layout;
+        @include form-layout;
+
+        &-select {
+            width: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            label {
+                color: black;
+            }
+
+            #select-driver {
+                width: 100px;
+                color: black;
+            }
+        }
+    }
+}

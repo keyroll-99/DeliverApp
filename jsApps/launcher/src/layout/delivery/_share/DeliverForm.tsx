@@ -8,6 +8,8 @@ import UpdateDeliveryFrom from "service/deliveryService/models/UpdateDeliveryFor
 import { CircularProgress, TextField } from "@mui/material";
 import { LocationFullText } from "utils/location/LocationUtils";
 import { GetLocationListAcion } from "service/location/LocationService";
+import { HasPermission } from "service/userService/Roles";
+import { PermisionToActionEnum } from "service/userService/models/Permissions";
 
 interface props {
     baseClassName: string;
@@ -42,8 +44,13 @@ const DeliverForm = ({
     if (locations.isLoading) {
         return <CircularProgress />;
     }
+
     if (!locations.isSuccess) {
-        return <p>please refresh page</p>;
+        if (HasPermission({ permissionAction: PermisionToActionEnum.get, permissionTo: "location" })) {
+            return <>please refresh page</>;
+        } else {
+            return null;
+        }
     }
 
     return (

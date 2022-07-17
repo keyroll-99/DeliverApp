@@ -1,0 +1,5 @@
+ALTER TABLE Cars
+	ADD Brand VARCHAR(255),
+	Model VARCHAR(255),
+	Vin VARCHAR(255);
+	

@@ -20,4 +20,5 @@ public class ErrorMessage
     public const string CannotModifyAdmin = "You can't modify admin";
     public const string UserIsBlocker = "User is blocked";
     public const string TokenExpiredOrInvalidPasswordRecoveryLink = "Token expired or invalid password recovery link";
+    public const string Unauthorized = "Unauthorized";
 }

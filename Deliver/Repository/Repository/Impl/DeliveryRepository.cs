@@ -13,6 +13,6 @@ public class DeliveryRepository : BaseHashRepository<Delivery>, IDeliveryReposit
 
     public override IQueryable<Delivery> GetAll()
     {
-        return base.GetAll().Include(x => x.To).Include(y => y.From);
+        return base.GetAll().Include(x => x.To).Include(y => y.From).Include(x => x.Car);
     }
 }

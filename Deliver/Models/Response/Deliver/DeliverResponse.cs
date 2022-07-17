@@ -1,4 +1,5 @@
-﻿using Models.Response.Location;
+﻿using Models.Response.Car;
+using Models.Response.Location;
 
 namespace Models.Response.Deliver;
 
@@ -9,7 +10,8 @@ public class DeliverResponse
     public int Status { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
-    
+
+    public CarResponse Car { get; set; }
     public LocationResponse From { get; set; }
     public LocationResponse To { get; set; }
 }

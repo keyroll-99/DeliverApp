@@ -76,6 +76,7 @@ public class DeliveryService : IDeliveryService
             .Include(x => x.From)
             .ThenInclude(y => y.Company)
             .ThenInclude(z => z.Users)
+            .Include(x => x.Car)
             .Where(x => x.From.Company.Users.Any(x => x.Id == _loggedUser.Id) || x.To.Company.Users.Any(x => x.Id == _loggedUser.Id))
             .Select(x => x.AsResponse())
             .ToListAsync();
@@ -108,8 +109,6 @@ public class DeliveryService : IDeliveryService
     {
         var delivery = await _deliveryRepository
             .GetAll()
-            .Include(x => x.From)
-            .Include(x => x.To)
             .FirstOrDefaultAsync(x => x.Hash == hash);
 
         if (delivery is null)
