@@ -127,6 +127,7 @@ public class CarServiceTests
             Vin = "test"
         };
         _roleUtils.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(true);
+        _companyUtils.GetUserCompany(Arg.Any<long>()).Returns(new Company { Id = 1 });
 
         // act
         await _service.CreateCar(request);
@@ -153,7 +154,7 @@ public class CarServiceTests
     {
         // arrnage
         _roleUtils.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(true);
-        _carRepository.GetAll().Returns(new List<Car> { new Car { Id = 1} }.BuildMock());
+        _carRepository.GetAll().Returns(new List<Car> { new Car { Id = 1 } }.BuildMock());
 
         // act
         var result = await _service.GetAllCars();
@@ -182,11 +183,11 @@ public class CarServiceTests
     {
         // arrange
         _roleUtils.HasPermission(Arg.Any<HasPermissionRequest>()).Returns(true);
-        _carRepository.GetByHashWithPromiseAsync(Arg.Any<Guid>()).Returns(new Car { Id = 1, Brand = "brand", Driver = new User { CompanyId = 1 } });
+        _carRepository.GetByHashWithPromiseAsync(Arg.Any<Guid>()).Returns(new Car { Id = 1, Brand = "brand", Driver = new User { CompanyId = 1 }, CompanyId = 1 });
         _companyUtils.GetUserCompany(Arg.Any<long>()).Returns(new Company { Id = 1 });
 
         // act
-        var result =  await _service.GetCar(Guid.NewGuid());
+        var result = await _service.GetCar(Guid.NewGuid());
 
         // assert
         result.Should().NotBeNull();
