@@ -2,6 +2,9 @@ version: "3.8"
 
 services:
     app:
+        volumes:
+            - ./launcher/src:/app/launcher/src
+            - ./utils/:/app/utils
         container_name: react-app
         image: react-app
         build:
