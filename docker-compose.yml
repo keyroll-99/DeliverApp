@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+    front:
+        volumes:
+            - ./launcher/src:/app/launcher/src
+            - ./utils/:/app/utils
+        container_name: react-app-prod
+        image: react-app-prod
+        build:
+            context: ./jsApps
+        networks:
+            - u-online
+
+    backend:
+        container_name: api-prod
+        image: api-prod
+        build: ./Deliver/
+        ports:
+            - "5000:5000"
+        expose:
+            - 5000
+        networks:
+            - u-online
+
+    nginx:
+        container_name: nginx
+        build:
+            context: .
+        networks:
+            - u-online
+
+networks:
+    u-online:
+        driver: bridge
