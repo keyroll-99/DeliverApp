@@ -20,7 +20,11 @@ FROM build AS publish
 RUN dotnet publish "Deliver.csproj" -c Release -o /app/publish
 
 FROM base AS final
+WORKDIR /DeployApp
+
+COPY --from=build /src/DeployApp/ .
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENV ASPNETCORE_URLS=http://+:5000
-ENTRYPOINT ["dotnet", "Deliver.dll"]
+ENTRYPOINT ["dotnet", "Deliver.dll", "localSql"]
