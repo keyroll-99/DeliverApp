@@ -40,7 +40,6 @@ services:
             - Mail__Login
             - Mail__Password
 
-
     nginx:
         container_name: nginx
         build:
