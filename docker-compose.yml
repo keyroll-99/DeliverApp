@@ -49,6 +49,7 @@ services:
             - backend
         ports:
             - "80:80"
+            - "443:443"
 
 secrets:
     ConnectionStrings__DefaultConnection:
