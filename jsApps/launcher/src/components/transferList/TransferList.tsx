@@ -10,7 +10,7 @@ interface props {
 }
 
 const TransferList = ({ elements, toggleChoose, checkeds, title }: props) => {
-    const isAllChecked = checkeds.length === elements.length;
+    const isAllChecked = checkeds.length === elements.length && elements.length > 0;
     const isAnyChecked = checkeds.length > 0;
 
     const toggleAll = () => {

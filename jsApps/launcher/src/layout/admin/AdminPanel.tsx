@@ -15,8 +15,8 @@ const AdminPanel = () => {
     const [page, setPage] = useState(pages.CompanyManagmentPanel);
 
     return (
-        <div className={CreateClass(baseClass, "create-company-panel")}>
-            <AppBar position="static" color="default">
+        <div className={baseClass}>
+            <AppBar position="static" className={CreateClass(baseClass, "app-bar")} color="default">
                 <Tabs textColor="primary" value={page} onChange={(e, v) => setPage(v)}>
                     <Tab label="Company managment" onClick={(e) => e.preventDefault()} />
                 </Tabs>

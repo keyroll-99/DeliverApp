@@ -3,7 +3,7 @@ $content-left-padding: 10px;
 .account {
     @include card-layout;
     background-color: #fff;
-    width: 80%;
+    width: 50%;
     margin: 20px auto;
     border: 1px solid black;
     padding: 10px;
@@ -11,9 +11,19 @@ $content-left-padding: 10px;
     overflow: hidden;
     white-space: nowrap;
     font-size: large;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    @include mobile {
+        width: 80%;
+    }
 
     &-title {
         padding-left: $content-left-padding;
+        @include mobile {
+            font-size: 28px;
+        }
     }
 
     &-item {
@@ -21,6 +31,7 @@ $content-left-padding: 10px;
         gap: 10px;
         padding-left: $content-left-padding;
         margin: 5px 0;
+        
     }
 
     &-list {
