@@ -7,8 +7,6 @@ namespace Deliver
 {
     public class Startup
     {
-        const string useSqlArg = "localSql";
-        const string onlySqlArg = "onlySql";
         private readonly IConfiguration _configuration;
         private readonly IHostEnvironment _environment;
 
