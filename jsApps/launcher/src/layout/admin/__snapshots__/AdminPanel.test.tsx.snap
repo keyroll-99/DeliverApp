@@ -6,10 +6,10 @@ Object {
   "baseElement": <body>
     <div>
       <div
-        class="admin-panel-create-company-panel"
+        class="admin-panel"
       >
         <header
-          class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorDefault MuiAppBar-positionStatic css-xqhexu-MuiPaper-root-MuiAppBar-root"
+          class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorDefault MuiAppBar-positionStatic admin-panel-app-bar css-xqhexu-MuiPaper-root-MuiAppBar-root"
         >
           <div
             class="MuiTabs-root css-1ujnqem-MuiTabs-root"
@@ -238,10 +238,10 @@ Object {
   </body>,
   "container": <div>
     <div
-      class="admin-panel-create-company-panel"
+      class="admin-panel"
     >
       <header
-        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorDefault MuiAppBar-positionStatic css-xqhexu-MuiPaper-root-MuiAppBar-root"
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-elevation4 MuiAppBar-root MuiAppBar-colorDefault MuiAppBar-positionStatic admin-panel-app-bar css-xqhexu-MuiPaper-root-MuiAppBar-root"
       >
         <div
           class="MuiTabs-root css-1ujnqem-MuiTabs-root"
