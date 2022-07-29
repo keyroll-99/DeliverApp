@@ -44,7 +44,9 @@ public class AuthenticationController : ControllerBase
     [Authorize]
     public async Task<BaseRespons> Logout()
     {
-        await _authenticateService.Logout(getIpAddress() ?? "unknow");
+        var logoutTask = _authenticateService.Logout(getIpAddress() ?? "unknow");
+        removeTokenCookie();
+        await logoutTask;
         return BaseRespons.Success();
     }
 
@@ -53,7 +55,10 @@ public class AuthenticationController : ControllerBase
     public async Task<PermissionResponse> GetPermissions()
         => await _authenticateService.GetLoggedUserPermission();
 
-
+    private void removeTokenCookie()
+    {
+        Response.Cookies.Delete(_refrehTokenCookieName);
+    }
 
     private void setTokenCookie(string token)
     {

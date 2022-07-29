@@ -31,7 +31,7 @@
         "web-vitals": "2.1.4"
     },
     "scripts": {
-        "start": "node ../utils/config-init.js %npm_config_env% && react-scripts start",
+        "start": "node ../utils/config-init.js dev && react-scripts start",
         "start:dev": "npm run start --env=dev",
         "start:docker": "react-scripts start",
         "test": "react-scripts test",

@@ -52,7 +52,7 @@ public class AuthenticationService : IAuthenticationService
             throw new AppException(ErrorMessage.UserIsBlocker);
         }
 
-        var jwtTokne = _authenticationUtils.GenerateJwtToken(user);
+        var jwtToken = _authenticationUtils.GenerateJwtToken(user);
         var refreshToken = await _authenticationUtils.GenerateRefreshToken(user, ipAddress);
 
         return new AuthResponse
@@ -62,7 +62,7 @@ public class AuthenticationService : IAuthenticationService
             Surname = user.Surname,
             RefreshToken = refreshToken.Token,
             Username = user.Username,
-            Jwt = jwtTokne,
+            Jwt = jwtToken,
             CompanyHash = user.Company.Hash,
             ExpireDate = DateTime.Now.AddMinutes(15),
             Roles = user.UserRole.Select(x => x.Role.Name).ToList(),

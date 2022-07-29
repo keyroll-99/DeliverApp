@@ -16,7 +16,7 @@ namespace Deliver.Setup
             return services;
         }
 
-        public async static Task<IServiceCollection> BaseInsert(this IServiceCollection services)
+        public static async Task<IServiceCollection> BaseInsert(this IServiceCollection services)
         {
             var appDbContext = services.BuildServiceProvider().GetService<AppDbContext>()!;
             var users = appDbContext.Users;
