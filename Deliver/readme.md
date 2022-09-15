@@ -1,7 +1,7 @@
 # Backend
 Backend has a layer model
 
-* Controllers is of top of layer, it place where all reqest from frontend come
+* Controller is of top of layer, it place where all reqest from frontend come
 * Service is a layer where we should keep business logic 
 * Integrations is a layer where we keep all integrations logic, like sending e-mail
 * Utils is a layer response for connect two or more business part. Two services shouldn't know about themeselves
